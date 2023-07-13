@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from . import models
@@ -37,7 +37,7 @@ class OsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(name_os__icontains=term.lower())
+                query |= Q(name_os__iregex=r'(?i)^.+' + term[1:])
             qs = qs.filter(query)
         return qs
     
@@ -55,10 +55,9 @@ class TmcList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(tmc_name__icontains=term.lower())
+                query |= Q(tmc_name__iregex=r'(?i)^.+' + term[1:])
             qs = qs.filter(query)
         return qs
-
 
 def upload_data(request):
 
@@ -85,5 +84,5 @@ def upload_data(request):
 
         os.remove(file_path)
 
-        return render(request, 'directories/os.html')
+        return redirect('/directories/os/')
     

@@ -28,7 +28,8 @@ $(document).ready(function() {
             $('.dataTables_paginate').addClass('step-links');
             $('.dataTables_paginate').find('a').addClass('page-link');
             $('.dataTables_paginate').find('.current').addClass('current-page');
-        }
+        },
+        "smartSearch": false // Добавьте эту опцию для поиска по первой букве
     });
 
     $('#customSearchBox').on('keyup', function() {
@@ -68,7 +69,8 @@ $(document).ready(function() {
             $('.dataTables_paginate').addClass('step-links');
             $('.dataTables_paginate').find('a').addClass('page-link');
             $('.dataTables_paginate').find('.current').addClass('current-page');
-        }
+        },
+        "smartSearch": false // Добавьте эту опцию для поиска по первой букве
     });
 
     $('#customSearchBox').on('keyup', function() {
