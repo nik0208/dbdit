@@ -10,7 +10,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 import os
 from django.conf import settings
 import subprocess
-
+from django.db.models import Q
 
 
 @login_required
@@ -30,27 +30,33 @@ class OsList(BaseDatatableView):
             else:
                 return ''
         return super().render_column(row, column)
-
+    
     def filter_queryset(self, qs):
-        # Фильтрация данных (если требуется)
         search_value = self.request.GET.get('search[value]', '')
         if search_value:
-            qs = qs.filter(name_os__icontains=search_value)
+            search_terms = search_value.lower().split()
+            query = Q()
+            for term in search_terms:
+                query |= Q(name_os__icontains=term.lower())
+            qs = qs.filter(query)
         return qs
     
 @login_required
 def Tmc(request):
-   return render(request, 'directories/tmc.html', context={'page_obj': page_obj})
+   return render(request, 'directories/tmc.html')
 
 class TmcList(BaseDatatableView):
     model = apps.get_model('directories', 'Tmc')
     columns = ['tmc_name', 'tmc_article', 'web_code', 'tmc_price']
 
     def filter_queryset(self, qs):
-        # Фильтрация данных (если требуется)
         search_value = self.request.GET.get('search[value]', '')
         if search_value:
-            qs = qs.filter(tmc_name__icontains=search_value)
+            search_terms = search_value.lower().split()
+            query = Q()
+            for term in search_terms:
+                query |= Q(tmc_name__icontains=term.lower())
+            qs = qs.filter(query)
         return qs
 
 
