@@ -6,4 +6,5 @@ urlpatterns = [
     path('tmc/', Tmc, name='tmc'),
     path('upload-data/', upload_data, name='upload_data'),
     path('os_list/', OsList.as_view(), name='os_list'),
+    path('tmc_list/', TmcList.as_view(), name='tmc_list')
 ]

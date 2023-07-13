@@ -153,7 +153,7 @@
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
 }
 
-#table_os_filter {
+.dataTables_filter {
   display: none;
 }
 /*Панель поиска END*/

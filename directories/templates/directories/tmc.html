@@ -6,28 +6,39 @@
     
     <a class = "AddDocument" href="/myapp/addosmove/" title="Создать новый документ"><span class="create-new-document"></span></a>
 
-    <span class="step-links">
+    <a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
 
-        {% if page_obj.has_previous %}
-            <a href="?page=1" title="В налачо">&laquo;</a>
-            <a href="?page={{ page_obj.previous_page_number }}" title="Предыдущая страница">&lt;</a>
-        {% endif %}
-
-        <span class="current-page">
-            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" title="Следующая страница">&gt;</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" title="В конец">&raquo;</a>
-        {% endif %}
-        
-        <form action="" method="get" class="page-number-form">
-            <input type="text" name="page" class="page-number-input">
-            <button type="submit" title = "Перейти к странице"class="go-to-page-button">Перейти</button>
-        </form>
-
-    </span>
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeFileUploadDialog()">&times;</span>
+            {% csrf_token %}
+            <div id="file-upload" data-upload-url="{% url 'upload_data' %}">
+     
+                <form id="uploadForm" action="{% url 'upload_data' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="file" id="uploadedFile" form="uploadForm">
+                    <button type="submit">Загрузить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="table-pagination" class="step-links"></div>
+    
+    <div class="table-options">
+    
+        <div class="table-length_main">
+    
+            <select id="table_os_length" name="table_os_length">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+    
+        </div>
+    
+    </div>
 
 {% endblock %}
 
@@ -35,25 +46,15 @@
 {% block content %}
 <div class="contentpanel">
     <div class="table-container">
-        <table>
+        <table id="table_tmc" class="display" style="width:100%">
             <thead>
                 <tr>
-                    <th>TMC Name</th>
-                    <th>Article</th>
+                    <th>Наименование</th>
+                    <th>Артикул</th>
                     <th>Web Code</th>
-                    <th>Price</th>
+                    <th>Стоимость</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for os in page_obj %}
-                    <tr>
-                        <td class="name-column">{{ os.tmc_name }}</td>
-                        <td>{{ os.tmc_article }}</td>
-                        <td>{{ os.web_code }}</td>
-                        <td>{{ os.tmc_price }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
         </table>
     </div>
 </div>
