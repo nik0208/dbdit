@@ -1,0 +1,25 @@
+{% extends 'index/base.html' %}
+
+{% load static %}
+
+
+{% block document-buttons %}
+  <h2 class="form-title">Перемещение ТМЦ</h2>
+{% endblock %}
+
+{% block content %}
+  <div class="form-container">
+
+    <form method="POST">
+       
+        {% csrf_token %}
+       
+        {{ form.as_p }}
+       
+        <button type="submit">Отправить</button>
+    
+    </form>
+    
+  </div>
+
+{% endblock %}

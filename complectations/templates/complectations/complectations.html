@@ -1,0 +1,83 @@
+{% extends "index/base.html" %}
+
+{% block title %}Комплектации{% endblock %}
+
+{% block document-buttons %}
+    <a class = "AddDocument" href="{% url 'add_complectations' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
+
+    <span class="step-links">
+
+        {% if page_obj.has_previous %}
+            <a href="?page=1" title="В налачо">&laquo;</a>
+            <a href="?page={{ page_obj.previous_page_number }}" title="Предыдущая страница">&lt;</a>
+        {% endif %}
+
+        <span class="current-page">
+            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" title="Следующая страница">&gt;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="В конец">&raquo;</a>
+        {% endif %}
+        
+        <form action="" method="get" class="page-number-form">
+            <input type="text" name="page" class="page-number-input">
+            <button type="submit" title = "Перейти к странице"class="go-to-page-button">Перейти</button>
+        </form>
+
+    </span>
+{% endblock %}
+
+
+{% block content %}
+    <div class="contentpanel">
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>№</th>
+                        <th>Дата</th>
+                        <th>Автор</th>
+                        <th>Основное средство</th>
+                        <th>ТМЦ</th>
+                        <th>Кол-в</th>
+                        <th>Основание</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for compl in page_obj %}
+
+                        <tr>
+                            <td>{{ compl.pk }}</td>
+                            <td>{{ compl.date }}</td>
+                            <td>{{ compl.avtor }}</td>
+                            <td>{{ compl.inv_dit }}</td>
+                            <td>{{ compl.tmc }}</td>
+                            <td>{{ compl.tmc_qty }}</td>
+                            <td>{{ compl.par_doc }}</td>
+                            {% comment %} <td>
+                                <a href="{% url 'act_edit' acts.id %}">Изменить</a>
+                                <a href="{% url 'act_delete' acts.id %}">Удалить</a>
+                                <a href="{% url 'generate_act_document' acts.id %}">Печать</a>
+                            </td> {% endcomment %}
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+{% endblock %}

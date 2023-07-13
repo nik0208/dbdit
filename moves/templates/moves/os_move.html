@@ -1,0 +1,65 @@
+{% extends "index/base.html" %}
+
+{% block title %}Перемещения{% endblock %}
+
+{% block document-buttons %}
+    
+    <a class = "AddDocument" href="/moves/addosmove/" title="Создать новый документ"><span class="create-new-document"></span></a>
+
+    <span class="step-links">
+
+        {% if page_obj.has_previous %}
+            <a href="?page=1" title="В налачо">&laquo;</a>
+            <a href="?page={{ page_obj.previous_page_number }}" title="Предыдущая страница">&lt;</a>
+        {% endif %}
+
+        <span class="current-page">
+            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" title="Следующая страница">&gt;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="В конец">&raquo;</a>
+        {% endif %}
+        
+        <form action="" method="get" class="page-number-form">
+            <input type="text" name="page" class="page-number-input">
+            <button type="submit" title = "Перейти к странице"class="go-to-page-button">Перейти</button>
+        </form>
+
+    </span>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Номер перемещения</th>
+                <th>Дата</th>
+                <th>МОЛ</th>
+                <th>Склад</th>
+                <th>Комментарий</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for move in combined %}
+            <tr>
+                <td>{{ move.move_num }}</td>
+                <td>{{ move.move_date }}</td>
+                <td>{{ move.user }}</td>
+                <td>{{ move.sklad }}</td>
+                <td>{{ move.comment }}</td>
+                <td>
+                    {% comment %} <a href="{% url 'act_edit' acts.id %}">Изменить</a>
+                    <a href="{% url 'act_delete' acts.id %}">Удалить</a> {% endcomment %}
+                    <a href="{% url 'generate_move_document' move.id %}">Печать</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

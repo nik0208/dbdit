@@ -1,0 +1,67 @@
+{% extends "index/base.html" %}
+
+{% block title %}Заявки на оборудование{% endblock %}
+
+{% block document-buttons %}
+    
+    {% comment %} <a class = "AddDocument" href="/skdit/addosmove/" title="Создать новый документ"><span class="create-new-document"></span></a> {% endcomment %}
+
+    <span class="step-links">
+
+        {% if page_obj.has_previous %}
+            <a href="?page=1" title="В налачо">&laquo;</a>
+            <a href="?page={{ page_obj.previous_page_number }}" title="Предыдущая страница">&lt;</a>
+        {% endif %}
+
+        <span class="current-page">
+            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" title="Следующая страница">&gt;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="В конец">&raquo;</a>
+        {% endif %}
+        
+        <form action="" method="get" class="page-number-form">
+            <input type="text" name="page" class="page-number-input">
+            <button type="submit" title = "Перейти к странице"class="go-to-page-button">Перейти</button>
+        </form>
+
+    </span>
+
+{% endblock %}
+
+{% block content %}
+<div class="contentpanel">
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Номер заявки</th>
+                    <th>Необходимое оборудование</th>
+                    <th>Автор заявки</th>
+                    <th>Для кого оборудование</th>
+                    <th>Дата поступления</th>
+                    <th>Дата выхода</th>
+                    <th>Подоазделение</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appl in page_obj %}
+                    <tr>
+                        <td>{{ appl.num }}</td>
+                        <td>{{ appl.requested_equipment }}</td>
+                        <td>{{ appl.avtor }}</td>
+                        <td>{{ appl.user }}</td>
+                        <td>{{ appl.date }}</td>
+                        <td>{{ appl.deadline }}</td>
+                        <td>{{ appl.department }}</td>
+                        <td>{{ appl.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

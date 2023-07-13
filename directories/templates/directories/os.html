@@ -1,0 +1,61 @@
+{% extends "index/base.html" %}
+
+{% block title %}Основные средства{% endblock %}
+
+{% block document-buttons %}
+
+<a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
+
+<div id="uploadModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeFileUploadDialog()">&times;</span>
+        {% csrf_token %}
+        <div id="file-upload" data-upload-url="{% url 'upload_data' %}">
+ 
+            <form id="uploadForm" action="{% url 'upload_data' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="file" id="uploadedFile" form="uploadForm">
+                <button type="submit">Загрузить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="table-pagination" class="step-links"></div>
+
+<div class="table-options">
+
+    <div class="table-length_main">
+
+        <select id="table_os_length" name="table_os_length">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="contentpanel">
+    <div class="table-container">
+        <table id="table_os" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Инвентарный Номер</th>
+                    <th>Наименование</th>
+                    <th>Дата ввода</th>
+                    <th>Группа ОС</th>
+                    <th>Серийный номер</th>
+                    <th>Первоначальная стоимость</th>
+                </tr>
+            </thead>
+        </table>            
+    </div>
+</div>
+{% endblock %}

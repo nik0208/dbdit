@@ -1,0 +1,80 @@
+{% extends 'index/base.html' %}
+
+{% load static %}
+
+
+{% block document-buttons %}
+  <h2 class="form-title">Акт технического состояния средств вычислительной и оргтехники</h2>
+{% endblock %}
+
+{% block content %}
+  <div class="form-container">
+
+    <form method="post" class="form-area act">
+
+        {% csrf_token %}
+      
+      <div class="form-field string">
+        <label for="id_user">Пользователь:</label>
+        {{ form.user }}
+      </div>
+
+      <div class="form-field select">
+        <label for="id_user">Местонахождение:</label>
+        {{ form.sklad }}
+      </div>
+
+      <div class="form-field select os">
+        <label for="id_user">Оборудование:</label>
+        {{ form.inv_dit }}
+      </div>
+
+      <div class="form-field text">
+        <label for="id_user">Результат проверки:</label>
+        {{ form.result }}
+      </div>
+
+      <div class="form-field text">
+        <label for="id_user">Заключение:</label>
+        {{ form.conclusion }}
+      </div>
+
+      <div class="form-field select">
+        <label for="id_user">Действие:</label>
+        {{ form.type }}
+      </div>      
+
+      <div class="form-field select">
+        <label for="id_user">Автор:</label>
+        {{ form.avtor }}
+      </div>
+
+      <div class="form-field button">
+        <button type="submit">Добавить</button>
+      </div>
+
+    </form>
+
+    <div class="prev-acts">
+
+      <h3 class="prev-acts title">Предыдущие акты:</h3>
+
+      <div class="prev-acts-list">
+        <ul id="acts-list">
+          {% for act in acts %}
+          <li>  
+            <div class="act-date">{{ act.act_date }}</div>
+            <div class="act-avtor">{{ act.avtor }}</div>
+            <div class="act-result">{{ act.result }}</div>
+            <div class="act-conclusion">{{ act.conclusion }}</div>
+            <div class="act-type">{{ act.type }}</div>
+          </li>
+          {% endfor %}
+        </ul>
+      <div>
+
+    </div>
+    
+  </div>
+
+{% endblock %}
