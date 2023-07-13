@@ -40,21 +40,18 @@ class OsList(BaseDatatableView):
     
 @login_required
 def Tmc(request):
+   return render(request, 'directories/tmc.html', context={'page_obj': page_obj})
 
-    # Получение всех объектов из базы данных
-    all_Tmc = models.Tmc.objects.all()
+class TmcList(BaseDatatableView):
+    model = apps.get_model('directories', 'Tmc')
+    columns = ['tmc_name', 'tmc_article', 'web_code', 'tmc_price']
 
-    # Создание объекта пагинатора, указывая количество объектов на одной странице
-    paginator = Paginator(all_Tmc, 50)
-
-    # Получение номера запрошенной страницы из параметров GET запроса
-    page_number = request.GET.get('page')
-
-    # Получение объектов для текущей страницы
-    page_obj = paginator.get_page(page_number)
-
-    # Отрисовка HTML-шаблона acts.html с данными внутри переменной контекста context
-    return render(request, 'directories/tmc.html', context={'page_obj': page_obj})
+    def filter_queryset(self, qs):
+        # Фильтрация данных (если требуется)
+        search_value = self.request.GET.get('search[value]', '')
+        if search_value:
+            qs = qs.filter(tmc_name__icontains=search_value)
+        return qs
 
 
 def upload_data(request):
