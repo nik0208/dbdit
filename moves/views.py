@@ -1,45 +1,64 @@
+from django.contrib.auth.decorators import login_required
+from acts import forms
+from . import models
+from django.apps import apps
+from openpyxl import load_workbook
 from django.http import JsonResponse
+from django.http import HttpResponse
+from django_datatables_view.base_datatable_view import BaseDatatableView
+import os
+from django.conf import settings
+import subprocess
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from . import models
-from . import forms
-from django.contrib.auth.decorators import login_required
 from docxtpl import DocxTemplate
 import win32api
 import tempfile
 
-
 @login_required
 def Moves(request):
-
-    os_moves = models.OsMove.objects.values(
+    return render(request, 'moves/moves.html')
+    
+    moves = models.OsMove.objects.values(
         'id', 'move_num', 'move_date', 'user', 'sklad', 'comment')
     tmc_moves = models.TmcMove.objects.values(
         'id', 'move_num', 'move_date', 'user', 'sklad', 'comment')
 
-    combined = list(os_moves.union(tmc_moves, all=True))
+    combined = list(moves.union(tmc_moves, all=True))
 
     combined.sort(key=lambda x: x['move_date'], reverse=True)
-
-    # Создание объекта пагинатора, указывая количество объектов на одной странице
-    paginator = Paginator(combined, 50)
-
-    # Получение номера запрошенной страницы из параметров GET запроса
-    page_number = request.GET.get('page')
-
-    # Получение объектов для текущей страницы
-    page_obj = paginator.get_page(page_number)
 
     context = {
         'combined': combined
     }
 
-    return render(request, 'moves/os_move.html', context)
+class MovesList(BaseDatatableView):
+    model_os = apps.get_model('moves', 'OsMove')
+    model_tmc = apps.get_model('moves', 'TmcMove')
+    columns = ['move_num', 'move_date', 'status', 'sklad', 'user', 'comment']
 
+    def render_column(self, row, column):
+        if column == 'move_date':
+            if row.inpute_date is not None:
+                return row.inpute_date.strftime('%d.%m.%Y')
+            else:
+                return ''
+        return super().render_column(row, column)
+    
+    def filter_queryset(self, qs):
+        search_value = self.request.GET.get('search[value]', '')
+        if search_value:
+            search_terms = search_value.lower().split()
+            query = Q()
+            for term in search_terms:
+                query |= Q(name_os__iregex=r'(?i)^.+' + term[1:])
+            qs = qs.filter(query)
+        return qs
 
 # Добавление перемещения OC
 @login_required
-def AddOsMove(request):
+def AddMove(request):
     if request.method == 'POST':
         form = forms.OsMoveForm(request.POST, user=request.user)
         if form.is_valid():
@@ -49,7 +68,7 @@ def AddOsMove(request):
             return redirect('moves')
     else:
         form = forms.OsMoveForm(user=request.user)
-    return render(request, 'moves/add_os_move.html', {'form': form})
+    return render(request, 'moves/add_moves.html', {'form': form})
 
 
 # Добавление перемещения ТМЦ

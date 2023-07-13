@@ -49,4 +49,14 @@ $(document).ready(function() {
         { "data": "web_code" },
         { "data": "tmc_price" }
     ]);
+
+    initializeDataTable('#table_moves', '/moves/', [
+        { "data": "move_num" },
+        { "data": "move_date" },
+        { "data": "status" },
+        { "data": "avtor" },
+        { "data": "sklad" },
+        { "data": "user" },
+        { "data": "comment" }
+    ]);
 });

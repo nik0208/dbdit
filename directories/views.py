@@ -1,6 +1,5 @@
-from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from acts import forms
 from . import models
 from django.apps import apps
 from openpyxl import load_workbook
@@ -11,6 +10,11 @@ import os
 from django.conf import settings
 import subprocess
 from django.db.models import Q
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
+from docxtpl import DocxTemplate
+import win32api
+import tempfile
 
 
 @login_required
@@ -26,7 +30,7 @@ class OsList(BaseDatatableView):
 
         if column == 'inpute_date':
             if row.inpute_date is not None:
-                return row.inpute_date.strftime('%Y-%m-%d')
+                return row.inpute_date.strftime('%d.%m.%Y')
             else:
                 return ''
         return super().render_column(row, column)
