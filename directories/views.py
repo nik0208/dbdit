@@ -64,7 +64,7 @@ def upload_data(request):
 
     def import_csv_to_sqlite(csv_file_path, db_name, table_name):
         # Команда для выполнения импорта CSV в SQLite
-        command = f'sqlite3 {db_name} ".mode csv" ".import {csv_file_path} {table_name}"'
+        command = f'sqlite3 "{db_name}" ".mode csv" ".separator ;" ".import {csv_file_path} {table_name}"'
 
         # Запуск команды в терминале
         subprocess.run(command, shell=True)
@@ -74,14 +74,14 @@ def upload_data(request):
         upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir)
-        file_path = os.path.join(upload_dir, file.name)
+        file_path = os.path.join(upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
         with open(file_path, 'wb+') as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
         
-        bd_name = 'db.sqlite3'
-        table_name_os = 'IT_OS'
-        import_csv_to_sqlite(file_path, bd_name, table_name_os)
+        db_name = 'db.sqlite3'
+        table_name = 'IT_OS'
+        import_csv_to_sqlite(file_path, db_name, table_name)
 
         os.remove(file_path)
 
