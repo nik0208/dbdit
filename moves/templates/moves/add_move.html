@@ -3,11 +3,15 @@
 {% load static %}
 
 
+
 {% block document-buttons %}
   <h2 class="form-title">Перемещение</h2>
 {% endblock %}
 
 {% block content %}
+
+  <input type="hidden" class="js-url-field" data-url="{% url 'get_equipment_data' %}">
+  
   <div class="form-container">
 
     <form method="post" class="form-area act">
