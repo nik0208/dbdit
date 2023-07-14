@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from acts import forms
+from . import forms
 from . import models
 from django.apps import apps
 from openpyxl import load_workbook
