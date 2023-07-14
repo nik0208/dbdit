@@ -15,6 +15,66 @@ from django.core.paginator import Paginator
 from docxtpl import DocxTemplate
 import win32api
 import tempfile
+import pandas as pd
+
+
+
+
+
+import os
+import subprocess
+import pandas as pd
+from django.conf import settings
+from django.shortcuts import redirect
+
+def upload_data_os(request, table_name='IT_OS'):
+
+    def import_csv_to_sqlite(csv_file_path, db_name, table_name):
+        # Команда для выполнения импорта CSV в SQLite
+        command = f'sqlite3 "{db_name}" ".mode csv" ".import {csv_file_path} {table_name}"'
+
+        # Запуск команды в терминале
+        subprocess.run(command, shell=True)
+
+    if request.method == 'POST':
+        file = request.FILES['file']
+        upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
+        
+        file_extension = os.path.splitext(file.name)[1].lower()
+        if file_extension != '.csv':
+            # Чтение данных из Excel-файла
+            data = pd.read_excel(file, engine='openpyxl')
+            
+            # Сохранение данных в CSV-файл
+            csv_file_path = os.path.join(upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
+            data.to_csv(csv_file_path, index=False)
+
+            db_name = 'db.sqlite3'
+            import_csv_to_sqlite(csv_file_path, db_name, table_name)
+
+            os.remove(csv_file_path)
+            
+        else:
+            # Сохранение загруженного CSV-файла
+            if not os.path.exists(upload_dir):
+                os.makedirs(upload_dir)
+            file_path = os.path.join(upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
+            with open(file_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+        
+            db_name = 'db.sqlite3'
+            import_csv_to_sqlite(file_path, db_name, table_name)
+
+            os.remove(file_path)
+
+        return redirect('/directories/os/')
+
+
+
+def upload_data_tmc(request):
+    upload_data_os(request, table_name='Tmc')
+    return redirect('/directories/tmc/')
 
 
 @login_required
@@ -41,7 +101,8 @@ class OsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(name_os__iregex=r'(?i)^.+' + term[1:])
+                query |= Q(name_os__iregex=r'(?i)^.+' + term[1:]) | Q(inv_dit__icontains=term)
+                query |= Q(serial_number__icontains=term)
             qs = qs.filter(query)
         return qs
     
@@ -59,34 +120,10 @@ class TmcList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(tmc_name__iregex=r'(?i)^.+' + term[1:])
+                query |= Q(tmc_name__iregex=r'(?i)^.+' + term[1:]) | Q(tmc_article__icontains=term)
+                query |= Q(web_code__icontains=term)
             qs = qs.filter(query)
         return qs
 
-def upload_data(request):
 
-    def import_csv_to_sqlite(csv_file_path, db_name, table_name):
-        # Команда для выполнения импорта CSV в SQLite
-        command = f'sqlite3 "{db_name}" ".mode csv" ".separator ;" ".import {csv_file_path} {table_name}"'
-
-        # Запуск команды в терминале
-        subprocess.run(command, shell=True)
-
-    if request.method == 'POST':
-        file = request.FILES['file']
-        upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
-        if not os.path.exists(upload_dir):
-            os.makedirs(upload_dir)
-        file_path = os.path.join(upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
-        with open(file_path, 'wb+') as destination:
-            for chunk in file.chunks():
-                destination.write(chunk)
-        
-        db_name = 'db.sqlite3'
-        table_name = 'IT_OS'
-        import_csv_to_sqlite(file_path, db_name, table_name)
-
-        os.remove(file_path)
-
-        return redirect('/directories/os/')
     

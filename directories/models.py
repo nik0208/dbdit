@@ -17,10 +17,17 @@ class IT_OS(models.Model):
         db_table = 'IT_OS'
 
 
+STATUS_CHOICES = (
+    ('цо', 'ЦО'),
+    ('региональный склад', 'Региональный склад'),
+    ('лц', 'ЛЦ'),
+    ('магазин', 'Магазин'),
+    ('пвз', 'ПВЗ'),
+)
 
 class SkladyOffice(models.Model):
     sklad_name = models.CharField(primary_key=True, max_length=50)
-    sklad_type = models.CharField(max_length=50)
+    sklad_type = models.CharField(max_length=50, choices=STATUS_CHOICES, blank=True)
     sklad_city = models.CharField(max_length=50, blank=True, null=True)
     sklad_adress = models.CharField(max_length=100)
     responsible_person = models.ForeignKey("Users", on_delete=models.PROTECT, blank=True, null=True)
@@ -38,7 +45,7 @@ class Tmc(models.Model):
     tmc_name = models.CharField(primary_key=True, max_length=50)
     tmc_article = models.CharField(max_length=50)
     web_code = models.CharField(max_length=50)
-    tmc_price = models.DecimalField(max_digits=20, decimal_places=2)
+    tmc_price = models.FloatField(default='100')
 
     def __str__(self):
         return self.tmc_name
@@ -49,15 +56,14 @@ class Tmc(models.Model):
 
 
 class Users(models.Model):
-    name = models.CharField(primary_key=True, max_length=50)
-    last_name = models.CharField(max_length=50)
-    dad_name = models.CharField(max_length=50)
-    login = models.CharField(max_length=50)
-    phone_num = models.CharField(max_length=15)
-    department = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(primary_key=True, max_length=255)
+    login = models.CharField(max_length=50, null=True)
+    phone_num = models.CharField(max_length=15, null=True)
+    department = models.CharField(max_length=100, null=True)
+    position = models.CharField(max_length=255, null=True)
 
     def __str__(self):
-        return f"{self.name} {self.last_name} {self.dad_name}"
+        return f"{self.name}"
     
     class Meta:
         managed = True
