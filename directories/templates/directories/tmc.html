@@ -21,6 +21,28 @@
         </div>
     </div>
     
+<<<<<<< HEAD
+    <a class = "AddDocument" href="/myapp/addosmove/" title="Создать новый документ"><span class="create-new-document"></span></a>
+
+    <a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
+
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeFileUploadDialog()">&times;</span>
+            {% csrf_token %}
+            <div id="file-upload" data-upload-url="{% url 'upload_data' %}">
+     
+                <form id="uploadForm" action="{% url 'upload_data' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="file" id="uploadedFile" form="uploadForm">
+                    <button type="submit">Загрузить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+=======
+>>>>>>> 77d8dde1f6b98978755c50132ee56a4eda4683f4
     <div id="table-pagination" class="step-links"></div>
     
     <div class="table-options">
