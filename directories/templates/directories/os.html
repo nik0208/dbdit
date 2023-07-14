@@ -10,9 +10,9 @@
     <div class="modal-content">
         <span class="close" onclick="closeFileUploadDialog()">&times;</span>
         {% csrf_token %}
-        <div id="file-upload" data-upload-url="{% url 'upload_data' %}">
+        <div id="file-upload" data-upload-url="{% url 'upload_data_os' %}">
  
-            <form id="uploadForm" action="{% url 'upload_data' %}" method="post" enctype="multipart/form-data">
+            <form id="uploadForm" action="{% url 'upload_data_os' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="file" name="file" id="uploadedFile" form="uploadForm">
                 <button type="submit">Загрузить</button>
@@ -30,7 +30,7 @@
         <select id="table_os_length" name="table_os_length">
             <option value="10">10</option>
             <option value="25">25</option>
-            <option value="50">50</option>
+            <option value="50" selected>50</option>
             <option value="100">100</option>
         </select>
 
