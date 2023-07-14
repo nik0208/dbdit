@@ -17,6 +17,7 @@ $(document).ready(function() {
                     "previous": "<"
                 }
             },
+            "pageLength": 50,
             "initComplete": function(settings, json) {
                 $('.bottom .dataTables_paginate').appendTo('#table-pagination');
                 $('.dataTables_paginate').addClass('step-links');
@@ -50,13 +51,15 @@ $(document).ready(function() {
         { "data": "tmc_price" }
     ]);
 
-    initializeDataTable('#table_moves', '/moves/', [
+    initializeDataTable('#table_moves', '/moves/moves_list/', [
+        { "data": "move_type" },
         { "data": "move_num" },
         { "data": "move_date" },
-        { "data": "status" },
-        { "data": "avtor" },
-        { "data": "sklad" },
         { "data": "user" },
-        { "data": "comment" }
+        { "data": "sklad" },
+        { "data": "comment" },
+        { "data": null, render: function (data, type, row) {
+            return '<a href="/generatemovedocument/' + row.id + '">Создать</a>';
+        }},
     ]);
 });

@@ -9,53 +9,57 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 import os
 from django.conf import settings
 import subprocess
-from django.db.models import Q
+from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from docxtpl import DocxTemplate
 import win32api
 import tempfile
+from django.db.models.functions import Lower
+from django.db.models import CharField
+
+
 
 @login_required
 def Moves(request):
     return render(request, 'moves/moves.html')
-    
-    moves = models.OsMove.objects.values(
-        'id', 'move_num', 'move_date', 'user', 'sklad', 'comment')
-    tmc_moves = models.TmcMove.objects.values(
-        'id', 'move_num', 'move_date', 'user', 'sklad', 'comment')
-
-    combined = list(moves.union(tmc_moves, all=True))
-
-    combined.sort(key=lambda x: x['move_date'], reverse=True)
-
-    context = {
-        'combined': combined
-    }
 
 class MovesList(BaseDatatableView):
     model_os = apps.get_model('moves', 'OsMove')
     model_tmc = apps.get_model('moves', 'TmcMove')
-    columns = ['move_num', 'move_date', 'status', 'sklad', 'user', 'comment']
+    columns = ['move_num', 'move_date', 'user', 'sklad', 'comment']
+
+    def get_initial_queryset(self):
+        os_queryset = self.model_os.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ОС', output_field=CharField()))
+        tmc_queryset = self.model_tmc.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ТМЦ', output_field=CharField()))
+        return os_queryset.union(tmc_queryset)
 
     def render_column(self, row, column):
         if column == 'move_date':
-            if row.inpute_date is not None:
-                return row.inpute_date.strftime('%d.%m.%Y')
+            if row['move_date'] is not None:
+                return row['move_date'].strftime('%d.%m.%Y')
             else:
                 return ''
         return super().render_column(row, column)
-    
+
     def filter_queryset(self, qs):
         search_value = self.request.GET.get('search[value]', '')
         if search_value:
             search_terms = search_value.lower().split()
-            query = Q()
+            os_query = Q()
+            tmc_query = Q()
             for term in search_terms:
-                query |= Q(name_os__iregex=r'(?i)^.+' + term[1:])
-            qs = qs.filter(query)
+                term_query = Q(move_num__iregex=r'(?i)^.+' + term[1:]) | Q(comment__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__iregex=r'(?i)^.+' + term[1:]) | Q(move_type__iregex=r'(?i)^.+' + term[1:])
+                os_query |= term_query
+                tmc_query |= term_query
+
+            os_queryset = self.model_os.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ОС', output_field=CharField())).filter(os_query)
+            tmc_queryset = self.model_tmc.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ТМЦ', output_field=CharField())).filter(tmc_query)
+            qs = os_queryset.union(tmc_queryset)
+
         return qs
 
+    
 # Добавление перемещения OC
 @login_required
 def AddMove(request):
@@ -68,7 +72,7 @@ def AddMove(request):
             return redirect('moves')
     else:
         form = forms.OsMoveForm(user=request.user)
-    return render(request, 'moves/add_moves.html', {'form': form})
+    return render(request, 'moves/add_move.html', {'form': form})
 
 
 # Добавление перемещения ТМЦ

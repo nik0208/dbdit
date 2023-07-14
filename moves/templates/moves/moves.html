@@ -3,6 +3,8 @@
 {% block title %}Перемещения{% endblock %}
 
 {% block document-buttons %}
+
+<a class = "AddDocument" href="{% url 'add_move' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
     
 <a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
 
@@ -30,7 +32,7 @@
         <select id="table_os_length" name="table_os_length">
             <option value="10">10</option>
             <option value="25">25</option>
-            <option value="50">50</option>
+            <option value="50" selected>50</option>
             <option value="100">100</option>
         </select>
 
@@ -43,16 +45,17 @@
 
 {% block content %}
 
-    <table id="table_moves" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>Номер перемещения</th>
-                <th>Дата</th>
-                <th>МОЛ</th>
-                <th>Склад</th>
-                <th>Комментарий</th>
-                <th>Действия</th>
-            </tr>
-        </thead>
-    </table>
+<table id="table_moves" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Тип</th>
+            <th>Номер перемещения</th>
+            <th>Дата</th>
+            <th>МОЛ</th>
+            <th>Склад</th>
+            <th>Комментарий</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+</table>
 {% endblock %}
