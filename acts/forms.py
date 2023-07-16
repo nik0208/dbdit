@@ -49,4 +49,9 @@ class ActForm(forms.ModelForm):
             "sklad": forms.Select(attrs={
                 'class': 'form-field string'
             }),
+            "user": Select2Widget(attrs={
+                'class': 'form_field_select',
+                'id': 'id_user',
+                'name': 'user'
+            }),
         }
