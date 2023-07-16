@@ -9,16 +9,14 @@ import win32api
 import tempfile
 
 
-
 @login_required
-
 def Complectations(request):
 
     all_Complectaions = models.Complectations.objects.all().order_by('-pk')
 
     # Создание объекта пагинатора, указывая количество объектов на одной странице
     paginator = Paginator(all_Complectaions, 50)
-    
+
     # Получение номера запрошенной страницы из параметров GET запроса
     page_number = request.GET.get('page')
 
@@ -28,8 +26,10 @@ def Complectations(request):
     # Отрисовка HTML-шаблона с данными внутри переменной контекста context
     return render(request, 'complectations/complectations.html', context={'page_obj': page_obj})
 
+
 ############ Создать документ комплектации ############
-def AddComplectations (request):
+
+def AddComplectations(request):
 
     if request.method == 'POST':
         form = forms.ComplForm(request.POST, user=request.user)
