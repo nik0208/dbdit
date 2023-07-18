@@ -3,61 +3,121 @@
 {% load static %}
 
 
+{% block document-name %}<h2 class="form-title">Создать перемещение</h2>{% endblock %}
 
 {% block document-buttons %}
-  <h2 class="form-title">Перемещение</h2>
+
+  <div class="toggle-switch">
+    <input type="checkbox" id="toggle" class="toggle-input">
+    <label for="toggle" class="toggle-label">
+      <span class="toggle-text">ОС</span>
+      <span class="toggle-text">ТМЦ</span>
+    </label>
+  </div>
+
 {% endblock %}
 
 {% block content %}
 
-  <input type="hidden" class="js-url-field" data-url="{% url 'get_equipment_data' %}">
+   {% comment %} <input type="hidden" class="js-url-field" data-url="{% url 'get_equipment_data' %}">  {% endcomment %}
   
-  <div class="form-container">
+    <div class="form-container">
 
-    <form method="post" class="form-area act">
+    <form method="post" id="osForm" class="form-area act">
 
       {% csrf_token %}
     
-    <div class="form-field string">
-      <label for="id_user">Номер перемещения:</label>
-      {{ form.move_num }}
-    </div>
+      <div class="form-field string">
+        <label>Номер перемещения:</label>
+        {{ form.move_num }}
+      </div>
 
-    <div class="form-field select">
-      <label for="id_user">Оборудование:</label>
-      {{ form.equipment }}
-    </div>
+      <div class="form-field select">
+        <label>Оборудование:</label>
+        {{ form.equipment }}
+      </div>
 
-    <div class="form-field select os">
-      <label for="id_user">МОЛ:</label>
-      {{ form.user }}
-    </div>
+      <div class="form-field select">
+        <label>МОЛ:</label>
+        {{ form.user }}
+      </div>
 
-    <div class="form-field text">
-      <label for="id_user">Подразделение:</label>
-      {{ form.sklad }}
-    </div>
+      <div class="form-field text">
+        <label>Подразделение:</label>
+        {{ form.sklad }}
+      </div>
 
-    <div class="form-field text">
-      <label for="id_user">Статус:</label>
-      {{ form.status }}
-    </div>
+      <div class="form-field text">
+        <label>Статус:</label>
+        {{ form.status }}
+      </div>
 
-    <div class="form-field select">
-      <label for="id_user">Комментарий:</label>
-      {{ form.comment }}
-    </div>      
+      <div class="form-field select">
+        <label>Комментарий:</label>
+        {{ form.comment }}
+      </div>      
 
-    <div class="form-field select">
-      <label for="id_user">Автор:</label>
-      {{ form.avtor }}
-    </div>
+      <div class="form-field select">
+        <label>Автор:</label>
+        {{ form.avtor }}
+      </div>
 
-    <div class="form-field button">
-      <button type="submit">Добавить</button>
-    </div>
+      <input type="hidden" name="toggle-switch" value="os">
+      <div class="form-field button">
+        <button type="submit">Добавить</button>
+      </div>
 
   </form>
 
+  <form method="post" id="tmcForm" class="form-area act" style="display: none;">
+
+      {% csrf_token %}
+    
+      <div class="form-field string">
+        <label>Номер перемещения:</label>
+        {{ form.move_num }}
+      </div>
+
+      <div class="form-field select">
+        <label>Оборудование:</label>
+        {{ form.equipment }}
+      </div>
+
+      <div class="form-field">
+        <label>Количество:</label>
+        {{ form.qty }}
+      </div>
+
+      <div class="form-field select">
+        <label>МОЛ:</label>
+        {{ form.user }}
+      </div>
+
+      <div class="form-field text">
+        <label>Подразделение:</label>
+        {{ form.sklad }}
+      </div>
+
+      <div class="form-field text">
+        <label>Статус:</label>
+        {{ form.status }}
+      </div>
+
+      <div class="form-field select">
+        <label>Комментарий:</label>
+        {{ form.comment }}
+      </div>      
+
+      <div class="form-field select">
+        <label for="id_user">Автор:</label>
+        {{ form.avtor }}
+      </div>
+
+      <input type="hidden" name="toggle-switch" value="tmc">
+      <div class="form-field button">
+        <button type="submit">Добавить</button>
+      </div>
+
+  </form>
 </div>
 {% endblock %}

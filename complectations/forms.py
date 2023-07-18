@@ -22,22 +22,22 @@ class ComplForm(forms.ModelForm):
         widgets = {
             
             "par_doc":Select2Widget(attrs={
-                'class': 'form_field_select',
+                'class': 'form_field select',
                 'id': 'par_doc'
             }),
             "inv_dit":Select2Widget(attrs={
-                'class': 'form_field_select',
+                'class': 'form_field select',
                 'id': 'inv_dit',
                 'name': 'inv_dit'
             }),
             "new_name_os":forms.TextInput(attrs={
-                'class': 'form-field string'
+                'class': 'form_field string'
             }),
             "tmc":Select2MultipleWidget(attrs={
-                'class': 'form_field_multi_select'
+                'class': 'form_field select multi'
             }),
             "tmc_qty":forms.NumberInput(attrs={
-                'class': 'form_field_num'
+                'class': 'form_field num'
             }),
         }
         
