@@ -5,7 +5,7 @@ from directories.models import *
 class Acts(models.Model):
     avtor = models.CharField(max_length=100)
     inv_dit = models.ForeignKey(
-        IT_OS, on_delete=models.CASCADE, blank=True, null=True)
+        IT_OS, on_delete=models.PROTECT, blank=True, null=True)
     type = models.CharField(max_length=100)
     result = models.CharField(max_length=255)
     conclusion = models.CharField(max_length=255)
