@@ -61,24 +61,35 @@ class MovesList(BaseDatatableView):
 
     
 # Добавление перемещения OC
-@login_required
-def AddMove(request):
-    if request.method == 'POST':
-        toggle_switch = request.POST.get('toggle-switch')  # Получаем значение переключателя
-        if toggle_switch == 'tmc':  # Проверяем, какая форма активна на основе значения переключателя
-            form = forms.TmcMoveForm(request.POST, user=request.user)
-        else:
-            form = forms.OsMoveForm(request.POST, user=request.user)
 
-        if form.is_valid():
-            move = form.save(commit=False)
+@login_required
+
+def AddMove(request):
+    form_os = forms.OsMoveForm(user=request.user)
+    form_tmc = forms.TmcMoveForm(user=request.user)
+
+    if request.method == 'POST':
+        form_os = forms.OsMoveForm(request.POST, user=request.user)
+        form_tmc = forms.TmcMoveForm(request.POST, user=request.user)
+
+        if form_os.is_valid():
+            move = form_os.save(commit=False)
             move.avtor = request.user
             move.save()
             return redirect('moves')
-    else:
-        form = forms.OsMoveForm(user=request.user)
-    
-    return render(request, 'moves/add_move.html', {'form': form})
+        
+        if form_tmc.is_valid():
+            move = form_tmc.save(commit=False)
+            move.avtor = request.user
+            move.save()
+            return redirect('moves')
+        
+    context = {
+        'form_os': form_os,
+        'form_tmc': form_tmc,
+    }
+
+    return render(request, 'moves/add_move.html', context)
 
 
 # Печать путевого листа

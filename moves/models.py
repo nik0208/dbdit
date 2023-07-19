@@ -20,7 +20,7 @@ class Move(models.Model):
 
 
 class OsMove(Move):
-    equipment = models.ManyToManyField(IT_OS)
+    equipment_os = models.ManyToManyField(IT_OS)
 
     class Meta:
         managed = True
@@ -28,7 +28,7 @@ class OsMove(Move):
 
 
 class TmcMove(Move):
-    equipment = models.ManyToManyField(Tmc)
+    equipment_tmc = models.ManyToManyField(Tmc)
     qty = models.IntegerField()
 
     class Meta:

@@ -319,7 +319,7 @@
 
 /*Кноки страниц END*/
   /*Переключатель Start*/
-  .toggle-switch {
+  .toggle_switch {
     position: relative;
     display: inline-block;
     width: 100px;
@@ -327,11 +327,11 @@
     margin: 10px;
   }
   
-  .toggle-input {
+  .toggle_input {
     display: none;
   }
   
-  .toggle-label {
+  .toggle_label {
     position: absolute;
     top: 0;
     left: 0;
@@ -342,7 +342,7 @@
     cursor: pointer;
   }
   
-  .toggle-label::before {
+  .toggle_label::before {
     content: "";
     position: absolute;
     top: 2px;
@@ -354,11 +354,11 @@
     transition: transform 0.2s ease;
   }
   
-  .toggle-input:checked + .toggle-label::before {
+  .toggle_input:checked + .toggle_label::before {
     transform: translateX(46px);
   }
   
-  .toggle-text {
+  .toggle_text {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -371,20 +371,20 @@
     transition: opacity 0.2s ease;
   }
   
-  .toggle-text:first-child {
+  .toggle_text:first-child {
     left: 10px;
   }
   
-  .toggle-text:last-child {
+  .toggle_text:last-child {
     right: 5px;
     opacity: 0;
   }
   
-  .toggle-input:checked + .toggle-label .toggle-text:first-child {
+  .toggle_input:checked + .toggle_label .toggle_text:first-child {
     opacity: 0;
   }
   
-  .toggle-input:checked + .toggle-label .toggle-text:last-child {
+  .toggle_input:checked + .toggle_label .toggle_text:last-child {
     opacity: 1;
   }
   

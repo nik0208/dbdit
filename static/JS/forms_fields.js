@@ -1,7 +1,10 @@
 $(document).ready(function() {
-  $('.form-field.select').select2();
+  $('.form-field.select').select2({
+    minimumInputLength: 3,
+  });
   $('.form-field.select.multi').select2({
     multiple: true,
+    minimumInputLength: 3,
   });
 });
   
@@ -14,14 +17,10 @@ $(document).ready(function() {
     toggleSwitch.addEventListener('change', function() {
       if (toggleSwitch.checked) {
         osForm.style.display = 'none';
-        tmcForm.style.display = 'block';
+        tmcForm.style.display = 'flex';
       } else {
-        osForm.style.display = 'block';
+        osForm.style.display = 'flex';
         tmcForm.style.display = 'none';
       }
     });
-  });
-
-  $(document).ready(function() {
-    $('#equipment').select2();
   });

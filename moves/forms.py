@@ -1,3 +1,4 @@
+# forms.py
 from django import forms
 from . import models
 from django_select2.forms import Select2Widget, Select2MultipleWidget
@@ -16,13 +17,13 @@ class OsMoveForm(forms.ModelForm):
 
     class Meta:
         model = models.OsMove
-        fields = ['move_num', 'user', 'sklad', 'equipment', 'comment']
+        fields = ['move_num', 'user', 'sklad', 'equipment_os', 'comment']
         widgets = {
-            "move_num": forms.TextInput(attrs={}),
-            "equipment": Select2Widget(attrs={'class': 'form-field select'}),
+            "move_num": forms.TextInput(attrs={'class': 'form-field string'}),
+            "equipment_os": Select2Widget(attrs={'class': 'form-field select'}),
             "sklad": Select2Widget(attrs={'class': 'form-field select'}),
             "user": Select2Widget(attrs={'class': 'form-field select'}),
-            "comment": forms.TextInput(attrs={}),
+            "comment": forms.TextInput(attrs={'class': 'form-field string'}),
         }
 
 
@@ -39,12 +40,12 @@ class TmcMoveForm(forms.ModelForm):
 
     class Meta:
         model = models.TmcMove
-        fields = ['move_num', 'sklad', 'user', 'equipment', 'comment', 'qty']
+        fields = ['move_num', 'sklad', 'user', 'equipment_tmc', 'comment', 'qty']
         widgets = {
             "move_num": forms.TextInput(attrs={}),
-            "equipment": Select2Widget(attrs={'class': 'form-field select'}),
-            "qty": forms.NumberInput(attrs={}),
+            "equipment_tmc": Select2Widget(attrs={'class': 'form-field select'}),
+            "qty": forms.NumberInput(attrs={'class': 'form-field integer'}),
             "sklad": Select2Widget(attrs={'class': 'form-field select'}),
             "user": Select2Widget(attrs={'class': 'form-field select'}),
-            "comment": forms.TextInput(attrs={}),
+            "comment": forms.TextInput(attrs={'class': 'form-field string'}),
         }
