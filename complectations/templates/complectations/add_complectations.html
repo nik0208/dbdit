@@ -14,33 +14,33 @@
 
             {% csrf_token %}
             
-            <div class="form-field select os">
+            <div>
                 <label>Оборудование:</label>
                 {{ form.inv_dit }}
             </div>
 
-            <div class="form-field select os">
+            <div>
                 <label>Новое наименование:</label>
                 {{ form.new_name_os }}
             </div>            
 
-            <div class="form-field select">
+            <div>
                 <label>ТМЦ:</label>
                 {{ form.tmc }}
             </div>
 
-            <div class="form-field integer">
+            <div>
                 <label>Кол-во:</label>
                 {{ form.tmc_qty }}
             </div>      
 
-            <div class="form-field select">
+            <div>
                 <label for="id_par_doc">Документ основание:</label>
                 {{ form.par_doc }}
             </div>
 
-            <div class="form-field select">
-                <label>Документ основание:</label>
+            <div>
+                <label>Автор:</label>
                 {{ form.avtor }}
             </div>
 
@@ -49,21 +49,6 @@
             </div>
 
         </form>
-        <div class="prev-docs">
-
-            <h3 class="prev-docs title">Предыдущие акты:</h3>
-      
-            <div class="prev-doc-list">
-              <ul id="-list">
-                {% for doc in  %}
-                <li>  
-
-                </li>
-                {% endfor %}
-              </ul>
-            <div>
-      
-          </div>
     </div>
 
 {% endblock %}
