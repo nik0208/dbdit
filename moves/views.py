@@ -72,17 +72,19 @@ def AddMove(request):
         form_os = forms.OsMoveForm(request.POST, user=request.user)
         form_tmc = forms.TmcMoveForm(request.POST, user=request.user)
 
-        if form_os.is_valid():
-            move = form_os.save(commit=False)
-            move.avtor = request.user
-            move.save()
-            return redirect('moves')
-        
-        if form_tmc.is_valid():
-            move = form_tmc.save(commit=False)
-            move.avtor = request.user
-            move.save()
-            return redirect('moves')
+    if form_os.is_valid() and 'toggle_switch' in request.POST and request.POST['toggle_switch'] == 'os':
+        move_os = form_os.save(commit=False)
+        move_os.avtor = request.user
+        move_os.save()
+        form_os.save_m2m()  # Сохранение связанных полей
+        return redirect('moves')
+
+    if form_tmc.is_valid() and 'toggle_switch' in request.POST and request.POST['toggle_switch'] == 'tmc':
+        move_tmc = form_tmc.save(commit=False)
+        move_tmc.avtor = request.user
+        move_tmc.save()
+        form_tmc.save_m2m()  # Сохранение связанных полей
+        return redirect('moves')
         
     context = {
         'form_os': form_os,
@@ -90,6 +92,7 @@ def AddMove(request):
     }
 
     return render(request, 'moves/add_move.html', context)
+
 
 
 # Печать путевого листа
