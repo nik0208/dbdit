@@ -22,6 +22,7 @@
   width: var(--topbar-width);
   display: flex;
   position: fixed;
+  justify-content: center;
   align-items: center;
   top: 0;
   left: 0;
@@ -51,12 +52,12 @@
   color: #fff;
   display: flex;
   position: fixed;
-  justify-content: right;
+  margin-top: 5px;
+  justify-content: center;
   align-items: center;
   top: 0;
-  right: 0;
   z-index: 2;
-  border-radius: 30px 30px 30px 30px;
+  border-radius: 30px 30px 0 0;
 }
 
 .topbar-right {
@@ -73,7 +74,7 @@
   top: 0;
   right: 0;
   z-index: 2;
-  border-radius: 30px 0 0 00px;
+  border-radius: 30px 0 0 0px;
 }
 
 /*Topapanel-left START*/
@@ -94,13 +95,11 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  ;
   opacity: 1;
 }
 
 .toggle {
   background-image: url(/static/icons/HidePanel.svg);
-
 }
 
 .toggle.sidebar-closed {
@@ -185,7 +184,6 @@
   background-image: url(/static/icons/creare-document.svg);
   opacity: 1;
 }
-
 
 .document-btns a.AddDocument:hover {
   background-color: initial;
@@ -320,10 +318,81 @@
 }
 
 /*Кноки страниц END*/
+  /*Переключатель Start*/
+  .toggle_switch {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    margin: 10px;
+  }
+  
+  .toggle_input {
+    display: none;
+  }
+  
+  .toggle_label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    border-radius: 15px;
+    cursor: pointer;
+  }
+  
+  .toggle_label::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 50px;
+    height: 26px;
+    background-color: var(--primary-color);
+    border-radius: 13px;
+    transition: transform 0.2s ease;
+  }
+  
+  .toggle_input:checked + .toggle_label::before {
+    transform: translateX(46px);
+  }
+  
+  .toggle_text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    padding: 0 5px;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  
+  .toggle_text:first-child {
+    left: 10px;
+  }
+  
+  .toggle_text:last-child {
+    right: 5px;
+    opacity: 0;
+  }
+  
+  .toggle_input:checked + .toggle_label .toggle_text:first-child {
+    opacity: 0;
+  }
+  
+  .toggle_input:checked + .toggle_label .toggle_text:last-child {
+    opacity: 1;
+  }
+  
+  /*Переключатель End*/
 
-/*Topapanel-right Start*/
-
+/*Toppanel-right Start*/
 /*Topbar END*/
+
 
 /*Sidebar START*/
 
@@ -683,6 +752,7 @@ textarea,
   color: #fff;
   border: none;
   border-radius: 20px 0 0 20px;
+  margin-top: 10px;
   cursor: pointer;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
   font-weight: bold;
