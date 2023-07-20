@@ -9,6 +9,12 @@
 {% block content %}
 
     <div class="form-container">
+        {{ form.media }}
+        <script>
+            $(document).ready(function() {
+                $('#inv_dit').select2();
+            });
+        </script>
 
         <form method="post" action="{% url 'add_complectations' %}" class="form-area act">
 
@@ -49,6 +55,7 @@
             </div>
 
         </form>
+
     </div>
 
 {% endblock %}

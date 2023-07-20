@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'acceptance',
     'complectations',
     'applications',
+    'django_select2',
 
 ]
 
