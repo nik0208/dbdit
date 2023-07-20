@@ -20,11 +20,8 @@
 {% block content %}
 
   <div class="form-container" id="osForm">
-
-  <form method="post" action="{% url 'add_move' %}" class="form-area act">
-
+    <form method="post" action="{% url 'add_move' %}" class="form-area act">
       {% csrf_token %}
-
       <input type="hidden" name="toggle_switch" value="os">
 
       <div>
@@ -76,13 +73,10 @@
 
 
   <div class="form-container" id="tmcForm" style='display: none'>
-
-  <form method="post" action="{% url 'add_move' %}" class="form-area act" >
-
+    <form method="post" action="{% url 'add_move' %}" class="form-area act">
       {% csrf_token %}
-
       <input type="hidden" name="toggle_switch" value="tmc">
-
+  
       <div>
         <label>Номер перемещения:</label>
         {{ form_tmc.move_num }}
@@ -131,51 +125,36 @@
 
 </div>
 
-
-<div id="selected-equipment os">
-
+<div id="selected_equipment_os" class="selected_equipment os">
   <h3>Выбранное оборудование:</h3>
-
-  <table id="selected-equipment-table">
-
+  <table id="selected-equipment-table-os">
     <thead>
       <tr>
         <th>Наименование</th>
-        <th>МОЛ</th>
-        <th>Подразделение</th>
-        <th>Подразделение</th>
+        <th>Описание</th>
       </tr>
     </thead>
-    
     <tbody>
-      <!-- Сюда будет вставлен выбранный список оборудования -->
+      <!-- Сюда будет вставлен выбранный список оборудования для ОС -->
     </tbody>
-
   </table>
-
+</div>
 </div>
 
-
-<div id="selected-equipment tmc">
-
+<div id="selected_equipment_tmc" class="selected_equipment tmc" style='display: none'>
   <h3>Выбранное оборудование:</h3>
-
-  <table id="selected-equipment-table">
-
+  <table id="selected-equipment-table-tmc">
     <thead>
       <tr>
         <th>Наименование</th>
-        <th>Количество</th>
-        <th>Стоимость</th>
-        <th>Сумма</th>
+        <th>Описание</th>
       </tr>
     </thead>
-    
     <tbody>
-      <!-- Сюда будет вставлен выбранный список оборудования -->
+      <!-- Сюда будет вставлен выбранный список оборудования для ТМЦ -->
     </tbody>
-
   </table>
-
 </div>
+</div>
+
 {% endblock %}

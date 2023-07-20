@@ -43,7 +43,7 @@ class TmcMoveForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={}),
-            "equipment_tmc": Select2Widget(attrs={'class': 'form-field select'}),
+            "equipment_tmc": Select2MultipleWidget(attrs={'class': 'form-field select'}),
             "qty": forms.NumberInput(attrs={'class': 'form-field integer'}),
             "sklad": Select2Widget(attrs={'class': 'form-field select'}),
             "user": Select2Widget(attrs={'class': 'form-field select'}),
