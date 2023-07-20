@@ -1,7 +1,7 @@
 # forms.py
 from django import forms
 from . import models
-from django_select2.forms import Select2Widget, Select2MultipleWidget
+from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget, ModelSelect2MultipleWidget
 
 
 class OsMoveForm(forms.ModelForm):
@@ -20,10 +20,10 @@ class OsMoveForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={'class': 'form-field string'}),
-            "equipment_os": Select2MultipleWidget (attrs={'class': 'form-field select'}),
-            "sklad": Select2Widget(attrs={'class': 'form-field select'}),
-            "user": Select2Widget(attrs={'class': 'form-field select'}),
-            "comment": forms.TextInput(attrs={'class': 'form-field string'}),
+            "equipment_os": ModelSelect2MultipleWidget (attrs={'class': 'form-field select'}, search_fields=['equipment_os__icontains'],),
+            "sklad": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['sklad__icontains'],),
+            "user": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['user__icontains'],),
+            "comment": forms.TextInput(attrs={'class': 'form-field string'},),
         }
 
 
@@ -43,9 +43,9 @@ class TmcMoveForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={}),
-            "equipment_tmc": Select2MultipleWidget(attrs={'class': 'form-field select'}),
+            "equipment_tmc": ModelSelect2MultipleWidget (attrs={'class': 'form-field select'}, search_fields=['equipment_tmc__icontains'],),
             "qty": forms.NumberInput(attrs={'class': 'form-field integer'}),
-            "sklad": Select2Widget(attrs={'class': 'form-field select'}),
-            "user": Select2Widget(attrs={'class': 'form-field select'}),
+            "sklad": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['sklad__icontains'],),
+            "user": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['user__icontains'],),
             "comment": forms.TextInput(attrs={'class': 'form-field string'}),
         }
