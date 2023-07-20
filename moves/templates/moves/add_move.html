@@ -20,7 +20,7 @@
 {% block content %}
 
   <div class="form-container" id="osForm">
-    {% csrf_token %}
+
   <form method="post" action="{% url 'add_move' %}" class="form-area act">
 
       {% csrf_token %}
@@ -30,6 +30,11 @@
       <div>
         <label>Номер перемещения:</label>
         {{ form_os.move_num }}
+      </div>
+
+      <div>
+        <label>Статус:</label>
+        {{ form_os.status }}
       </div>
 
       <div>
@@ -63,10 +68,20 @@
 
   </form>
 
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+
   </div>
 
-  <div class="form-container" id="tmcForm" >
-    {% csrf_token %}
+
+
+  <div class="form-container" id="tmcForm" style='display: flex'>
+
   <form method="post" action="{% url 'add_move' %}" class="form-area act" >
 
       {% csrf_token %}
@@ -76,6 +91,11 @@
       <div>
         <label>Номер перемещения:</label>
         {{ form_tmc.move_num }}
+      </div>
+
+      <div>
+        <label>Статус:</label>
+        {{ form_tmc.status }}
       </div>
 
       <div>
@@ -113,6 +133,14 @@
       </div>
 
   </form>
+
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
 
 </div>
 

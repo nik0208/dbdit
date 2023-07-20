@@ -17,7 +17,7 @@ import win32api
 import tempfile
 from django.db.models.functions import Lower
 from django.db.models import CharField
-
+from django.contrib import messages
 
 
 @login_required
@@ -64,28 +64,34 @@ class MovesList(BaseDatatableView):
 
 @login_required
 
+@login_required
 def AddMove(request):
     form_os = forms.OsMoveForm(user=request.user)
     form_tmc = forms.TmcMoveForm(user=request.user)
 
     if request.method == 'POST':
-        form_os = forms.OsMoveForm(request.POST, user=request.user)
-        form_tmc = forms.TmcMoveForm(request.POST, user=request.user)
+        toggle_switch = request.POST.get('toggle_switch')
+        if toggle_switch == 'os':
+            form_os = forms.OsMoveForm(request.POST, user=request.user)
+            if form_os.is_valid():
+                move_os = form_os.save(commit=False)
+                move_os.avtor = request.user
+                move_os.save()
+                form_os.save_m2m()  # Сохранение связанных полей
+                return redirect('moves')
+            else:
+                messages.error(request, form_os.errors)
+        elif toggle_switch == 'tmc':
+            form_tmc = forms.TmcMoveForm(request.POST, user=request.user)
+            if form_tmc.is_valid():
+                move_tmc = form_tmc.save(commit=False)
+                move_tmc.avtor = request.user
+                move_tmc.save()
+                form_tmc.save_m2m()  # Сохранение связанных полей
+                return redirect('moves')
+            else:
+                messages.error(request, form_tmc.errors)
 
-    if form_os.is_valid() and 'toggle_switch' in request.POST and request.POST['toggle_switch'] == 'os':
-        move_os = form_os.save(commit=False)
-        move_os.avtor = request.user
-        move_os.save()
-        form_os.save_m2m()  # Сохранение связанных полей
-        return redirect('moves')
-
-    if form_tmc.is_valid() and 'toggle_switch' in request.POST and request.POST['toggle_switch'] == 'tmc':
-        move_tmc = form_tmc.save(commit=False)
-        move_tmc.avtor = request.user
-        move_tmc.save()
-        form_tmc.save_m2m()  # Сохранение связанных полей
-        return redirect('moves')
-        
     context = {
         'form_os': form_os,
         'form_tmc': form_tmc,
@@ -94,6 +100,19 @@ def AddMove(request):
     return render(request, 'moves/add_move.html', context)
 
 
+# def AddMove(request):
+    
+#     if request.method == 'POST':
+#         form_os = forms.OsMoveForm(request.POST, user=request.user)
+#         if form_os.is_valid():
+#             act = form_os.save(commit=False)
+#             act.avtor = request.user
+#             act.save()
+#             return redirect('acts')
+#     else:
+#         form_os = forms.OsMoveForm(user=request.user)
+        
+#     return render(request, 'moves/add_move.html', {'form_os': form_os})
 
 # Печать путевого листа
 def GenerateMoveDocument(request, move_id):

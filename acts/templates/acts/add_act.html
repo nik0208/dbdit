@@ -14,42 +14,42 @@
 
         {% csrf_token %}
       
-      <div class="form-field string">
-        <label for="id_user">Пользователь:</label>
+      <div>
+        <label>Пользователь:</label>
         {{ form.user }}
       </div>
 
-      <div class="form-field select">
-        <label for="id_user">Местонахождение:</label>
+      <div>
+        <label>Местонахождение:</label>
         {{ form.sklad }}
       </div>
 
-      <div class="form-field select os">
-        <label for="id_user">Оборудование:</label>
+      <div>
+        <label>Оборудование:</label>
         {{ form.inv_dit }}
       </div>
 
-      <div class="form-field text">
-        <label for="id_user">Результат проверки:</label>
+      <div>
+        <label>Результат проверки:</label>
         {{ form.result }}
       </div>
 
-      <div class="form-field text">
-        <label for="id_user">Заключение:</label>
+      <div>
+        <label>Заключение:</label>
         {{ form.conclusion }}
       </div>
 
-      <div class="form-field select">
-        <label for="id_user">Действие:</label>
+      <div>
+        <label>Действие:</label>
         {{ form.type }}
       </div>      
 
-      <div class="form-field select">
-        <label for="id_user">Автор:</label>
+      <div>
+        <label>Автор:</label>
         {{ form.avtor }}
       </div>
 
-      <div class="form-field button">
+      <div>
         <button type="submit">Добавить</button>
       </div>
 

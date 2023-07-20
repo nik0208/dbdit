@@ -5,7 +5,7 @@ from directories.models import *
 class Move(models.Model):
     move_num = models.CharField(max_length=20, null=True)
     move_date = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=100)
+    status = models.CharField(max_length=100, default='True')
     avtor = models.CharField(max_length=100)
     sklad = models.ForeignKey(
         SkladyOffice, on_delete=models.PROTECT, null=True)
@@ -20,7 +20,7 @@ class Move(models.Model):
 
 
 class OsMove(Move):
-    equipment_os = models.ManyToManyField(IT_OS)
+    equipment_os = models.ForeignKey(IT_OS, on_delete=models.PROTECT)
 
     class Meta:
         managed = True
@@ -28,7 +28,7 @@ class OsMove(Move):
 
 
 class TmcMove(Move):
-    equipment_tmc = models.ManyToManyField(Tmc)
+    equipment_tmc = models.ForeignKey(Tmc, on_delete=models.PROTECT)
     qty = models.IntegerField()
 
     class Meta:

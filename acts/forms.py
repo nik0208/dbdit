@@ -42,7 +42,7 @@ class ActForm(forms.ModelForm):
                 'class': 'form-field text'
             }),
             "inv_dit": Select2Widget(attrs={
-                'class': 'form_field_select',
+                'class': 'form-field select',
                 'id': 'id_inv_dit',
                 'name': 'inv_dit'
             }),
@@ -50,7 +50,7 @@ class ActForm(forms.ModelForm):
                 'class': 'form-field string'
             }),
             "user": Select2Widget(attrs={
-                'class': 'form_field_select',
+                'class': 'form-field select',
                 'id': 'id_user',
                 'name': 'user'
             }),

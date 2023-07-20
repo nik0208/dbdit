@@ -17,7 +17,7 @@ class OsMoveForm(forms.ModelForm):
 
     class Meta:
         model = models.OsMove
-        fields = ['move_num', 'user', 'sklad', 'equipment_os', 'comment']
+        fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={'class': 'form-field string'}),
             "equipment_os": Select2Widget(attrs={'class': 'form-field select'}),
@@ -40,7 +40,7 @@ class TmcMoveForm(forms.ModelForm):
 
     class Meta:
         model = models.TmcMove
-        fields = ['move_num', 'sklad', 'user', 'equipment_tmc', 'comment', 'qty']
+        fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={}),
             "equipment_tmc": Select2Widget(attrs={'class': 'form-field select'}),
