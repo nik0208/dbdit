@@ -20,6 +20,14 @@
 {% block content %}
 
   <div class="form-container" id="osForm">
+    
+    {{ form_os.media }}
+    <script>
+        $(document).ready(function() {
+            $('#equipment_os').select2();
+        });
+    </script>
+
     <form method="post" action="{% url 'add_move' %}" class="form-area act">
       {% csrf_token %}
       <input type="hidden" name="toggle_switch" value="os">
@@ -37,6 +45,11 @@
       <div>
         <label>Оборудование:</label>
         {{ form_os.equipment_os }}
+      </div>
+
+      <div>
+        <label>Подразделение:</label>
+        {{ form_os.sklad }}
       </div>
 
       <div>
@@ -73,6 +86,9 @@
 
 
   <div class="form-container" id="tmcForm" style='display: none'>
+
+
+
     <form method="post" action="{% url 'add_move' %}" class="form-area act">
       {% csrf_token %}
       <input type="hidden" name="toggle_switch" value="tmc">
