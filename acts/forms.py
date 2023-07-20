@@ -1,6 +1,6 @@
 from django import forms
 from . import models
-from django_select2.forms import Select2Widget, Select2MultipleWidget
+from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget
 
 
 class ActForm(forms.ModelForm):
@@ -41,11 +41,11 @@ class ActForm(forms.ModelForm):
             "conclusion": forms.Textarea(attrs={
                 'class': 'form-field text'
             }),
-            "inv_dit": Select2Widget(attrs={
-                'class': 'form-field select',
-                'id': 'id_inv_dit',
-                'name': 'inv_dit'
-            }),
+            "inv_dit": ModelSelect2Widget(
+                attrs={'class': 'form-field select'},
+                # Поиск по частичному совпадению символов в поле inv_dit
+                search_fields=['inv_dit__icontains'],
+            ),
             "sklad": forms.Select(attrs={
                 'class': 'form-field string'
             }),

@@ -10,6 +10,13 @@
 {% block content %}
   <div class="form-container">
 
+    {{ form.media }}
+    <script>
+        $(document).ready(function() {
+            $('#inv_dit').select2();
+        });
+    </script>
+    
     <form method="post" class="form-area act">
 
         {% csrf_token %}

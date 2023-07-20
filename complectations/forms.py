@@ -16,7 +16,6 @@ class ComplForm(forms.ModelForm):
             # Устанавливаем начальное значение поля 'avtor'
             self.initial['avtor'] = user.get_username()
 
-
     class Meta:
         model = models.Complectations
         fields = ['par_doc', 'inv_dit', 'new_name_os', 'tmc', 'tmc_qty']
@@ -24,7 +23,8 @@ class ComplForm(forms.ModelForm):
             # Остальные виджеты
             "inv_dit": ModelSelect2Widget(
                 attrs={'class': 'form-field select'},
-                search_fields=['inv_dit__icontains'],  # Поиск по частичному совпадению символов в поле inv_dit
+                # Поиск по частичному совпадению символов в поле inv_dit
+                search_fields=['inv_dit__icontains'],
             ),
             "new_name_os": forms.TextInput(attrs={}),
             "tmc": Select2MultipleWidget(attrs={'class': 'form-field select multi'}),
