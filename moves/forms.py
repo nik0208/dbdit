@@ -20,9 +20,9 @@ class OsMoveForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={'class': 'form-field string'}),
-            "equipment_os": ModelSelect2MultipleWidget (attrs={'class': 'form-field select'}, search_fields=['equipment_os__icontains'],),
-            "sklad": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['sklad__icontains'],),
-            "user": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['user__icontains'],),
+            "equipment_os": ModelSelect2MultipleWidget(attrs={'class': 'form-field select'}, search_fields=['inv_dit__icontains'],),
+            "sklad": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['sklad_name__icontains'],),
+            "user": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['name__icontains'],),
             "comment": forms.TextInput(attrs={'class': 'form-field string'},),
         }
 
@@ -43,9 +43,9 @@ class TmcMoveForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={}),
-            "equipment_tmc": ModelSelect2MultipleWidget (attrs={'class': 'form-field select'}, search_fields=['equipment_tmc__icontains'],),
+            "equipment_tmc": ModelSelect2MultipleWidget(attrs={'class': 'form-field select'}, search_fields=['tmc_name__icontains']),
             "qty": forms.NumberInput(attrs={'class': 'form-field integer'}),
-            "sklad": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['sklad__icontains'],),
-            "user": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['user__icontains'],),
+            "sklad": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['sklad_name__icontains']),
+            "user": ModelSelect2Widget(attrs={'class': 'form-field select'}, search_fields=['name__icontains']),
             "comment": forms.TextInput(attrs={'class': 'form-field string'}),
         }
