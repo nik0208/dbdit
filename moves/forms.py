@@ -20,7 +20,7 @@ class OsMoveForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={'class': 'form-field string'}),
-            "equipment_os": Select2Widget(attrs={'class': 'form-field select'}),
+            "equipment_os": Select2MultipleWidget (attrs={'class': 'form-field select'}),
             "sklad": Select2Widget(attrs={'class': 'form-field select'}),
             "user": Select2Widget(attrs={'class': 'form-field select'}),
             "comment": forms.TextInput(attrs={'class': 'form-field string'}),

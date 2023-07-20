@@ -48,11 +48,6 @@
       </div>
 
       <div>
-        <label>Подразделение:</label>
-        {{ form_os.sklad }}
-      </div>
-
-      <div>
         <label>Комментарий:</label>
         {{ form_os.comment }}
       </div>      
@@ -80,7 +75,7 @@
 
 
 
-  <div class="form-container" id="tmcForm" style='display: flex'>
+  <div class="form-container" id="tmcForm" style='display: none'>
 
   <form method="post" action="{% url 'add_move' %}" class="form-area act" >
 
@@ -102,7 +97,7 @@
         <label>Оборудование:</label>
         {{ form_tmc.equipment_tmc }}
       </div>
-
+  
       <div>
         <label>Количество:</label>
         {{ form_tmc.qty }}
@@ -134,14 +129,53 @@
 
   </form>
 
-  {% if messages %}
-  <ul class="messages">
-      {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-  </ul>
-  {% endif %}
+</div>
+
+
+<div id="selected-equipment os">
+
+  <h3>Выбранное оборудование:</h3>
+
+  <table id="selected-equipment-table">
+
+    <thead>
+      <tr>
+        <th>Наименование</th>
+        <th>МОЛ</th>
+        <th>Подразделение</th>
+        <th>Подразделение</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <!-- Сюда будет вставлен выбранный список оборудования -->
+    </tbody>
+
+  </table>
 
 </div>
 
+
+<div id="selected-equipment tmc">
+
+  <h3>Выбранное оборудование:</h3>
+
+  <table id="selected-equipment-table">
+
+    <thead>
+      <tr>
+        <th>Наименование</th>
+        <th>Количество</th>
+        <th>Стоимость</th>
+        <th>Сумма</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <!-- Сюда будет вставлен выбранный список оборудования -->
+    </tbody>
+
+  </table>
+
+</div>
 {% endblock %}
