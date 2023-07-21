@@ -181,8 +181,17 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  background-image: url(/static/icons/creare-document.svg);
+  background-image: url(/static/icons/create_document.svg);  
   opacity: 1;
+}
+
+
+.create-new-document.os {
+  background-image: url(/static/icons/create_document_os.svg);
+}
+
+.create-new-document.tmc {
+  background-image: url(/static/icons/create_document_tmc.svg);
 }
 
 .document-btns a.AddDocument:hover {

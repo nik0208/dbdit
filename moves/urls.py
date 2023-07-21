@@ -7,7 +7,8 @@ urlpatterns = [
 
     path('', Moves, name='moves'),
     path('moves_list/', MovesList.as_view(), name='moves_list'),
-    path('add_move/', AddMove, name='add_move'),
+    path('add_move_os/', AddMoveOS, name='add_move_os'),
+    path('add_move_tmc/', AddMoveTmc, name='add_move_tmc'),
     path('generatemovedocument/<int:move_id>', GenerateMoveDocument,
          name='generate_move_document'),
 
