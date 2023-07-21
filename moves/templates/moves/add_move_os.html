@@ -1,0 +1,85 @@
+{% extends 'index/base.html' %}
+
+{% load static %}
+
+
+{% block document-name %}<h2 class="form-title">Создать перемещение ОС</h2>{% endblock %}
+
+{% block document-buttons %}
+
+<a class = "AddDocument" href="{% url 'add_move_tmc' %}" title="Создать новый документ"><span class="create-new-document tmc"></span></a>
+
+  {% comment %} <div class="toggle_switch">
+    <input type="checkbox" id="toggle" class="toggle_input">
+    <label for="toggle" class="toggle_label">
+      <span class="toggle_text">ОС</span>
+      <span class="toggle_text">ТМЦ</span>
+    </label>
+  </div> {% endcomment %}
+
+  
+
+{% endblock %}
+
+{% block content %}
+
+  <div class="form-container" id="osForm">
+    
+    <a type="hidden">{{ form.media }}</a>
+
+    <form method="post" action="{% url 'add_move_os' %}" class="form-area act">
+      {% csrf_token %}
+      <input type="hidden" name="toggle_switch" value="os">
+
+      <div>
+        <label>Номер перемещения:</label>
+        {{ form.move_num }}
+      </div>
+
+      <div>
+        <label>Статус:</label>
+        {{ form.status }}
+      </div>
+
+      <div>
+        <label>Оборудование:</label>
+        {{ form.equipment_os }}
+      </div>
+
+      <div>
+        <label>Подразделение:</label>
+        {{ form.sklad }}
+      </div>
+
+      <div>
+        <label>МОЛ:</label>
+        {{ form.user }}
+      </div>
+
+      <div>
+        <label>Комментарий:</label>
+        {{ form.comment }}
+      </div>      
+
+      <div>
+        <label>Автор:</label>
+        {{ form.avtor }}
+      </div>
+
+      <div class="form-field button">
+        <button type="submit">Добавить</button>
+      </div>
+
+  </form>
+
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+
+  </div>
+
+{% endblock %}

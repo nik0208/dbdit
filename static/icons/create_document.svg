@@ -1,0 +1,10 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+<g>
+	<polygon fill="none" stroke="#ffffff" stroke-width="6" stroke-miterlimit="10" points="23,1 55,1 55,63 9,63 9,15"/>
+	<polyline fill="none" stroke="#ffffff" stroke-width="6" stroke-miterlimit="10" points="9,15 23,15 23,1"/>
+</g>
+<line fill="none" stroke="#ffffff" stroke-width="6" stroke-miterlimit="10" x1="32" y1="27" x2="32" y2="45"/>
+<line fill="none" stroke="#ffffff" stroke-width="6" stroke-miterlimit="10" x1="41" y1="36" x2="23" y2="36"/>
+
+</svg>
