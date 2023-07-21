@@ -10,6 +10,6 @@ urlpatterns = [
     path('add_move/', AddMove, name='add_move'),
     path('generatemovedocument/<int:move_id>', GenerateMoveDocument,
          name='generate_move_document'),
-    path('select2/', include('django_select2.urls')),
+
 ]
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

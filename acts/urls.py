@@ -13,6 +13,6 @@ urlpatterns = [
     path('get_acts/', get_acts, name='get_acts'),
     path('create_based_on_act/<int:act_id>',
          CreateBasedOnAct, name='create_based_on_act'),
-    path('select2/', include('django_select2.urls')),
+
 ]
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
