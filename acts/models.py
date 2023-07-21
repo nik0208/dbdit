@@ -16,6 +16,7 @@ class Acts(models.Model):
                              blank=True)
     sklad = models.ForeignKey(
         SkladyOffice, on_delete=models.PROTECT, blank=True)
+    status = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"{self.act_date} {self.avtor} {self.user}"
