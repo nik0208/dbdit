@@ -21,12 +21,7 @@
 
   <div class="form-container" id="osForm">
     
-    {{ form_os.media }}
-    <script>
-        $(document).ready(function() {
-            $('#equipment_os').select2();
-        });
-    </script>
+      {{ form_os.media }}
 
     <form method="post" action="{% url 'add_move' %}" class="form-area act">
       {% csrf_token %}
