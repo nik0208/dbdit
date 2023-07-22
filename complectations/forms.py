@@ -1,6 +1,6 @@
 from django import forms
 from . import models
-from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget
+from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget, ModelSelect2MultipleWidget
 
 
 class ComplForm(forms.ModelForm):
@@ -22,11 +22,10 @@ class ComplForm(forms.ModelForm):
         widgets = {
             # Остальные виджеты
             "inv_dit": ModelSelect2Widget(
-                attrs={'class': 'form-field select'},
-                # Поиск по частичному совпадению символов в поле inv_dit
-                search_fields=['inv_dit__icontains'],
+                attrs={'class': 'form-field select'}, search_fields=['inv_dit__icontains'],
             ),
             "new_name_os": forms.TextInput(attrs={}),
-            "tmc": Select2MultipleWidget(attrs={'class': 'form-field select multi'}),
+            "tmc": ModelSelect2MultipleWidget(attrs={'class': 'form-field select multi'}, search_fields=['tmc_name__icontains'],
+            ),
             "tmc_qty": forms.NumberInput(attrs={}),
         }

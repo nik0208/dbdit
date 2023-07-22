@@ -55,25 +55,23 @@ document.addEventListener('DOMContentLoaded', function() {
     var activeMenu = null; // Хранит активное меню
 
     // Добавляем обработчик событий к каждой кнопке
-    dropdownButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            var buttonId = this.id;
-            var menuId = buttonId.replace('dropdown_btn_', 'dropdown_menu_');
-            var dropdownMenu = document.getElementById(menuId);
-
-            // Закрываем предыдущее активное меню, если оно существует и не равно текущему меню
-            if (activeMenu && activeMenu !== dropdownMenu) {
-                activeMenu.style.display = 'none';
-            }
-
-            if (dropdownMenu.style.display === 'none') {
-                dropdownMenu.style.display = 'block';
-                activeMenu = dropdownMenu; // Обновляем активное меню
-            } else {
-                dropdownMenu.style.display = 'none';
-                activeMenu = null; // Сбрасываем активное меню
-            }
-        });
+    $('#table_acts').on('click', '.dropdown_menu_button', function() {
+        var buttonId = this.id;
+        var menuId = buttonId.replace('dropdown_btn_', 'dropdown_menu_');
+        var dropdownMenu = document.getElementById(menuId);
+    
+        // Закрываем предыдущее активное меню, если оно существует и не равно текущему меню
+        var activeMenu = document.querySelector('.dropdown-menu.show');
+        if (activeMenu && activeMenu !== dropdownMenu) {
+            activeMenu.style.display = 'none';
+        }
+    
+        // Отображаем/скрываем текущее меню
+        if (dropdownMenu.style.display === 'none') {
+            dropdownMenu.style.display = 'block';
+        } else {
+            dropdownMenu.style.display = 'none';
+        }
     });
 
     // Обработчик изменения значения в поле "Оборудование"

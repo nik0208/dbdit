@@ -1,84 +1,53 @@
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator
-from . import models
+from django.contrib.auth.decorators import login_required
 from . import forms
-from django.contrib.auth.decorators import login_required
-from docxtpl import DocxTemplate
-import win32api
-import tempfile
-from django.contrib.auth.decorators import login_required
+from . import models
+from django.apps import apps
+from openpyxl import load_workbook
+from django.http import JsonResponse
+from django.http import HttpResponse
+from django_datatables_view.base_datatable_view import BaseDatatableView
 import os
 from django.conf import settings
 import subprocess
+from django.db.models import Q, F, Value, CharField
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
+from docxtpl import DocxTemplate
+import win32api
+import tempfile
+from django.db.models.functions import Lower
+from django.db.models import CharField
+from django.contrib import messages
 import pandas as pd
-
-
-def upload_data_acts(request, table_name='Acts'):
-
-    def import_csv_to_sqlite(csv_file_path, db_name, table_name):
-        # Команда для выполнения импорта CSV в SQLite
-        command = f'sqlite3 "{db_name}" ".mode csv" ".import {csv_file_path} {table_name}"'
-
-        # Запуск команды в терминале
-        subprocess.run(command, shell=True)
-
-    if request.method == 'POST':
-        file = request.FILES['file']
-        upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
-
-        file_extension = os.path.splitext(file.name)[1].lower()
-        if file_extension != '.csv':
-            # Чтение данных из Excel-файла
-            data = pd.read_excel(file, engine='openpyxl')
-
-            # Сохранение данных в CSV-файл
-            csv_file_path = os.path.join(
-                upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
-            data.to_csv(csv_file_path, index=False)
-
-            db_name = 'db.sqlite3'
-            import_csv_to_sqlite(csv_file_path, db_name, table_name)
-
-            os.remove(csv_file_path)
-
-        else:
-            # Сохранение загруженного CSV-файла
-            if not os.path.exists(upload_dir):
-                os.makedirs(upload_dir)
-            file_path = os.path.join(
-                upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
-            with open(file_path, 'wb+') as destination:
-                for chunk in file.chunks():
-                    destination.write(chunk)
-
-            db_name = 'db.sqlite3'
-            import_csv_to_sqlite(file_path, db_name, table_name)
-
-            os.remove(file_path)
-
-        return redirect('/acts')
-    
 
 
 @login_required
 def Acts(request):
+    return render(request, 'acts/acts.html')
 
-    # Получение всех объектов из базы данных
-    all_Acts = models.Acts.objects.all().order_by('-pk')
+class ActsList(BaseDatatableView):
+    model = apps.get_model('acts', 'Acts')
+    columns = ['pk', 'act_date', 'inv_dit', 'result', 'conclusion', 'type', 'user', 'avtor']
 
-    # Создание объекта пагинатора, указывая количество объектов на одной странице
-    paginator = Paginator(all_Acts, 50)
+    def render_column(self, row, column):
+        # Обработка специфических столбцов (если требуется)
 
-    # Получение номера запрошенной страницы из параметров GET запроса
-    page_number = request.GET.get('page')
+        if column == 'act_date':
+            if row.act_date is not None:
+                return row.act_date.strftime('%d.%m.%Y')
+            else:
+                return ''
+        return super().render_column(row, column)
 
-    # Получение объектов для текущей страницы
-    page_obj = paginator.get_page(page_number)
-
-    # Отрисовка HTML-шаблона acts.html с данными внутри переменной контекста context
-    return render(request, 'acts/acts.html', context={'page_obj': page_obj})
-
+    def filter_queryset(self, qs):
+        search_value = self.request.GET.get('search[value]', '')
+        if search_value:
+            search_terms = search_value.lower().split()
+            query = Q()
+            for term in search_terms:
+                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__icontains=term[1:])
+            qs = qs.filter(query)
+        return qs
 
 # Добавление Акта ТС
 @login_required
@@ -168,3 +137,48 @@ def CreateBasedOnAct(request, act_id):
     ...
     # Логика создания на основании акта ТС
     return redirect('acts')
+
+def upload_data_acts(request, table_name='Acts'):
+
+    def import_csv_to_sqlite(csv_file_path, db_name, table_name):
+        # Команда для выполнения импорта CSV в SQLite
+        command = f'sqlite3 "{db_name}" ".mode csv" ".import {csv_file_path} {table_name}"'
+
+        # Запуск команды в терминале
+        subprocess.run(command, shell=True)
+
+    if request.method == 'POST':
+        file = request.FILES['file']
+        upload_dir = os.path.join(settings.MEDIA_ROOT, 'uploads')
+
+        file_extension = os.path.splitext(file.name)[1].lower()
+        if file_extension != '.csv':
+            # Чтение данных из Excel-файла
+            data = pd.read_excel(file, engine='openpyxl')
+
+            # Сохранение данных в CSV-файл
+            csv_file_path = os.path.join(
+                upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
+            data.to_csv(csv_file_path, index=False)
+
+            db_name = 'db.sqlite3'
+            import_csv_to_sqlite(csv_file_path, db_name, table_name)
+
+            os.remove(csv_file_path)
+
+        else:
+            # Сохранение загруженного CSV-файла
+            if not os.path.exists(upload_dir):
+                os.makedirs(upload_dir)
+            file_path = os.path.join(
+                upload_dir, file.name.replace(" ", "_")).replace("\\", "/")
+            with open(file_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+
+            db_name = 'db.sqlite3'
+            import_csv_to_sqlite(file_path, db_name, table_name)
+
+            os.remove(file_path)
+
+        return redirect('/acts')

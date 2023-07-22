@@ -2,12 +2,21 @@
 
 {% load static %}
 
+{% block title %}Создать перемещение ТМЦ{% endblock %}
 
 {% block document-name %}<h2 class="form-title">Создать перемещение ТМЦ</h2>{% endblock %}
 
 {% block document-buttons %}
 
 <a class = "AddDocument" href="{% url 'add_move_os' %}" title="Создать новый документ"><span class="create-new-document os"></span></a>
+
+  {% comment %} <div class="toggle_switch">
+    <input type="checkbox" id="toggle" class="toggle_input">
+    <label for="toggle" class="toggle_label">
+      <span class="toggle_text">ОС</span>
+      <span class="toggle_text">ТМЦ</span>
+    </label>
+  </div> {% endcomment %}
 
 {% endblock %}
 

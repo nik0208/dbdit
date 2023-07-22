@@ -62,4 +62,69 @@ $(document).ready(function() {
             return '<a href="/generatemovedocument/' + row.id + '">Создать</a>';
         }},
     ]);
+
+    initializeDataTable('#table_acts', '/acts/acts_list/', [
+        { "data": "pk" },
+        { "data": "act_date" },
+        { "data": "inv_dit" },
+        { "data": "result" },
+        { "data": "conclusion" },
+        { "data": "user" },
+        { "data": "sklad" },
+        { "data": "type" },        
+        { "data": "avtor" },
+        {
+            "data": null,
+            "render": function(data, type, row) {
+                // Верните содержимое ячейки в виде HTML-кода, включая ваш блок
+                return `
+                    <td>
+                        <div class="intable_dropdown_menu">
+                            <!-- Ваш блок здесь -->
+                            <!-- Пример: -->
+                            <button id="dropdown_btn_${row.pk}" class="dropdown_menu_button" data-dropdown-id="${row.pk}">
+                                <img src="/static/icons/list.svg" alt="Действия" class="dropdown_menu_button_image">
+                            </button>
+                            <div id="dropdown_menu_${row.pk}" class="dropdown-menu" style="display: none;">
+                                <ul>
+                                    <li><a href="{% comment %} {% url 'act_edit' acts.id %} {% endcomment %}">Изменить</a></li>
+                                    <li><a href="#" onclick="{% comment %} confirmDelete('{% url 'act_delete' acts.id %}', '{% url 'acts' %}') {% endcomment %}">Удалить</a></li>
+                                    <li><a href="{% comment %} {% url 'generate_act_document' acts.id %} {% endcomment %}">Печать</a></li>
+                                    <div id="dropdown_submenu_{{ acts.id }}" class="dropdown_submenu">
+                                        <ul>
+                                            <li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
+                                            <li><a href="#">Перемещение</a></li>
+                                            <li><a href="#">Комплектация</a></li>
+                                            <li><a href="#">Перевод товаров</a></li>
+                                        </ul>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                `;
+            }
+        }
+    ]);
+
+    initializeDataTable('#table_applications', '/applications/applications_list/', [
+        { "data": "num" },
+        { "data": "requested_equipment" },
+        { "data": "avtor" },
+        { "data": "user" },
+        { "data": "date" },
+        { "data": "deadline" },
+        { "data": "department" },
+        { "data": "status" },
+    ]);
+
+    initializeDataTable('#table_complectations', '/complectations/complectations_list/', [
+        { "data": "pk" },
+        { "data": "date" },
+        { "data": "avtor" },
+        { "data": "inv_dit" },
+        { "data": "tmc" },
+        { "data": "tmc_qty" },
+        { "data": "par_doc" },
+    ]);
 });

@@ -12,8 +12,6 @@ class Complectations(models.Model):
     new_name_os = models.CharField(max_length=255)
     tmc = models.ManyToManyField(Tmc, blank=True)
     tmc_qty = models.IntegerField()
-    spisanie_tmc_1c = models.CharField(max_length=12, blank=True, null=True)
-    compl_os_1c = models.CharField(max_length=12, blank=True, null=True)
 
     def __str__(self):
         return f"{self.date} {self.inv_dit}"

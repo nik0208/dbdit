@@ -5,28 +5,38 @@
 {% block document-buttons %}
     <a class = "AddDocument" href="{% url 'add_complectations' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
 
-    <span class="step-links">
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeFileUploadDialog()">&times;</span>
+            {% csrf_token %}
+            {% comment %} <div id="file-upload" data-upload-url="{% url 'upload_data_os' %}">
+    
+                <form id="uploadForm" action="{% url 'upload_data_os' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="file" id="uploadedFile" form="uploadForm">
+                    <button type="submit">Загрузить</button>
+                </form>
+            </div> {% endcomment %}
+        </div>
+    </div>
+    
+    <div id="table-pagination" class="step-links"></div>
 
-        {% if page_obj.has_previous %}
-            <a href="?page=1" title="В налачо">&laquo;</a>
-            <a href="?page={{ page_obj.previous_page_number }}" title="Предыдущая страница">&lt;</a>
-        {% endif %}
+    <div class="table-options">
 
-        <span class="current-page">
-            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-        </span>
+        <div class="table-length_main">
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" title="Следующая страница">&gt;</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" title="В конец">&raquo;</a>
-        {% endif %}
-        
-        <form action="" method="get" class="page-number-form">
-            <input type="text" name="page" class="page-number-input">
-            <button type="submit" title = "Перейти к странице"class="go-to-page-button">Перейти</button>
-        </form>
+            <select id="table_os_length" name="table_os_length">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+            </select>
 
-    </span>
+        </div>
+
+    </div>
+
 {% endblock %}
 
 
@@ -35,7 +45,7 @@
 
         <div class="table-container">
 
-            <table>
+            <table id="table_complectations" class="display" style="width:100%">
 
                 <thead>
 
@@ -51,29 +61,6 @@
                     </tr>
 
                 </thead>
-
-                <tbody>
-
-                    {% for compl in page_obj %}
-
-                        <tr>
-                            <td>{{ compl.pk }}</td>
-                            <td>{{ compl.date }}</td>
-                            <td>{{ compl.avtor }}</td>
-                            <td>{{ compl.inv_dit }}</td>
-                            <td>{{ compl.tmc }}</td>
-                            <td>{{ compl.tmc_qty }}</td>
-                            <td>{{ compl.par_doc }}</td>
-                            {% comment %} <td>
-                                <a href="{% url 'act_edit' acts.id %}">Изменить</a>
-                                <a href="{% url 'act_delete' acts.id %}">Удалить</a>
-                                <a href="{% url 'generate_act_document' acts.id %}">Печать</a>
-                            </td> {% endcomment %}
-                        </tr>
-
-                    {% endfor %}
-
-                </tbody>
 
             </table>
 

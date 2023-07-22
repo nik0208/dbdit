@@ -1,6 +1,8 @@
 {% extends "index/base.html" %}
 
-{% block title %}Создать документ комплектации{% endblock %}
+{% block title %}Создать комплектацию{% endblock %}
+
+{% block document-name %}<h2 class="form-title">Создать комплектацию ОС</h2>{% endblock %}
 
 {% block document-buttons %}
 
@@ -9,12 +11,8 @@
 {% block content %}
 
     <div class="form-container">
-        {{ form.media }}
-        <script>
-            $(document).ready(function() {
-                $('#inv_dit').select2();
-            });
-        </script>
+
+        <a type="hidden">{{ form.media }}</a>
 
         <form method="post" action="{% url 'add_complectations' %}" class="form-area act">
 

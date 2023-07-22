@@ -2,6 +2,9 @@
 
 {% load static %}
 
+{% block title %}Создать актс ТС{% endblock %}
+
+{% block document-name %}<h2 class="form-title">Создать акт ТС</h2>{% endblock %}
 
 {% block document-buttons %}
   <h2 class="form-title">Акт технического состояния средств вычислительной и оргтехники</h2>
@@ -56,7 +59,7 @@
         {{ form.avtor }}
       </div>
 
-      <div>
+      <div class="form-field button">
         <button type="submit">Добавить</button>
       </div>
 

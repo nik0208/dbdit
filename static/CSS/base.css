@@ -351,7 +351,7 @@
     cursor: pointer;
   }
   
-  .toggle_label::before {
+  .toggle_label.os {
     content: "";
     position: absolute;
     top: 2px;
@@ -363,7 +363,7 @@
     transition: transform 0.2s ease;
   }
   
-  .toggle_input:checked + .toggle_label::before {
+  .toggle_input.os + .toggle_label.tmc {
     transform: translateX(46px);
   }
   

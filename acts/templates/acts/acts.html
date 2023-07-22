@@ -1,49 +1,43 @@
 {% extends "index/base.html" %}
 
-{% block title %}Акты{% endblock %}
+{% block title %}Акты ТС{% endblock %}
 
 {% block document-buttons %}
     
     <a class = "AddDocument" href="{% url 'add_act' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
     <a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
 
-<div id="uploadModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close" onclick="closeFileUploadDialog()">&times;</span>
-        {% csrf_token %}
-        <div id="file-upload" data-upload-url="{% url 'upload_data_os' %}">
- 
-            <form id="uploadForm" action="{% url 'upload_data_os' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="file" name="file" id="uploadedFile" form="uploadForm">
-                <button type="submit">Загрузить</button>
-            </form>
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeFileUploadDialog()">&times;</span>
+            {% csrf_token %}
+            {% comment %} <div id="file-upload" data-upload-url="{% url 'upload_data_os' %}">
+    
+                <form id="uploadForm" action="{% url 'upload_data_os' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="file" id="uploadedFile" form="uploadForm">
+                    <button type="submit">Загрузить</button>
+                </form>
+            </div> {% endcomment %}
         </div>
     </div>
-</div>
 
-    <span class="step-links">
+    <div id="table-pagination" class="step-links"></div>
 
-        {% if page_obj.has_previous %}
-            <a href="?page=1" title="В налачо">&laquo;</a>
-            <a href="?page={{ page_obj.previous_page_number }}" title="Предыдущая страница">&lt;</a>
-        {% endif %}
+    <div class="table-options">
 
-        <span class="current-page">
-            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-        </span>
+        <div class="table-length_main">
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" title="Следующая страница">&gt;</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" title="В конец">&raquo;</a>
-        {% endif %}
-        
-        <form action="" method="get" class="page-number-form">
-            <input type="text" name="page" class="page-number-input">
-            <button type="submit" title = "Перейти к странице"class="go-to-page-button">Перейти</button>
-        </form>
+            <select id="table_os_length" name="table_os_length">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+            </select>
 
-    </span>
+        </div>
+
+    </div>
 
 {% endblock %}
 
@@ -53,7 +47,7 @@
 
         <div class="table-container">
 
-            <table id="table">
+            <table id="table_acts" class="display" style="width:100%">
 
                 <thead>
 
@@ -63,7 +57,9 @@
                         <th>Дата</th>
                         <th>Основное средство</th>
                         <th>Результат проверки</th>
-                        <th>Заключение</th>
+                        <th>Заключение</th>                        
+                        <th>Пользователь</th>
+                        <th>Местоположение</th>
                         <th>Тип</th>
                         <th>Автор</th>
                         <th>Действия</th>   
@@ -71,55 +67,7 @@
 
                 </thead>
 
-                <tbody>
 
-                    {% for acts in page_obj %}
-
-                        <tr>
-
-                            <td>{{ acts.id }}</td>
-                            <td>{{ acts.act_date }}</td>
-                            <td>{{ acts.inv_dit }}</td>
-                            <td class="name-column">{{ acts.result }}</td>
-                            <td>{{ acts.conclusion }}</td>
-                            <td>{{ acts.type }}</td>
-                            <td>{{ acts.avtor }}</td>
-                            <td>
-
-                                <div class="intable_dropdown_menu">
-
-                                    <button id="dropdown_btn_{{ acts.id }}" class="dropdown_menu_button" data-dropdown-id="{{ acts.id }}">
-                                        <img src="/static/icons/list.svg" alt="Действия" class="dropdown_menu_button_image">
-                                    </button>
-
-                                    <div id="dropdown_menu_{{ acts.id }}" class="dropdown-menu" style="display: none;">
-
-                                        <ul>
-                                            <li><a href="{% url 'act_edit' acts.id %}">Изменить</a></li>
-                                            <li><a href="#" onclick="confirmDelete('{% url 'act_delete' acts.id %}', '{% url 'acts' %}')">Удалить</a></li>
-                                            <li><a href="{% url 'generate_act_document' acts.id %}">Печать</a></li>
-
-                                            <div id="dropdown_submenu_{{ acts.id }}" class="dropdown_submenu">
-                                                <ul>
-                                                    <li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
-                                                    <li><a href="#">Перемещение</a></li>
-                                                    <li><a href="#">Комплектация</a></li>
-                                                    <li><a href="#">Перевод товаров</a></li>
-                                                </ul>
-                                            </div>
-
-                                        </ul>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-                        </tr>
-
-                    {% endfor %}
-
-                </tbody>
 
             </table>
 
