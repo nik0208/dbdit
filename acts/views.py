@@ -138,6 +138,9 @@ def CreateBasedOnAct(request, act_id):
     # Логика создания на основании акта ТС
     return redirect('acts')
 
+
+
+
 def upload_data_acts(request, table_name='Acts'):
 
     def import_csv_to_sqlite(csv_file_path, db_name, table_name):
