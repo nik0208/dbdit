@@ -10,12 +10,9 @@ class Acts(models.Model):
     result = models.CharField(max_length=255)
     conclusion = models.CharField(max_length=255)
     act_date = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(Users,
-                             on_delete=models.PROTECT,
-                             to_field='name',
+    user = models.CharField(max_length=100,
                              blank=True)
-    sklad = models.ForeignKey(
-        SkladyOffice, on_delete=models.PROTECT, blank=True)
+    sklad = models.CharField(max_length=100, blank=True)
     status = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
