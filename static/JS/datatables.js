@@ -52,15 +52,14 @@ $(document).ready(function() {
     ]);
 
     initializeDataTable('#table_moves', '/moves/moves_list/', [
-        { "data": "pk" },
         { "data": "move_type" },
         { "data": "move_num" },
         { "data": "move_date" },
         { "data": "user" },
         { "data": "sklad" },
         { "data": "comment" },
-        { "data": null, render: function (data, type, row) {
-            return '<a href="/moves/generatemovedocument/' + row.pk + '">Создать</a>';
+        { "data": "id", render: function (data, type, row) {
+            return '<a href="/moves/generatemovedocument/' + data + '">Создать</a>';
         }},
     ]);
 

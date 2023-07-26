@@ -3,6 +3,7 @@ from directories.models import *
 
 
 class Move(models.Model):
+    id = models.AutoField(primary_key=True, unique=True, auto_created=True, serialize=False)
     move_num = models.CharField(max_length=20, null=True)
     move_date = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=100)

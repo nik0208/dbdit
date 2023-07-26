@@ -27,7 +27,7 @@ def Moves(request):
 class MovesList(BaseDatatableView):
     model_os = apps.get_model('moves', 'OsMove')
     model_tmc = apps.get_model('moves', 'TmcMove')
-    columns = ['pk', 'move_num', 'move_date', 'user', 'sklad', 'comment']
+    columns = ['id', 'move_num', 'move_date', 'user', 'sklad', 'comment']
 
     def get_initial_queryset(self):
         os_queryset = self.model_os.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ОС', output_field=CharField()))
