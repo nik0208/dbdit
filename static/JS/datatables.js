@@ -52,6 +52,7 @@ $(document).ready(function() {
     ]);
 
     initializeDataTable('#table_moves', '/moves/moves_list/', [
+        { "data": "pk" },
         { "data": "move_type" },
         { "data": "move_num" },
         { "data": "move_date" },
@@ -59,7 +60,7 @@ $(document).ready(function() {
         { "data": "sklad" },
         { "data": "comment" },
         { "data": null, render: function (data, type, row) {
-            return '<a href="/generatemovedocument/' + row.id + '">Создать</a>';
+            return '<a href="/moves/generatemovedocument/' + row.pk + '">Создать</a>';
         }},
     ]);
 
@@ -89,7 +90,7 @@ $(document).ready(function() {
                                 <ul>
                                     <li><a href="{% comment %} {% url 'act_edit' acts.id %} {% endcomment %}">Изменить</a></li>
                                     <li><a href="#" onclick="{% comment %} confirmDelete('{% url 'act_delete' acts.id %}', '{% url 'acts' %}') {% endcomment %}">Удалить</a></li>
-                                    <li><a href="{% comment %} {% url 'generate_act_document' acts.id %} {% endcomment %}">Печать</a></li>
+                                    <li><a href=" { 'generate_act_document' acts.id } ">Печать</a></li>
                                     <div id="dropdown_submenu_{{ acts.id }}" class="dropdown_submenu">
                                         <ul>
                                             <li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
