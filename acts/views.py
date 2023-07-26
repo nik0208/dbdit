@@ -45,7 +45,7 @@ class ActsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__icontains=term[1:])
+                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__icontains=term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
             qs = qs.filter(query)
         return qs
 

@@ -46,12 +46,14 @@ class ActForm(forms.ModelForm):
                 # Поиск по частичному совпадению символов в поле inv_dit
                 search_fields=['inv_dit__icontains'],
             ),
-            "sklad": forms.Select(attrs={
-                'class': 'form-field string'
-            }),
-            "user": Select2Widget(attrs={
+            "sklad": ModelSelect2Widget(attrs={
+                'class': 'form-field string'},
+                search_fields=['sklad_name__icontains'],
+            ),
+            "user": ModelSelect2Widget(attrs={
                 'class': 'form-field select',
                 'id': 'id_user',
-                'name': 'user'
-            }),
+                'name': 'user'},
+            search_fields=['name__icontains']
+            ),
         }
