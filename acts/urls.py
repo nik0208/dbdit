@@ -9,7 +9,7 @@ urlpatterns = [
      path('acts_list/', ActsList.as_view(), name='acts_list'),
      path('act_edit/<int:act_id>', ActEdit, name='act_edit'),
      path('act_delete/<int:act_id>', ActDelete, name='act_delete'),
-     path('acts/<int:act_id>/generate_document/', GenerateActDocument,
+     path('generate_act_document/<int:act_id>', GenerateActDocument,
          name='generate_act_document'),
      path('get_acts/', get_acts, name='get_acts'),
      path('create_based_on_act/<int:act_id>',
