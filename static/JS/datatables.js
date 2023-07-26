@@ -58,7 +58,7 @@ $(document).ready(function() {
         { "data": "user" },
         { "data": "sklad" },
         { "data": "comment" },
-        { "data": "id", render: function (data, type, row) {
+        { "data": "pk", render: function (data, type, row) {
             return '<a href="/moves/generatemovedocument/' + data + '">Создать</a>';
         }},
     ]);
