@@ -87,8 +87,8 @@ $(document).ready(function() {
                             </button>
                             <div id="dropdown_menu_${row.pk}" class="dropdown-menu" style="display: none;">
                                 <ul>
-                                    <li><a href="{% comment %} {% url 'act_edit' acts.id %} {% endcomment %}">Изменить</a></li>
-                                    <li><a href="#" onclick="{% comment %} confirmDelete('{% url 'act_delete' acts.id %}', '{% url 'acts' %}') {% endcomment %}">Удалить</a></li>
+                                    <li><a href="/acts/act_edit/${data}">Изменить</a></li>
+                                    <li><a href="/acts/act_delete/${data}">Удалить</a></li>
                                     <li><a href="/acts/generate_act_document/${data}">Печать</a></li>
                                     <div id="dropdown_submenu_{{ acts.id }}" class="dropdown_submenu">
                                         <ul>
