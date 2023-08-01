@@ -1,0 +1,70 @@
+{% extends "index/base.html" %}
+
+{% block title %}Комплектации{% endblock %}
+
+{% block document-buttons %}
+    <a class = "AddDocument" href="{% url 'add_complectations' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
+
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeFileUploadDialog()">&times;</span>
+            {% csrf_token %}
+            {% comment %} <div id="file-upload" data-upload-url="{% url 'upload_data_os' %}">
+    
+                <form id="uploadForm" action="{% url 'upload_data_os' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="file" id="uploadedFile" form="uploadForm">
+                    <button type="submit">Загрузить</button>
+                </form>
+            </div> {% endcomment %}
+        </div>
+    </div>
+    
+    <div id="table-pagination" class="step-links"></div>
+
+    <div class="table-options">
+
+        <div class="table-length_main">
+
+            <select id="table_os_length" name="table_os_length">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+            </select>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="contentpanel">
+
+        <div class="table-container">
+
+            <table id="table_complectations" class="display" style="width:100%">
+
+                <thead>
+
+                    <tr>
+
+                        <th>№</th>
+                        <th>Дата</th>
+                        <th>Автор</th>
+                        <th>Основное средство</th>
+                        <th>ТМЦ</th>
+                        <th>Кол-в</th>
+                        <th>Основание</th>
+                    </tr>
+
+                </thead>
+
+            </table>
+
+        </div>
+
+    </div>
+{% endblock %}

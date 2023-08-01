@@ -7,7 +7,8 @@ class IT_OS(models.Model):
     os_group = models.CharField(max_length=100)
     serial_number = models.CharField(max_length=255, null=True, default="None")
     original_price = models.FloatField(default='100')
-    
+    user = models.CharField(max_length=100, null=True)
+    department = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f"{self.name_os} {self.inv_dit}"
