@@ -120,3 +120,29 @@ class TmcList(BaseDatatableView):
                 query |= Q(web_code__icontains=term)
             qs = qs.filter(query)
         return qs
+
+
+def load_to_sdp(request):
+    model = apps.get_model('directories', 'IT_OS')
+    
+    type = ""
+    
+    url = ("https://help-test/api/v3/"+type+"s")
+    headers = {"authtoken": "DE2F5A51-D3B5-417D-99AC-2B10689E0EC0"}
+
+    input_data = {
+    type: {
+        "org_serial_number": serial_number,
+        "name": inv_dit,
+        "purchase_cost": original_price,
+        "department": department,
+        "product": {
+        "name": os_group,
+        },
+        "user": user,
+    }
+    }
+
+    data = {'input_data': json.dumps(input_data)}
+    response = requests.post(url, headers=headers, data=data, verify=False)
+    print(response.text)
