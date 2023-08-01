@@ -91,19 +91,12 @@ def ActEdit(request, act_id):
 
 @login_required
 # Удаление Акта ТС
-# def ActDelete(request, act_id):
-#     act = get_object_or_404(models.Acts, id=act_id)
-#     if request.method == 'POST':
-#         act.delete()
-#         return redirect('acts')
-#     #return render(request, 'acts/act_delete.html', {'act': act})
-
 def ActDelete(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
     if request.method == 'POST':
         act.delete()
-        return JsonResponse({'message': 'Акт успешно удален.'})
-    return JsonResponse({'error': 'Недопустимый метод запроса.'}, status=400)
+        return redirect('acts')
+    return render(request, 'acts/act_delete.html', {'act': act})
     
 
 
