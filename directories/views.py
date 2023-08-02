@@ -14,6 +14,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from docxtpl import DocxTemplate
 import pandas as pd
+import requests
+import json
 
 
 def upload_data_os(request, table_name='IT_OS'):
@@ -121,28 +123,36 @@ class TmcList(BaseDatatableView):
             qs = qs.filter(query)
         return qs
 
-
 def load_to_sdp(request):
     model = apps.get_model('directories', 'IT_OS')
-    
-    type = ""
-    
-    url = ("https://help-test/api/v3/"+type+"s")
+    entries = model.objects.all()[:100]  # Получаем только первые 5 записей
+
     headers = {"authtoken": "DE2F5A51-D3B5-417D-99AC-2B10689E0EC0"}
 
-    input_data = {
-    type: {
-        "org_serial_number": serial_number,
-        "name": inv_dit,
-        "purchase_cost": original_price,
-        "department": department,
-        "product": {
-        "name": os_group,
-        },
-        "user": user,
-    }
-    }
+    for entry in entries:
+        if entry.os_group in ["Мини ПК ITEKS", "Ноутбук ITNTB", "Системный блок, Тонкий клиент ITWKS", "Моноблок ITMNB"]:
+            type = "workstation"
+        else:
+            type = "asset"
 
-    data = {'input_data': json.dumps(input_data)}
-    response = requests.post(url, headers=headers, data=data, verify=False)
-    print(response.text)
+        url = f"https://help-test/api/v3/{type}s"
+
+        input_data = {
+            type: {
+                "org_serial_number": entry.serial_number,
+                "name": entry.inv_dit,
+                "purchase_cost": entry.original_price,
+                # "department": entry.department,
+                "product": {
+                    "name": entry.os_group,
+                },
+                # "user": entry.user,
+            }
+        }
+
+        data = {'input_data': json.dumps(input_data)}
+        response = requests.post(url, headers=headers, data=data, verify=False)
+        print(response.text)
+
+    return HttpResponse("Data upload to SDP complete.")
+
