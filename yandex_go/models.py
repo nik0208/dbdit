@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Requests(models.Model):
     user = models.CharField(max_length=100, default="None")
     type = models.CharField(max_length=100, default="None")
@@ -36,6 +35,7 @@ class UsersYa(models.Model):
     phone_number = models.CharField(max_length=10)
     group = models.CharField(max_length=100, default="None")
     user_id = models.CharField(max_length=100, default="None")
+    chosen_city = models.CharField(max_length=100, default="None")
 
     def __str__(self):
         return f"{self.name}"

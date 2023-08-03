@@ -15,23 +15,48 @@ from docxtpl import DocxTemplate
 import pandas as pd
 import requests
 import json
+import telebot
+from telebot import types
 
-@login_required
 
-def TaxiRequest(requests):
+bot = telebot.TeleBot('6083458782:AAHce7jw-k4EsQFmolRncB-b3u1B_EH-syg')
 
-    url = 'https://b2b-api.go.yandex.ru/integration/2.0/orders/create'
+@bot.message_handler(commands=['start'])
+def start(message):
+    chat_id = message.chat.id
+    user, created = UsersYa.objects.get_or_create(
+        user_id=str(chat_id),  # Если такого пользователя нет, то он создается
+    )
 
-    headers = {'Authorization': 'Bearer <OAuth-токен>',}
+    if created:
+        bot.send_message(chat_id, "Привет! Выберите город")
+        send_cities(chat_id)
+    else:
+        bot.send_message(chat_id, f"Привет! Ваш текущий город {user.city}")
 
-    data = {
-    "route": [
-        [start_point],
-        [destination_point]
-    ],
-    "user_id": "035...3c71"
-  }
-    response = requests.post(url, headers=headers, data=json.dumps(data))
 
-    print(response.status_code)
-    print(response.text)
+def send_cities(chat_id):
+    markup = types.InlineKeyboardMarkup(row_width=2)
+
+    # Получаем список всех городов из базы данных
+    cities = Locations.objects.values_list('city', flat=True).distinct()
+
+    # Создаем кнопки для каждого города
+    for city in cities:
+        city_button = types.InlineKeyboardButton(city, callback_data=city)
+        markup.add(city_button)
+
+    bot.send_message(chat_id, "Выберите город:", reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    if call.message:
+        # Обновляем город пользователя в базе данных
+        UsersYa.objects.filter(user_id=str(call.message.chat.id)).update(city=call.data)
+
+        bot.send_message(call.message.chat.id, f"Вы выбрали город {call.data}")
+
+
+bot.polling(none_stop=True)
+
