@@ -77,7 +77,7 @@ def Os(request):
 class OsList(BaseDatatableView):
     model = apps.get_model('directories', 'IT_OS')
     columns = ['inv_dit', 'name_os', 'inpute_date',
-               'os_group', 'serial_number', 'original_price']
+               'os_group', 'serial_number', 'original_price', 'user,', 'department']
 
     def render_column(self, row, column):
         # Обработка специфических столбцов (если требуется)
