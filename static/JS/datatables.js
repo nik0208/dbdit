@@ -38,6 +38,8 @@ $(document).ready(function() {
     initializeDataTable('#table_os', '/directories/os_list/', [
         { "data": "inv_dit" },
         { "data": "name_os" },
+        { "data": "user" },
+        { "data": "department" },
         { "data": "inpute_date" },
         { "data": "os_group" },
         { "data": "serial_number" },
