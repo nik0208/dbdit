@@ -20,6 +20,7 @@ class Requests(models.Model):
 class Locations(models.Model):
     city = models.CharField(max_length=100, default="None")
     name = models.CharField(max_length=100, default="None")
+    login = models.CharField(max_length=255, default="None")
     adress = models.CharField(max_length=255, default="None")
     coordinate = models.CharField(max_length=100, default="None")
 
