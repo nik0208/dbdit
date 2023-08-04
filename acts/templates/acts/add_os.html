@@ -1,0 +1,25 @@
+{% extends "index/base.html" %}
+
+{% block title %}Добавить ОС{% endblock %}
+
+{% block document-name %}<h2 class="form-title">Добавить ОС</h2>{% endblock %}
+
+{% block document-buttons %}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="form-container">
+
+        <a type="hidden">{{ form.media }}</a>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Сохранить</button>
+        </form>
+
+    </div>
+
+{% endblock %}

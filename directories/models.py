@@ -1,10 +1,35 @@
 from django.db import models
 
+
+GROUP_CHOICES = (
+    ('Мини ПК ITEKS', 'Мини ПК ITEKS'),
+    ('Мониторы ITMNT', 'Мониторы ITMNT'),
+    ('Моноблок ITMNB', 'Моноблок ITMNB'),
+    ('Ноутбук ITNTB', 'Ноутбук ITNTB'),
+    ('Планшет ITPAD', 'Планшет ITPAD'),
+    ('Сервер ITSRV', 'Сервер ITSRV'),
+    ('Система хранения данных ITSHD', 'Система хранения данных ITSHD'),
+    ('Системный блок, Тонкий клиент ITWKS', 'Системный блок, Тонкий клиент ITWKS'),
+    ('Видеорегистраторы ITVDN', 'Видеорегистраторы ITVDN'),
+    ('Жесткие диски ITHDD', 'Жесткие диски ITHDD'),
+    ('ИБП (источники бесперебойного питания) Стабилизатор ITUPS', 'ИБП (источники бесперебойного питания) Стабилизатор ITUPS'),
+    ('Кассовое оборудование ITKSS', 'Кассовое оборудование ITKSS'),
+    ('Охранное видеонаблюдение (Видеокамеры ITVDC)', 'Охранное видеонаблюдение (Видеокамеры ITVDC)'),
+    ('Принтеры, МФУ, копировальные аппараты ITPRN', 'Принтеры, МФУ, копировальные аппараты ITPRN'),
+    ('Проектор ITPRK', 'Проектор ITPRK'),
+    ('Сетевое оборудование ITETH', 'Сетевое оборудование ITETH'),
+    ('Сканеры штрихкода ITSCN', 'Сканеры штрихкода ITSCN'),
+    ('Счетчики посетителей ITCNT', 'Счетчики посетителей ITCNT'),
+    ('Телефон, факс ITTLF', 'Телефон, факс ITTLF'),
+    ('Терминал для сбора данных ITTCD,  подставки под ТСД, зарядные устройства для ТСД', 'Терминал для сбора данных ITTCD,  подставки под ТСД, зарядные устройства для ТСД'),
+    ('Шкаф коммутационный, серверный  ITBOX', 'Шкаф коммутационный, серверный  ITBOX'),
+)
+
 class IT_OS(models.Model):
     inv_dit = models.CharField(primary_key=True, max_length=100)
-    name_os = models.CharField(max_length=100)
+    name_os = models.CharField(max_length=255, null=True, blank=True)
     inpute_date = models.DateTimeField( null=True)
-    os_group = models.CharField(max_length=100)
+    os_group = models.CharField(max_length=100, choices=GROUP_CHOICES)
     serial_number = models.CharField(max_length=255, null=True, default="None")
     original_price = models.FloatField(default='100')
     user = models.CharField(max_length=100, null=True)
@@ -18,7 +43,7 @@ class IT_OS(models.Model):
         db_table = 'IT_OS'
 
 
-STATUS_CHOICES = (
+TYPE_CHOICES = (
     ('цо', 'ЦО'),
     ('региональный склад', 'Региональный склад'),
     ('лц', 'ЛЦ'),
@@ -28,7 +53,7 @@ STATUS_CHOICES = (
 
 class SkladyOffice(models.Model):
     sklad_name = models.CharField(primary_key=True, max_length=50)
-    sklad_type = models.CharField(max_length=50, choices=STATUS_CHOICES, blank=True)
+    sklad_type = models.CharField(max_length=50, choices=TYPE_CHOICES, blank=True)
     sklad_city = models.CharField(max_length=50, blank=True, null=True)
     sklad_adress = models.CharField(max_length=100)
     responsible_person = models.ForeignKey("Users", on_delete=models.PROTECT, blank=True, null=True)
