@@ -1,57 +1,71 @@
 import telebot
-from django.core.wsgi import get_wsgi_application
-import os
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ditdb.settings')
-application = get_wsgi_application()
-
-from yandex_go.models import Locations, UsersYa, Requests
-
+import sqlite3
+from telebot import types
 
 TOKEN = '6083458782:AAHce7jw-k4EsQFmolRncB-b3u1B_EH-syg'
 bot = telebot.TeleBot(TOKEN)
 
+def get_db_connection():
+    conn = sqlite3.connect('../db.sqlite3')
+    cursor = conn.cursor()
+    return conn, cursor
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    user, created = UsersYa.objects.get_or_create(
-        user_id=message.from_user.id,
-        defaults={'name': message.from_user.first_name}
-    )
-    markup = telebot.types.ReplyKeyboardMarkup(row_width=1)
-    city_list = Locations.objects.values_list('city', flat=True).distinct()
-    for city in city_list:
-        markup.add(telebot.types.KeyboardButton(city))
-    bot.send_message(message.chat.id, 'Выберите свой город:', reply_markup=markup)
+    conn, cursor = get_db_connection()
+    cursor.execute("SELECT DISTINCT city FROM Locations")
+    cities = [item[0] for item in cursor.fetchall()]
+    conn.close()
 
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    for city in cities:
+        markup.add(types.KeyboardButton(city))
 
-@bot.message_handler(func=lambda message: message.text in Locations.objects.values_list('city', flat=True).distinct())
-def choose_city(message):
-    user = UsersYa.objects.get(user_id=message.from_user.id)
-    user.chosen_city = message.text
-    user.save()
-    bot.send_message(message.chat.id, 'Вы успешно выбрали город. Доступные команды: /taxi, /delivery, /choose_city')
+    bot.send_message(message.chat.id, "Выберите ваш город", reply_markup=markup)
 
+@bot.message_handler(content_types=['text'])
+def save_city(message):
+    city = message.text
+    conn, cursor = get_db_connection()
+    cursor.execute("SELECT DISTINCT city FROM Locations")
+    cities = [item[0] for item in cursor.fetchall()]
 
-@bot.message_handler(commands=['taxi'])
-def order_taxi(message):
-    markup = telebot.types.ReplyKeyboardMarkup(row_width=1)
-    user = UsersYa.objects.get(user_id=message.from_user.id)
-    location_list = Locations.objects.filter(city=user.chosen_city).values_list('name', flat=True)
-    for location in location_list:
-        markup.add(telebot.types.KeyboardButton(location))
-    bot.send_message(message.chat.id, 'Выберите начальную точку:', reply_markup=markup)
+    if city in cities:
+        cursor.execute(f"INSERT INTO UsersYa (chosen_city) VALUES ('{city}')")
+        conn.commit()
+        conn.close()
+        bot.send_message(message.chat.id, "Введите логин")
+    else:
+        conn.close()
+        bot.send_message(message.chat.id, "Некорректный город, выберите из предложенных")
 
+def main_menu(message):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(types.KeyboardButton('Такси'))
+    markup.add(types.KeyboardButton('Доставка'))
+    markup.add(types.KeyboardButton('Выбор города'))
+    bot.send_message(message.chat.id, "Выберите действие", reply_markup=markup)
 
-@bot.message_handler(func=lambda message: message.text in Locations.objects.filter(city=UsersYa.objects.get(user_id=message.from_user.id).chosen_city).values_list('name', flat=True))
-def choose_start_point(message):
-    # Реализация выбора начальной точки и затем отправки сообщения о выборе конечной точки аналогична предыдущей функции.
+@bot.message_handler(content_types=['text'])
+def handle_text(message):
+    if message.text == 'Такси':
+        send_locations(message)
+    elif message.text == 'Доставка':
+        # Обработка кнопки Доставка
+        pass
+    elif message.text == 'Выбор города':
+        send_welcome(message)
 
-@bot.message_handler(commands=['choose_city'])
-def choose_city_command(message):
-    # Реализация данной функции аналогична функции send_welcome.
+def send_locations(message):
+    conn, cursor = get_db_connection()
+    cursor.execute("SELECT name FROM Locations")
+    locations = [item[0] for item in cursor.fetchall()]
+    conn.close()
 
-@bot.message_handler(commands=['delivery'])
-def delivery_command(message):
-    # Реализация данной функции пока не проработана, согласно вашим требованиям.
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    for location in locations:
+        markup.add(types.KeyboardButton(location))
+
+    bot.send_message(message.chat.id, "Выберите стартовую точку", reply_markup=markup)
 
 bot.polling(none_stop=True)
