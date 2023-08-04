@@ -14,10 +14,58 @@
 
         <a type="hidden">{{ form.media }}</a>
 
-        <form method="post">
+        <form method="post" class="form-area act">
+
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Сохранить</button>
+          
+          <div>
+            <label>Дата:</label>
+            {{ form.inpute_date }}
+          </div>
+
+          <div>
+            <label>Инвентарный номер:</label>
+            {{ form.int_inv_dit }}
+          </div>
+    
+          <div>
+            <label>Группа ОС:</label>
+            {{ form.os_group }}
+          </div>
+    
+          <div>
+            <label>Пользователь:</label>
+            {{ form.user }}
+          </div>
+    
+          <div>
+            <label>Подразделение:</label>
+            {{ form.department }}
+          </div>
+    
+          <div>
+            <label>Наименование:</label>
+            {{ form.name_os }}
+          </div>
+    
+          <div>
+            <label>Процессор:</label>
+            {{ form.first_part }}
+          </div>      
+    
+          <div>
+            <label>ОЗУ:</label>
+            {{ form.second_part }}
+          </div>
+          
+          <label>Накопитель:</label>
+            {{ form.third_part }}
+          </div>
+    
+          <div class="form-field button">
+            <button type="submit">Добавить</button>
+          </div>
+    
         </form>
 
     </div>
