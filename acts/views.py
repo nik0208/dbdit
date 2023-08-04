@@ -19,6 +19,7 @@ from django.db.models.functions import Lower
 from django.db.models import CharField
 from django.contrib import messages
 import pandas as pd
+from datetime import date
 
 
 @login_required
@@ -178,3 +179,24 @@ def upload_data_acts(request, table_name='Acts'):
             os.remove(file_path)
 
         return redirect('/acts')
+    
+
+
+
+
+def add_os(request):
+    if request.method == 'POST':
+        form = forms.AddOsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Добавьте здесь дополнительный код, если нужно, после успешного сохранения формы
+            # ...
+        else:
+            # Если форма недействительна, оставляем ее открытой для исправлений
+            # и ошибки будут отображены на странице.
+            pass
+    else:
+        # Инициализируем форму с текущей датой
+        form = forms.AddOsForm(initial={'inpute_date': date.today()})
+
+    return render(request, 'acts/add_os.html', {'form': form})

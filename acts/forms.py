@@ -1,5 +1,6 @@
 from django import forms
-from . import models
+from .models import *
+from directories.models import IT_OS
 from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget
 
 
@@ -29,7 +30,7 @@ class ActForm(forms.ModelForm):
         attrs={'class': 'form-field select'}))
 
     class Meta:
-        model = models.Acts
+        model = Acts
         fields = '__all__'
         field_order = ['act_date', 'avtor', 'inv_dit', 'user',
                        'result', 'conclusion', 'type', 'sklad']
@@ -43,7 +44,6 @@ class ActForm(forms.ModelForm):
             }),
             "inv_dit": ModelSelect2Widget(
                 attrs={'class': 'form-field select'},
-                # Поиск по частичному совпадению символов в поле inv_dit
                 search_fields=['inv_dit__icontains'],
             ),
             "sklad": ModelSelect2Widget(attrs={
@@ -57,3 +57,38 @@ class ActForm(forms.ModelForm):
             search_fields=['name__icontains']
             ),
         }
+
+
+
+
+class AddOsForm(forms.ModelForm):
+    first_part = forms.CharField(max_length=50, label='Процессор', required=False)
+    second_part = forms.CharField(max_length=50, label='ОЗУ', required=False)
+    third_part = forms.CharField(max_length=50, label='Накопитель', required=False)
+    name_os = forms.CharField(max_length=150, label='Наименование', required=False)
+    inv_dit = forms.CharField(max_length=15, label='Инвентарный номер')
+    
+    class Meta:
+        model = IT_OS
+        fields = ['inv_dit', 'inpute_date', 'os_group',
+                  'user', 'department', 'name_os']
+        widgets = {
+            "inpute_date": forms.DateInput(attrs={'class': 'form-field text', 'readonly': 'readonly'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        first_part = cleaned_data.get('first_part')
+        second_part = cleaned_data.get('second_part')
+        third_part = cleaned_data.get('third_part')
+        name_os = cleaned_data.get('name_os')
+
+        try:
+            if not name_os:  # Проверяем, если поле name_os пустое, то формируем его из первых трех полей
+                name_os = f"Системный блок({first_part}\{second_part}\{third_part})"
+        except Exception as e:
+            name_os = ''
+
+        cleaned_data['name_os'] = name_os
+        return cleaned_data
+
