@@ -112,7 +112,7 @@ class AddOsForm(forms.ModelForm):
         
         try:
             if not name_os:  # Проверяем, если поле name_os пустое, то формируем его из первых трех полей
-                name_os = f"Системный блок({first_part}\{second_part}\{third_part}) {inv_dit}"
+                name_os = f"Системный блок ({first_part}\{second_part}\{third_part}) {inv_dit}"
         
         except Exception as e:
             name_os = ''
