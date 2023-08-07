@@ -755,7 +755,7 @@ textarea,
 }
 
 .form-field.button {
-  text-align: right;
+  text-align: left;
 }
 
 .form-field button[type="submit"] {
