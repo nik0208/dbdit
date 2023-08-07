@@ -189,6 +189,7 @@ def add_os(request):
         form = forms.AddOsForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect ('/acts/addact')
         else:
             pass
     else:

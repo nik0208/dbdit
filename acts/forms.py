@@ -2,6 +2,7 @@ from django import forms
 from .models import *
 from directories.models import IT_OS
 from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget
+import re
 
 
 class ActForm(forms.ModelForm):
@@ -95,17 +96,27 @@ class AddOsForm(forms.ModelForm):
         inv_dit = cleaned_data.get('inv_dit')
         name_os = cleaned_data.get('name_os')
 
+        def extract_three_letters_after_it(text):
+            pattern = r'IT(\w{3})'  # Здесь \w означает "буквенно-цифровой символ", а {3} - 3 раза повторенный предыдущий шаблон.
+            match = re.search(pattern, text)
+            if match:
+                return match.group(1)
+            else:
+                return None
+        i = 0    
+        while i < 20:
+            group = GROUP_CHOICES[i]
+            if os_group == group[1]:
+                    inv_dit = f"IT{extract_three_letters_after_it(os_group)}{int_inv_dit}"
+            i += 1
+        
         try:
             if not name_os:  # Проверяем, если поле name_os пустое, то формируем его из первых трех полей
-                name_os = f"Системный блок({first_part}\{second_part}\{third_part})"
-
-            
+                name_os = f"Системный блок({first_part}\{second_part}\{third_part}) {inv_dit}"
         
         except Exception as e:
             name_os = ''
         
-        if os_group == "Системный блок, Тонкий клиент ITWKS":
-                inv_dit = f"ITWKS{int_inv_dit}"
 
         cleaned_data['name_os'] = name_os
         cleaned_data['inv_dit'] = inv_dit
