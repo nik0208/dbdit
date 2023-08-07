@@ -1,71 +1,44 @@
+import os
+import sys
+import django
+
+sys.path.append('C:\dbdit\dbdit')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'ditdb.settings'
+django.setup()
+
+
 import telebot
-import sqlite3
 from telebot import types
+from django.apps import *
+from ditdb.yandex_go.models import *
+
+
 
 TOKEN = '6083458782:AAHce7jw-k4EsQFmolRncB-b3u1B_EH-syg'
 bot = telebot.TeleBot(TOKEN)
 
-def get_db_connection():
-    conn = sqlite3.connect('../db.sqlite3')
-    cursor = conn.cursor()
-    return conn, cursor
+auth_steps = {}
 
 @bot.message_handler(commands=['start'])
-def send_welcome(message):
-    conn, cursor = get_db_connection()
-    cursor.execute("SELECT DISTINCT city FROM Locations")
-    cities = [item[0] for item in cursor.fetchall()]
-    conn.close()
+def start(message):
+    bot.send_message(message.chat.id, "Привет! Пожалуйста, введи свой логин:")
+    auth_steps[message.chat.id] = 'login'
 
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    for city in cities:
-        markup.add(types.KeyboardButton(city))
+@bot.message_handler(func=lambda message: auth_steps.get(message.chat.id) == 'login')
+def handle_login(message):
+    login = message.text.strip()
+    try:
+        user = models.UsersYa.objects.get(login=login)
+        auth_steps[message.chat.id] = 'city'
+        bot.send_message(message.chat.id, "Выбери свой текущий город:")
+        # Здесь можешь создать InlineKeyboard для выбора города
+    except models.UsersYa.DoesNotExist:
+        bot.send_message(message.chat.id, "Пользователь не найден. Попробуй еще раз:")
 
-    bot.send_message(message.chat.id, "Выберите ваш город", reply_markup=markup)
+# Продолжи здесь, добавив обработчики для остальных этапов авторизации и работы с ботом.
+# Напоминаю, что для InlineKeyboard можно использовать метод bot.send_message с параметром reply_markup.
 
-@bot.message_handler(content_types=['text'])
-def save_city(message):
-    city = message.text
-    conn, cursor = get_db_connection()
-    cursor.execute("SELECT DISTINCT city FROM Locations")
-    cities = [item[0] for item in cursor.fetchall()]
+# Запускаем бот
+bot.polling()
 
-    if city in cities:
-        cursor.execute(f"INSERT INTO UsersYa (chosen_city) VALUES ('{city}')")
-        conn.commit()
-        conn.close()
-        bot.send_message(message.chat.id, "Введите логин")
-    else:
-        conn.close()
-        bot.send_message(message.chat.id, "Некорректный город, выберите из предложенных")
 
-def main_menu(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add(types.KeyboardButton('Такси'))
-    markup.add(types.KeyboardButton('Доставка'))
-    markup.add(types.KeyboardButton('Выбор города'))
-    bot.send_message(message.chat.id, "Выберите действие", reply_markup=markup)
-
-@bot.message_handler(content_types=['text'])
-def handle_text(message):
-    if message.text == 'Такси':
-        send_locations(message)
-    elif message.text == 'Доставка':
-        # Обработка кнопки Доставка
-        pass
-    elif message.text == 'Выбор города':
-        send_welcome(message)
-
-def send_locations(message):
-    conn, cursor = get_db_connection()
-    cursor.execute("SELECT name FROM Locations")
-    locations = [item[0] for item in cursor.fetchall()]
-    conn.close()
-
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    for location in locations:
-        markup.add(types.KeyboardButton(location))
-
-    bot.send_message(message.chat.id, "Выберите стартовую точку", reply_markup=markup)
-
-bot.polling(none_stop=True)

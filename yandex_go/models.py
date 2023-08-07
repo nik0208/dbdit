@@ -20,7 +20,6 @@ class Requests(models.Model):
 class Locations(models.Model):
     city = models.CharField(max_length=100, default="None")
     name = models.CharField(max_length=100, default="None")
-    login = models.CharField(max_length=255, default="None")
     adress = models.CharField(max_length=255, default="None")
     coordinate = models.CharField(max_length=100, default="None")
 
@@ -34,6 +33,7 @@ class Locations(models.Model):
 class UsersYa(models.Model):
     name = models.CharField(max_length=100, default="None")
     phone_number = models.CharField(max_length=10)
+    login = models.CharField(max_length=255, default="None")
     group = models.CharField(max_length=100, default="None")
     user_id = models.CharField(max_length=100, default="None")
     chosen_city = models.CharField(max_length=100, default="None")
