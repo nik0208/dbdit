@@ -7,7 +7,7 @@ class Requests(models.Model):
     date = models.DateTimeField()
     start_point = models.CharField(max_length=100, default="None")
     destination_point = models.CharField(max_length=100, default="None")
-    receiver = models.CharField(max_length=255, null=True, default="None")
+    destination_point = models.CharField(max_length=255, null=True, default="None")
     status = models.BooleanField()
     order = models.CharField(max_length=100, default="None")
 
@@ -37,6 +37,7 @@ class UsersYa(models.Model):
     login = models.CharField(max_length=255, default="None")
     group = models.CharField(max_length=100, default="None")
     user_id = models.CharField(max_length=100, default="None")
+    yandex_id = models.CharField(max_length=100, default="None")
     chosen_city = models.CharField(max_length=100, default="None")
 
     def __str__(self):
