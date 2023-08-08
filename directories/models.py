@@ -57,7 +57,12 @@ class SkladyOffice(models.Model):
     sklad_city = models.CharField(max_length=50, blank=True, null=True)
     sklad_adress = models.CharField(max_length=100)
     responsible_person = models.ForeignKey("Users", on_delete=models.PROTECT, blank=True, null=True)
-
+    sklad_name_lower = models.CharField(max_length=50, blank=True)
+    
+    def save(self, *args, **kwargs):
+        if self.sklad_name:
+            self.sklad_name_lower = self.sklad_name.lower()
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return self.sklad_name
@@ -87,7 +92,13 @@ class Users(models.Model):
     phone_num = models.CharField(max_length=15, null=True)
     department = models.CharField(max_length=100, null=True)
     position = models.CharField(max_length=255, null=True)
+    name_lower = models.CharField(max_length=100, blank=True)  # Дополнительное поле для имени пользователя в нижнем регистре
 
+    def save(self, *args, **kwargs):
+        if self.name:
+            self.name_lower = self.name.lower()
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return f"{self.name}"
     

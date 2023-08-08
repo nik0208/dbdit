@@ -5,6 +5,7 @@ from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSele
 import re
 
 
+
 class ActForm(forms.ModelForm):
 
     avtor = forms.CharField(
@@ -49,13 +50,14 @@ class ActForm(forms.ModelForm):
             ),
             "sklad": ModelSelect2Widget(attrs={
                 'class': 'form-field string'},
-                search_fields=['sklad_name__icontains'],
+                search_fields=['sklad_name__icontains', 'sklad_name_lower__icontains'],
             ),
             "user": ModelSelect2Widget(attrs={
                 'class': 'form-field select',
                 'id': 'id_user',
                 'name': 'user'},
-            search_fields=['name__icontains']
+            
+            search_fields=['name_lower__icontains', 'name__icontains']
             ),
         }
 
