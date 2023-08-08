@@ -18,6 +18,7 @@ from telebot import types
 from django.db import models
 from django.shortcuts import get_object_or_404
 from yandex_go.models import *
+import requests
 
 
 # Создаем объект бота
@@ -38,7 +39,6 @@ def check_login(message):
         user = UsersYa.objects.get(login=login)
         user.user_id = str(message.chat.id)
         user.save()
-        bot.send_message(user.user_id, f"Привет, {user.name}! Выберите ваш город из списка:")
         # Отправить список городов для выбора
         cities = Locations.objects.values_list('city', flat=True).distinct()
         markup = telebot.types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
@@ -76,7 +76,6 @@ def show_main_menu(user_id):
 @bot.message_handler(func=lambda message: message.text == "Изменить город")
 def change_city(message):
     user_id = message.chat.id
-    bot.send_message(user_id, "Выберите ваш новый город из списка:")
     cities = Locations.objects.values_list('city', flat=True).distinct()
     markup = telebot.types.ReplyKeyboardMarkup(row_width=2, one_time_keyboard=True)
     for city in cities:
@@ -99,12 +98,13 @@ def choose_pickup_location(message):
     user_id = message.chat.id
     user = UsersYa.objects.get(user_id=user_id)
     chosen_city = user.chosen_city
-    bot.send_message(user_id, f"Выберите точку отправления в городе {chosen_city}:")
     locations = Locations.objects.filter(city=chosen_city)
     markup = telebot.types.ReplyKeyboardMarkup(row_width=1, one_time_keyboard=True)
     for location in locations:
         markup.add(telebot.types.KeyboardButton(location.name))
     bot.send_message(user_id, "Выберите точку отправления:", reply_markup=markup)
+    # Здесь сохраняем выбранную точку отправления в словаре user_data
+    user_data[user_id] = {'pickup_location': None, 'destination_location': None}
     bot.register_next_step_handler(message, choose_destination_location)
 
 def choose_destination_location(message):
@@ -112,17 +112,14 @@ def choose_destination_location(message):
     pickup_location = message.text
     user = UsersYa.objects.get(user_id=user_id)
     chosen_city = user.chosen_city
-    bot.send_message(user_id, f"Выберите точку назначения в городе {chosen_city}:")
     locations = Locations.objects.filter(city=chosen_city)
     markup = telebot.types.ReplyKeyboardMarkup(row_width=1, one_time_keyboard=True)
     for location in locations:
         markup.add(telebot.types.KeyboardButton(location.name))
     bot.send_message(user_id, "Выберите точку назначения:", reply_markup=markup)
-    user.pickup_location = pickup_location
-    user.save()
+    # Здесь обновляем точку отправления в словаре user_data
+    user_data[user_id]['pickup_location'] = pickup_location
     bot.register_next_step_handler(message, request_taxi)
-
-import requests
 
 def request_taxi(message):
     user_id = message.chat.id
@@ -132,13 +129,19 @@ def request_taxi(message):
         bot.send_message(user_id, "Что-то пошло не так. Пожалуйста, начните сначала.")
         return
     
-    start_location = user_data[user_id]['pickup_location']
-    destination_location = user_data[user_id]['destination_location']
+    start_location_name = user_data[user_id]['pickup_location']
+    destination_location_name = user_data[user_id]['destination_location']
+
+    try:
+        start_location = Locations.objects.get(name=start_location_name)
+        destination_location = Locations.objects.get(name=destination_location_name)
+    except Locations.DoesNotExist:
+        bot.send_message(user_id, "Ошибка. Одна из выбранных точек не найдена. Пожалуйста, начните сначала.")
+        return
 
     url = "https://b2b-api.go.yandex.ru/integration/2.0/orders/routestats"
     headers = {
-        "Authorization": "Bearer <y0_AgAAAABv5zl7AAVM1QAAAADpoCiI_kW_PhLOSeCj8_3M4hipc2AoI8s>",
-        "Content-Type": "application/json"
+        "Authorization": "Bearer y0_AgAAAABv5zl7AAVM1QAAAADpoCiI_kW_PhLOSeCj8_3M4hipc2AoI8s"
     }
 
     data = {
@@ -149,7 +152,7 @@ def request_taxi(message):
         "user_id": user.yandex_id
     }
 
-    response = requests.post(url, json=data, headers=headers)
+    response = requests.post(url, json=data, headers=headers, verify=False)
 
     if response.status_code == 200:
         bot.send_message(user_id, "Запрос успешно выполнен")
@@ -174,6 +177,7 @@ def request_taxi(message):
         bot.send_message(user_id, "Ошибка при выполнении запроса")
         bot.send_message(user_id, f"Статус код: {response.status_code}")
         bot.send_message(user_id, f"Ответ от сервера: {response.text}")
+
 
 
 if __name__ == '__main__':
