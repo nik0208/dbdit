@@ -743,7 +743,7 @@ select,
 input,
 textarea,
 .form-field.user {
-  width: calc(100% - 10px);
+  width: calc(100% - 20px);
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;

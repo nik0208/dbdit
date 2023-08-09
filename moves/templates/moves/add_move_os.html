@@ -30,6 +30,7 @@
 
     <form method="post" action="{% url 'add_move_os' %}" class="form-area act">
       {% csrf_token %}
+      
       <input type="hidden" name="toggle_switch" value="os">
 
       <div>
