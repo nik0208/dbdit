@@ -7,14 +7,8 @@ headers = {
 
 data = {
     "route": [
-        [
-          43.240506,
-          76.892447
-        ],
-        [
-          43.353997 ,
-          76.984596
-        ]
+        [43.240506, 76.892447],
+        [43.353997, 76.984596]
     ],
     "user_id": "2b9eb9910c6d487aaeb3e6ba080bb33b"
 }
@@ -65,6 +59,22 @@ else:
 # }
 
 # response = requests.get(url, params=params, headers=headers, verify=False)
+
+# if response.status_code == 200:
+#     print("Запрос успешно выполнен")
+#     print("Ответ от сервера:")
+#     print(response.json())
+# else:
+#     print("Ошибка при выполнении запроса")
+#     print("Статус код:", response.status_code)
+#     print("Ответ от сервера:")
+#     print(response.text)
+
+# url = "https://business.taxi.yandex.ru/client-api/3.0/cities"
+
+# data = {}
+
+# response = requests.post(url, json=data, verify=False)
 
 # if response.status_code == 200:
 #     print("Запрос успешно выполнен")
