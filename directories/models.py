@@ -36,7 +36,7 @@ class IT_OS(models.Model):
     department = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return f"{self.name_os} {self.inv_dit}"
+        return f"{self.name_os}"
 
     class Meta:
         managed = True

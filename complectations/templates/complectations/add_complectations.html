@@ -10,6 +10,8 @@
 
 {% block content %}
 
+
+
     <div class="form-container">
 
         <a type="hidden">{{ form.media }}</a>
@@ -46,6 +48,11 @@
             <div>
                 <label>Автор:</label>
                 {{ form.avtor }}
+            </div>
+
+            <div style='display: none'>
+                <label>Старое имя:</label>
+                {{ form.prev_name_os }}
             </div>
 
             <div class="form-field button">

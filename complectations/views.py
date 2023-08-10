@@ -19,6 +19,7 @@ from django.db.models.functions import Lower
 from django.db.models import CharField
 from django.contrib import messages
 import pandas as pd
+from django.contrib import messages
 
 
 @login_required
@@ -53,7 +54,6 @@ class ComplectationsList(BaseDatatableView):
 ############ Создать документ комплектации ############
 
 def AddComplectations(request):
-
     if request.method == 'POST':
         form = forms.ComplForm(request.POST, user=request.user)
         if form.is_valid():
@@ -61,7 +61,11 @@ def AddComplectations(request):
             act.avtor = request.user
             act.save()
             form.save_m2m()
+            messages.success(request, 'Запись успешно добавлена.')
             return redirect('complectations')
+        else:
+            messages.error(request, 'Форма заполнена неправильно. Пожалуйста, исправьте ошибки.')
+
     else:
         form = forms.ComplForm(user=request.user)
 

@@ -1,7 +1,26 @@
 $(document).ready(function() {
   $('.form-field.select').select2();
 });
-  
+
+
+
+    $(document).ready(function() {
+        $('#id_inv_dit').change(function() {
+            var selectedOption = $('#id_inv_dit option:selected');
+            var selectedText = selectedOption.text();
+            $('#new_name_os').val(selectedText);
+        });
+    });
+
+
+    $(document).ready(function() {
+        $('#id_inv_dit').change(function() {
+            var selectedOption = $('#id_inv_dit option:selected');
+            var selectedText = selectedOption.text();
+            $('#prev_name').val(selectedText);
+        });
+    });
+
 // document.addEventListener("DOMContentLoaded", function() {
 //   const toggleSwitch = document.getElementById("toggle");
 //   const osForm = document.getElementById("osForm");
