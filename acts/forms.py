@@ -46,7 +46,7 @@ class ActForm(forms.ModelForm):
                 'class': 'form-field text'
             }),
             "inv_dit": ModelSelect2Widget(
-                attrs={'class': 'form-field select'},
+                attrs={'class': 'form-field inv_dit'},
                 search_fields=['inv_dit__icontains'],
             ),
             "sklad": ModelSelect2Widget(attrs={

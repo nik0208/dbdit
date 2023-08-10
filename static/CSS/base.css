@@ -731,13 +731,8 @@ tbody td.name-column {
 }
 
 .form-field,
-#id_avtor,
-#id_par_doc,
-#id_tmc_qty,
-#id_new_name_os,
-#id_status,
-#id_move_num,
-.select2-selection {
+input,
+text {
   display: flex;
   width: 100%;
   margin-bottom: 10px;
@@ -749,6 +744,15 @@ label {
 }
 
 .form-field.select {
+  display: flex;
+  width: calc(100%);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+}
+
+.form-field.inv_dit {
   display: flex;
   width: calc(45%);
   padding: 5px;

@@ -22,9 +22,10 @@ class ComplForm(forms.ModelForm):
         widgets = {
             # Остальные виджеты
             "inv_dit": ModelSelect2Widget(
-                attrs={'class': 'form-field select'}, search_fields=['inv_dit__icontains'],
+                attrs={'class': 'form-field inv_dit'}, search_fields=['inv_dit__icontains'],
             ),
-            "new_name_os": forms.TextInput(attrs={}),
+            "new_name_os": forms.TextInput(attrs={'class': 'form-field text'}),
+            "par_doc": ModelSelect2Widget(attrs={'class': 'form-field text'}),
             "tmc": ModelSelect2MultipleWidget(attrs={'class': 'form-field select multi'}, search_fields=['tmc_name__icontains'],
             ),
             "tmc_qty": forms.NumberInput(attrs={}),
