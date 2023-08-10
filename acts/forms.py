@@ -9,8 +9,9 @@ import re
 class ActForm(forms.ModelForm):
 
     avtor = forms.CharField(
-        widget=forms.TextInput(attrs={'readonly': 'readonly'})
-    )
+        widget=forms.TextInput(attrs={'readonly': 'readonly', 'class': 'form-field text'}))
+    
+                            
 
     def __init__(self, *args, **kwargs):
         # Получаем пользователя из аргументов
@@ -29,7 +30,7 @@ class ActForm(forms.ModelForm):
     )
 
     type = forms.ChoiceField(choices=choses_for_type, widget=forms.Select(
-        attrs={'class': 'form-field select'}))
+        attrs={'class': 'form-field text'}))
 
     class Meta:
         model = Acts
@@ -49,11 +50,11 @@ class ActForm(forms.ModelForm):
                 search_fields=['inv_dit__icontains'],
             ),
             "sklad": ModelSelect2Widget(attrs={
-                'class': 'form-field string'},
+                'class': 'form-field text'},
                 search_fields=['sklad_name__icontains', 'sklad_name_lower__icontains'],
             ),
             "user": ModelSelect2Widget(attrs={
-                'class': 'form-field select',
+                'class': 'form-field text',
                 'id': 'id_user',
                 'name': 'user'},
             

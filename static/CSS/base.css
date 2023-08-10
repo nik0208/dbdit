@@ -730,7 +730,16 @@ tbody td.name-column {
   border-radius: 4px;
 }
 
-.form-field {
+.form-field,
+#id_avtor,
+#id_par_doc,
+#id_tmc_qty,
+#id_new_name_os,
+#id_status,
+#id_move_num,
+.select2-selection {
+  display: flex;
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -739,11 +748,38 @@ label {
   font-weight: bold;
 }
 
-select,
-input,
-textarea,
+.form-field.select {
+  display: flex;
+  width: calc(45%);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+}
+
+.form-field.input {
+  display: flex;
+  width: calc(45%);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+}
+
+
+.form-field.textarea {
+  display: flex;
+  width: calc(45%);
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+}
+
+
 .form-field.user {
-  width: calc(100% - 20px);
+  display: flex;
+  width: calc(45%);
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -755,7 +791,8 @@ textarea,
 }
 
 .form-field.button {
-  text-align: left;
+  text-align: right;
+  justify-content: end;
 }
 
 .form-field button[type="submit"] {
