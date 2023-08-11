@@ -15,7 +15,7 @@ class Acts(models.Model):
     status = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return f"{self.act_date} {self.avtor} {self.user}"
+        return f"Дата:{self.act_date} Автор:{self.avtor} ОС:{self.inv_dit}"
 
     class Meta:
         managed = True
