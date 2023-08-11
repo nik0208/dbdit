@@ -76,7 +76,7 @@ class Tmc(models.Model):
     tmc_name = models.CharField(primary_key=True, max_length=50)
     tmc_article = models.CharField(max_length=50)
     web_code = models.CharField(max_length=50)
-    tmc_price = models.FloatField(default='100')
+    tmc_price = models.FloatField(default=100)
 
     def __str__(self):
         return self.tmc_name

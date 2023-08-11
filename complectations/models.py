@@ -13,7 +13,7 @@ class Complectations(models.Model):
     tmc = models.ManyToManyField(Tmc, blank=True)
     tmc_qty = models.IntegerField()
     prev_name_os = models.CharField(max_length=255, default="None")
-    doc_num = models.IntegerField(blank=True)
+    doc_num = models.IntegerField(blank=True, default=1)
 
     def __str__(self):
         return f"{self.date} {self.inv_dit}"

@@ -19,7 +19,6 @@ from django.db.models.functions import Lower
 from django.db.models import CharField
 from django.contrib import messages
 import pandas as pd
-from django.contrib import messages
 
 
 @login_required
@@ -31,7 +30,8 @@ class ComplectationsList(BaseDatatableView):
     columns = ['pk', 'date', 'avtor', 'inv_dit', 'tmc', 'tmc_qty', 'par_doc']
 
     def render_column(self, row, column):
-        # Обработка специфических столбцов (если требуется)
+        if column == 'tmc':
+                return ', '.join([str(tmc) for tmc in row.tmc.all()])
 
         if column == 'date':
             if row.date is not None:
@@ -47,13 +47,14 @@ class ComplectationsList(BaseDatatableView):
             query = Q()
             for term in search_terms:
                 query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(tmc__tmc_name__iregex=r'(?i)^.+' + term[1:])
-            qs = qs.filter(query)
+            qs = qs.filter(query).distinct()  # Применяем distinct() здесь
         return qs
 
 
 ############ Создать документ комплектации ############
 
 def AddComplectations(request):
+
     if request.method == 'POST':
         form = forms.ComplForm(request.POST, user=request.user)
         if form.is_valid():
@@ -61,11 +62,7 @@ def AddComplectations(request):
             act.avtor = request.user
             act.save()
             form.save_m2m()
-            messages.success(request, 'Запись успешно добавлена.')
             return redirect('complectations')
-        else:
-            messages.error(request, 'Форма заполнена неправильно. Пожалуйста, исправьте ошибки.')
-
     else:
         form = forms.ComplForm(user=request.user)
 
