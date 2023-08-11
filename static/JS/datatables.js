@@ -33,6 +33,15 @@ $(document).ready(function() {
         $('#table_os_length').on('change', function() {
             table.page.len($(this).val()).draw();
         });
+
+        if (tableId === '#table_moves') {
+            $(tableId + ' tbody').on('click', 'tr', function() {
+                var pk = table.row(this).data().pk; // Получаем значение "pk" из строки
+                if (pk) {
+                    showMoveDetailsModal(pk); // Вызываем функцию для открытия модального окна с деталями
+                }
+            });
+        }
     }
 
     initializeDataTable('#table_os', '/directories/os_list/', [
@@ -63,8 +72,22 @@ $(document).ready(function() {
         { "data": "comment" },
         { "data": "pk", render: function (data, type, row) {
             return '<a href="/moves/generatemovedocument/' + data + '">Создать</a>';
-        }},
+        }}
     ]);
+    
+    function showMoveDetailsModal(movePk) {
+        $.ajax({
+            url: `/moves/move_details/${movePk}`,
+            success: function(data) {
+                $("#move-details-content").html(data);
+                $("#moveDetailsModal").css("display", "block");
+            }
+        });
+    }
+
+    function closeMoveDetailsModal() {
+        $("#moveDetailsModal").css("display", "none");
+    }
 
     initializeDataTable('#table_acts', '/acts/acts_list/', [
         { "data": "pk" },

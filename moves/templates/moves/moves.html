@@ -48,32 +48,31 @@
 {% block content %}
 
 <table id="table_moves" class="display" style="width:100%">
-            <script>
+    
+    <script>
 
-            function openMoveDetailsModal(movePk) {
-                // Загрузить детали перемещения с сервера, используя AJAX запрос
-                // Заполнить содержимое модального окна с данными о перемещении
-                // Показать модальное окно
-                // Пример использования jQuery:
-                $.ajax({
-                    url: `/moves/move_details/${movePk}`,  // Замените на ваш URL
-                    success: function(data) {
-                        $("#move-details-content").html(data);
-                        $("#moveDetailsModal").css("display", "block");
-                    }
-                });
-            }
-
-            $(document).ready(function() {
-                var table = $('#table_moves').DataTable();
-                
-                $('#table_moves tbody').on('click', 'tr', function() {
-                    var movePkk = table.row(this).data()[1]; // Предполагается, что PK находится во второй ячейке
-                    openMoveDetailsModal(movePkk);
-                });
+    
+        function openMoveDetailsModal(movePk) {
+            // Пример использования jQuery для отправки AJAX-запроса
+            $.ajax({
+                url: `/moves/move_details/${movePk}`,  // Используем PK строки для формирования URL
+                success: function(data) {
+                    $("#move-details-content").html(data);
+                    $("#moveDetailsModal").css("display", "block");
+                }
             });
+        }
 
-            </script>
+        $(document).ready(function() {
+            var table = $('#table_moves').DataTable();
+            
+            $('#table_moves tbody').on('click', 'tr', function() {
+                var movePk = table.row(this).data()[1]; // Получаем значение PK из второй ячейки
+                openMoveDetailsModal(movePk);
+            });
+        });
+    </script>
+
     <thead>
         <tr>
             <th>Тип</th>
