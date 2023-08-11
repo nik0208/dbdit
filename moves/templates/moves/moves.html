@@ -48,9 +48,36 @@
 {% block content %}
 
 <table id="table_moves" class="display" style="width:100%">
+            <script>
+
+            function openMoveDetailsModal(movePk) {
+                // Загрузить детали перемещения с сервера, используя AJAX запрос
+                // Заполнить содержимое модального окна с данными о перемещении
+                // Показать модальное окно
+                // Пример использования jQuery:
+                $.ajax({
+                    url: `/moves/move_details/${movePk}`,  // Замените на ваш URL
+                    success: function(data) {
+                        $("#move-details-content").html(data);
+                        $("#moveDetailsModal").css("display", "block");
+                    }
+                });
+            }
+
+            $(document).ready(function() {
+                var table = $('#table_moves').DataTable();
+                
+                $('#table_moves tbody').on('click', 'tr', function() {
+                    var movePkk = table.row(this).data()[1]; // Предполагается, что PK находится во второй ячейке
+                    openMoveDetailsModal(movePkk);
+                });
+            });
+
+            </script>
     <thead>
         <tr>
             <th>Тип</th>
+            <th>PK</th>
             <th>Номер перемещения</th>
             <th>Дата</th>
             <th>МОЛ</th>
@@ -60,4 +87,12 @@
         </tr>
     </thead>
 </table>
+<div id="moveDetailsModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeMoveDetailsModal()">&times;</span>
+        <div id="move-details-content">
+            <!-- Здесь будут отображаться детали перемещения -->
+        </div>
+    </div>
+</div>
 {% endblock %}

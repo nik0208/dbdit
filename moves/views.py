@@ -59,6 +59,11 @@ class MovesList(BaseDatatableView):
 
         return qs
 
+
+def get_move_details(request, move_pk):
+    move = models.OsMove.objects.get(pk=move_pk)  # Предполагается, что move_pk - это значение PK из строки таблицы
+    context = {'move': move}
+    return render(request, 'moves/move_details.html', context)
     
 # Добавление перемещения OC
 

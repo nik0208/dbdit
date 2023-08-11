@@ -55,6 +55,7 @@ $(document).ready(function() {
 
     initializeDataTable('#table_moves', '/moves/moves_list/', [
         { "data": "move_type" },
+        { "data": "pk" },
         { "data": "move_num" },
         { "data": "move_date" },
         { "data": "user" },

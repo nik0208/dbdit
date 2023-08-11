@@ -11,6 +11,7 @@ urlpatterns = [
     path('add_move_tmc/', AddMoveTmc, name='add_move_tmc'),
     path('generatemovedocument/<int:move_id>', GenerateMoveDocument,
          name='generate_move_document'),
+    path('move_details/<int:move_pk>', get_move_details, name='move_details'),
 
 ]
 
