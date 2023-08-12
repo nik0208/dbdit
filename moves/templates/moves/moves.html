@@ -49,29 +49,7 @@
 
 <table id="table_moves" class="display" style="width:100%">
     
-    <script>
 
-    
-        function openMoveDetailsModal(movePk) {
-            // Пример использования jQuery для отправки AJAX-запроса
-            $.ajax({
-                url: `/moves/move_details/${movePk}`,  // Используем PK строки для формирования URL
-                success: function(data) {
-                    $("#move-details-content").html(data);
-                    $("#moveDetailsModal").css("display", "block");
-                }
-            });
-        }
-
-        $(document).ready(function() {
-            var table = $('#table_moves').DataTable();
-            
-            $('#table_moves tbody').on('click', 'tr', function() {
-                var movePk = table.row(this).data()[1]; // Получаем значение PK из второй ячейки
-                openMoveDetailsModal(movePk);
-            });
-        });
-    </script>
 
     <thead>
         <tr>

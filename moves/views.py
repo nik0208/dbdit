@@ -24,17 +24,24 @@ from django.contrib import messages
 def Moves(request):
     return render(request, 'moves/moves.html')
 
+
 class MovesList(BaseDatatableView):
     model_os = apps.get_model('moves', 'OsMove')
     model_tmc = apps.get_model('moves', 'TmcMove')
     columns = ['pk', 'move_num', 'move_date', 'user', 'sklad', 'comment']
 
     def get_initial_queryset(self):
-        os_queryset = self.model_os.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ОС', output_field=CharField()))
-        tmc_queryset = self.model_tmc.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ТМЦ', output_field=CharField()))
+        os_queryset = self.model_os.objects.select_related('sklad', 'user').values(
+            *self.columns).annotate(move_type=Value('ОС', output_field=CharField()))
+        tmc_queryset = self.model_tmc.objects.select_related('sklad', 'user').values(
+            *self.columns).annotate(move_type=Value('ТМЦ', output_field=CharField()))
         return os_queryset.union(tmc_queryset)
 
     def render_column(self, row, column):
+
+        if column == 'equipment_os':
+            return ', '.join([str(equipment) for equipment in row['equipment_os'].all()])
+
         if column == 'move_date':
             if row['move_date'] is not None:
                 return row['move_date'].strftime('%d.%m.%Y')
@@ -49,23 +56,29 @@ class MovesList(BaseDatatableView):
             os_query = Q()
             tmc_query = Q()
             for term in search_terms:
-                term_query = Q(move_num__iregex=r'(?i)^.+' + term[1:]) | Q(comment__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__iregex=r'(?i)^.+' + term[1:]) | Q(move_type__iregex=r'(?i)^.+' + term[1:])
+                term_query = Q(move_num__iregex=r'(?i)^.+' + term[1:]) | Q(comment__iregex=r'(?i)^.+' + term[1:]) | Q(
+                    user__name__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__iregex=r'(?i)^.+' + term[1:]) | Q(move_type__iregex=r'(?i)^.+' + term[1:])
                 os_query |= term_query
                 tmc_query |= term_query
 
-            os_queryset = self.model_os.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ОС', output_field=CharField())).filter(os_query)
-            tmc_queryset = self.model_tmc.objects.select_related('sklad', 'user').values(*self.columns).annotate(move_type=Value('ТМЦ', output_field=CharField())).filter(tmc_query)
+            os_queryset = self.model_os.objects.select_related('sklad', 'user').values(
+                *self.columns).annotate(move_type=Value('ОС', output_field=CharField())).filter(os_query)
+            tmc_queryset = self.model_tmc.objects.select_related('sklad', 'user').values(
+                *self.columns).annotate(move_type=Value('ТМЦ', output_field=CharField())).filter(tmc_query)
             qs = os_queryset.union(tmc_queryset)
 
         return qs
 
 
 def get_move_details(request, move_pk):
-    move = models.OsMove.objects.get(pk=move_pk)  # Предполагается, что move_pk - это значение PK из строки таблицы
+
+    # Предполагается, что move_pk - это значение PK из строки таблицы
+    move = models.OsMove.objects.get(pk=move_pk)
     context = {'move': move}
     return render(request, 'moves/move_details.html', context)
-    
+
 # Добавление перемещения OC
+
 
 @login_required
 def AddMoveOS(request):
@@ -81,6 +94,7 @@ def AddMoveOS(request):
         form = forms.OsMoveForm(user=request.user)
 
     return render(request, 'moves/add_move_os.html', {'form': form})
+
 
 @login_required
 def AddMoveTmc(request):
@@ -98,6 +112,8 @@ def AddMoveTmc(request):
     return render(request, 'moves/add_move_tmc.html', {'form': form})
 
 # Печать путевого листа
+
+
 def GenerateMoveDocument(request, move_id):
     move = models.OsMove.objects.get(id=move_id)
 

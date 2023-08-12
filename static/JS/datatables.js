@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     function initializeDataTable(tableId, ajaxUrl, columns) {
         var table = $(tableId).DataTable({
             "processing": true,
@@ -18,7 +18,7 @@ $(document).ready(function() {
                 }
             },
             "pageLength": 50,
-            "initComplete": function(settings, json) {
+            "initComplete": function (settings, json) {
                 $('.bottom .dataTables_paginate').appendTo('#table-pagination');
                 $('.dataTables_paginate').addClass('step-links');
                 $('.dataTables_paginate').find('a').addClass('page-link');
@@ -26,16 +26,16 @@ $(document).ready(function() {
             }
         });
 
-        $('#customSearchBox').on('keyup', function() {
+        $('#customSearchBox').on('keyup', function () {
             table.search(this.value).draw();
         });
 
-        $('#table_os_length').on('change', function() {
+        $('#table_os_length').on('change', function () {
             table.page.len($(this).val()).draw();
         });
 
         if (tableId === '#table_moves') {
-            $(tableId + ' tbody').on('click', 'tr', function() {
+            $(tableId + ' tbody').on('click', 'tr', function () {
                 var pk = table.row(this).data().pk; // Получаем значение "pk" из строки
                 if (pk) {
                     showMoveDetailsModal(pk); // Вызываем функцию для открытия модального окна с деталями
@@ -70,15 +70,17 @@ $(document).ready(function() {
         { "data": "user" },
         { "data": "sklad" },
         { "data": "comment" },
-        { "data": "pk", render: function (data, type, row) {
-            return '<a href="/moves/generatemovedocument/' + data + '">Создать</a>';
-        }}
+        {
+            "data": "pk", render: function (data, type, row) {
+                return '<a href="/moves/generatemovedocument/' + data + '">Создать</a>';
+            }
+        }
     ]);
-    
+
     function showMoveDetailsModal(movePk) {
         $.ajax({
             url: `/moves/move_details/${movePk}`,
-            success: function(data) {
+            success: function (data) {
                 $("#move-details-content").html(data);
                 $("#moveDetailsModal").css("display", "block");
             }
@@ -97,11 +99,11 @@ $(document).ready(function() {
         { "data": "conclusion" },
         { "data": "user" },
         { "data": "sklad" },
-        { "data": "type" },        
+        { "data": "type" },
         { "data": "avtor" },
         {
             "data": "pk",
-            "render": function(data, type, row) {
+            "render": function (data, type, row) {
                 // Верните содержимое ячейки в виде HTML-кода, включая ваш блок
                 return `
                     <td>
@@ -152,5 +154,9 @@ $(document).ready(function() {
         { "data": "tmc" },
         { "data": "tmc_qty" },
         { "data": "par_doc" },
+    ]);
+
+    initializeDataTable('#table_move_detail', '/complectations/complectations_list/', [
+        { "data": "equipment_os" },
     ]);
 });

@@ -1,6 +1,11 @@
 <h2>Детали перемещения</h2>
 <p>Номер перемещения: {{ move.move_num }}</p>
-<p>Дата: {{ move.move_date }}</p>
+<p>Наименования:</p>
+<ul>
+    {% for equipment in move.equipment_os.all %}
+        <li>{{ equipment }}</li>
+    {% endfor %}
+</ul>
 <script>
     function closeMoveDetailsModal() {
         $("#moveDetailsModal").css("display", "none");
