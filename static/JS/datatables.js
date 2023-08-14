@@ -108,15 +108,14 @@ $(document).ready(function () {
                 return `
                     <td>
                         <div class="intable_dropdown_menu">
-                            <!-- Ваш блок здесь -->
                             <!-- Пример: -->
                             <button id="dropdown_btn_${row.pk}" class="dropdown_menu_button" data-dropdown-id="${row.pk}">
-                                <img src="/static/icons/list.svg" alt="Действия" class="dropdown_menu_button_image">
+                            <img src="/static/icons/list.svg" alt="Действия" class="dropdown_menu_button_image">
                             </button>
                             <div id="dropdown_menu_${row.pk}" class="dropdown-menu" style="display: none;">
                                 <ul>
                                     <li><a href="/acts/act_edit/${data}">Изменить</a></li>
-                                    <li><a href="/acts/act_delete/${data}">Удалить</a></li>
+                                    <li><a href="#" onclick="confirmDelete('/acts/act_delete/${data}', '/acts/acts_list/')">Удалить</a></li>
                                     <li><a href="/acts/generate_act_document/${data}">Печать</a></li>
                                     <div id="dropdown_submenu_{{ acts.id }}" class="dropdown_submenu">
                                         <ul>

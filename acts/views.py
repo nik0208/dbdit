@@ -97,15 +97,23 @@ def ActEdit(request, act_id):
 
 @login_required
 # Удаление Акта ТС
+def has_related_objects(instance):
+    fields = instance._meta.get_fields()
+    for field in fields:
+        if isinstance(field, models.ForeignKey):
+            related_objects = getattr(instance, field.name).all()
+            if related_objects.exists():
+                return True
+    return False
+
 def ActDelete(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
     try:
-        if request.method == 'POST':
+        if request.method == 'POST':            
             act.delete()
-            return redirect('acts')
-        return render(request, 'acts/act_delete.html', {'act': act})
+            return JsonResponse({'success': True})
     except:
-        return HttpResponse("Нельзя удалить")
+        return JsonResponse({'success': False, 'message': 'Произошла ошибка при удалении.'})
 
 
 # Печать Акта ТС

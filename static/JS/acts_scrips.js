@@ -23,28 +23,23 @@ function confirmDelete(url, actsUrl) {
                 'X-CSRFToken': getCookie('csrftoken')
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Произошла ошибка при выполнении запроса');
+            }
+            return response.json();
+        })
         .then(data => {
-            console.log(data);
-            if (data.message) {
-                fetch(actsUrl)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const newDocument = parser.parseFromString(html, 'text/html');
-                        const newContent = newDocument.querySelector('.contentpanel');
-                        const oldContent = document.querySelector('.contentpanel');
-                        oldContent.innerHTML = newContent.innerHTML;
-                    })
-                    .catch(error => {
-                        console.error('Ошибка при обновлении списка:', error);
-                    });
+            if (data.success) {
+                // После успешного удаления, обновляем таблицу данных
+                var table = $('#table_acts').DataTable();
+                table.ajax.reload(null, false); // Этот метод обновит таблицу без перерисовки страницы
             } else {
-                // Обработка других сообщений или ошибок
+                alert(data.message); // Выводим сообщение об ошибке
             }
         })
         .catch(error => {
-            console.error('Произошла ошибка:', error);
+            alert('Произошла ошибка: ' + error.message); // Выводим сообщение об ошибке
         });
     }
 }
