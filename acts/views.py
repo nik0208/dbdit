@@ -113,7 +113,7 @@ def GenerateActDocument(request, act_id):
     act = models.Acts.objects.get(id=act_id)
 
     # Путь к шаблону
-    template_path = "C:/Users/User/Desktop/dbdit/doki/for_acts.docx"
+    template_path = os.path.join('doki', 'for_acts.docx')
 
     # Открытие шаблона
     document = DocxTemplate(template_path)
