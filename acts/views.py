@@ -26,9 +26,11 @@ from datetime import date
 def Acts(request):
     return render(request, 'acts/acts.html')
 
+
 class ActsList(BaseDatatableView):
     model = apps.get_model('acts', 'Acts')
-    columns = ['pk', 'act_date', 'inv_dit', 'result', 'conclusion', 'type', 'user', 'avtor']
+    columns = ['pk', 'act_date', 'inv_dit', 'result',
+               'conclusion', 'type', 'user', 'avtor']
 
     def render_column(self, row, column):
         # Обработка специфических столбцов (если требуется)
@@ -46,14 +48,17 @@ class ActsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__icontains=term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
+                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(
+                    avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__icontains=term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
             qs = qs.filter(query)
         return qs
 
 # Добавление Акта ТС
+
+
 @login_required
 def AddAct(request):
-    
+
     if request.method == 'POST':
         form = forms.ActForm(request.POST, user=request.user)
         if form.is_valid():
@@ -63,7 +68,7 @@ def AddAct(request):
             return redirect('acts')
     else:
         form = forms.ActForm(user=request.user)
-        
+
     return render(request, 'acts/add_act.html', {'form': form})
 
 
@@ -94,11 +99,13 @@ def ActEdit(request, act_id):
 # Удаление Акта ТС
 def ActDelete(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
-    if request.method == 'POST':
-        act.delete()
-        return redirect('acts')
-    return render(request, 'acts/act_delete.html', {'act': act})
-    
+    try:
+        if request.method == 'POST':
+            act.delete()
+            return redirect('acts')
+        return render(request, 'acts/act_delete.html', {'act': act})
+    except:
+        return HttpResponse("Нельзя удалить")
 
 
 # Печать Акта ТС
@@ -106,7 +113,7 @@ def GenerateActDocument(request, act_id):
     act = models.Acts.objects.get(id=act_id)
 
     # Путь к шаблону
-    template_path = "G:\\.shortcut-targets-by-id\\1wDdA42V4U3psLmrHAEMLYzqdF2xgXZFK\\WebApp\\ditdb\\doki\\for_acts.docx"
+    template_path = "C:/Users/User/Desktop/dbdit/doki/for_acts.docx"
 
     # Открытие шаблона
     document = DocxTemplate(template_path)
@@ -127,12 +134,11 @@ def GenerateActDocument(request, act_id):
 
     return redirect('acts')
 
+
 def CreateBasedOnAct(request, act_id):
     ...
     # Логика создания на основании акта ТС
     return redirect('acts')
-
-
 
 
 def upload_data_acts(request, table_name='Acts'):
@@ -179,9 +185,6 @@ def upload_data_acts(request, table_name='Acts'):
             os.remove(file_path)
 
         return redirect('/acts')
-    
-
-
 
 
 def add_os(request):
@@ -189,7 +192,7 @@ def add_os(request):
         form = forms.AddOsForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect ('/acts/addact')
+            return redirect('/acts/addact')
         else:
             pass
     else:

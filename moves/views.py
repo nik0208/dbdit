@@ -118,7 +118,7 @@ def GenerateMoveDocument(request, move_id):
     move = models.OsMove.objects.get(id=move_id)
 
     # Путь к шаблону
-    template_path = "G:\\.shortcut-targets-by-id\\1wDdA42V4U3psLmrHAEMLYzqdF2xgXZFK\\WebApp\\ditdb\\doki\\way_list.docx"
+    template_path = "C:/Users/User/Desktop/dbdit/doki/way_list.docx"
 
     # Открытие шаблона
     document = DocxTemplate(template_path)

@@ -156,7 +156,7 @@ $(document).ready(function () {
         { "data": "par_doc" },
     ]);
 
-    initializeDataTable('#table_move_detail', '/complectations/complectations_list/', [
+    initializeDataTable('#table_move_detail', '/move_details/<int:move_pk>', [
         { "data": "equipment_os" },
     ]);
 });
