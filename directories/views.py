@@ -16,6 +16,7 @@ from docxtpl import DocxTemplate
 import pandas as pd
 import requests
 import json
+import openpyxl
 
 
 def upload_data_os(request, table_name='IT_OS'):
@@ -33,6 +34,61 @@ def upload_data_os(request, table_name='IT_OS'):
 
         file_extension = os.path.splitext(file.name)[1].lower()
         if file_extension != '.csv':
+
+            wb = openpyxl.load_workbook(file)
+            sheet = wb.active  # Выбираем активный лист
+
+            # Проходимся по строкам и меняем значения в третьем столбце
+            for row in sheet.iter_rows(min_row=2, max_row=sheet.max_row, min_col=1, max_col=3):
+                first_column_value = row[0].value
+                if first_column_value is not None:
+                    first_five_chars = first_column_value[:5]
+                    if first_five_chars == "ITEKS":
+                        row[2].value = "Мини ПК ITEKS"
+                    elif first_five_chars == "ITMNT":
+                        row[2].value = "Мониторы ITMNT"
+                    elif first_five_chars == "ITMNB":
+                        row[2].value = "Моноблок ITMNB"
+                    elif first_five_chars == "ITNTB":
+                        row[2].value = "Ноутбук ITNTB"
+                    elif first_five_chars == "ITPAD":
+                        row[2].value = "Планшет ITPAD"
+                    elif first_five_chars == "ITSRV":
+                        row[2].value = "Сервер ITSRV"
+                    elif first_five_chars == "ITSHD":
+                        row[2].value = "Система хранения данных ITSHD"
+                    elif first_five_chars == "ITWKS":
+                        row[2].value = "Системный блок, Тонкий клиент ITWKS"
+                    elif first_five_chars == "ITVDN":
+                        row[2].value = "Видеорегистраторы ITVDN"
+                    elif first_five_chars == "ITHDD":
+                        row[2].value = "Жесткие диски ITHDD"
+                    elif first_five_chars == "ITUPS":
+                        row[2].value = "ИБП (источники бесперебойного питания) Стабилизатор ITUPS"
+                    elif first_five_chars == "ITKSS":
+                        row[2].value = "Кассовое оборудование ITKSS"
+                    elif first_five_chars == "ITSAN":
+                        row[2].value = "Оптические коммутаторы ITSAN"
+                    elif first_five_chars == "ITVDC":
+                        row[2].value = "Охранное видеонаблюдение (Видеокамеры ITVDC)"
+                    elif first_five_chars == "ITPRN":
+                        row[2].value = "Принтеры, МФУ, копировальные аппараты ITPRN"
+                    elif first_five_chars == "ITPRK":
+                        row[2].value = "Проектор ITPRK"
+                    elif first_five_chars == "ITETH" or first_five_chars == "ITCSC":
+                        row[2].value = "Сетевое оборудование ITETH"
+                    elif first_five_chars == "ITSCN":
+                        row[2].value = "Сканеры штрихкода ITSCN"
+                    elif first_five_chars == "ITCNT" or first_five_chars == "ITKND":
+                        row[2].value = "Счетчики посетителей ITCNT"
+                    elif first_five_chars == "ITTLF":
+                        row[2].value = "Телефон, факс ITTLF"
+                    elif first_five_chars == "ITTCD":
+                        row[2].value = "Терминал для сбора данных ITTCD,  подставки под ТСД, зарядные устройства для ТСД"
+                    elif first_five_chars == "ITBOX":
+                        row[2].value = "Шкаф коммутационный, серверный  ITBOX"
+
+            wb.save(file)
             # Чтение данных из Excel-файла
             data = pd.read_excel(file, engine='openpyxl')
 
