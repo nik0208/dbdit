@@ -37,7 +37,8 @@ def upload_data_os(request, table_name='IT_OS'):
 
             wb = openpyxl.load_workbook(file)
             sheet = wb.active  # Выбираем активный лист
-
+            sheet.delete_rows(1, amount=1)
+            
             # Проходимся по строкам и меняем значения в третьем столбце
             for row in sheet.iter_rows(min_row=2, max_row=sheet.max_row, min_col=1, max_col=3):
                 first_column_value = row[0].value
