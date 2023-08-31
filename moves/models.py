@@ -12,7 +12,7 @@ class Move(models.Model):
         SkladyOffice, on_delete=models.PROTECT, null=True)
     user = models.ForeignKey(Users, on_delete=models.PROTECT)
     comment = models.CharField(max_length=255, null=True)
-    par_dok = models.ForeignKey(Acts, on_delete=models.PROTECT, null=True)
+    par_dok = models.ForeignKey(Acts, on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return f"{self.move_date} {self.user} {self.sklad}"
