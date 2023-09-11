@@ -28,7 +28,7 @@ GROUP_CHOICES = (
 class IT_OS(models.Model):
     inv_dit = models.CharField(primary_key=True, max_length=100)
     name_os = models.CharField(max_length=255, null=True, blank=True)
-    inpute_date = models.DateTimeField( null=True)
+    inpute_date = models.DateTimeField(null=True)
     os_group = models.CharField(max_length=100, choices=GROUP_CHOICES)
     serial_number = models.CharField(max_length=255, null=True, default="None")
     original_price = models.FloatField(default='100')

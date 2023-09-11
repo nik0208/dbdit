@@ -5,6 +5,22 @@
 {% block document-buttons %}
     
     <a class = "AddDocument" href="#" title="Создать новый документ"><span class="create-new-document"></span></a>
+    <a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
+
+    <div id="uploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeFileUploadDialog()">&times;</span>
+            {% csrf_token %}
+            <div id="file-upload" data-upload-url="{% url 'upload_data' %}">
+    
+                <form id="uploadForm" action="{% url 'upload_data' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="file" id="uploadedFile" form="uploadForm">
+                    <button type="submit">Загрузить</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div id="table-pagination" class="step-links"></div>
 
@@ -39,7 +55,7 @@
                         <th>Для кого оборудование</th>
                         <th>Дата поступления</th>
                         <th>Дата выхода</th>
-                        <th>Подоазделение</th>
+                        <th>Подразделение</th>
                         <th>Статус</th>
                     </tr>
                 </thead>
