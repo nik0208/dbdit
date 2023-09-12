@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from . import models
+from .models import *
 from django.apps import apps
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import os
@@ -12,6 +12,7 @@ from . import forms
 from datetime import date
 import datetime
 import locale
+from django.http import HttpResponse
 
 
 @login_required
@@ -21,6 +22,15 @@ def Application(request):
 class ApplicationsList(BaseDatatableView):
     model = apps.get_model('applications', 'Applications')
     columns = ['num', 'requested_equipment', 'avtor', 'user', 'date', 'deadline', 'department', 'status']
+
+    def update_status(request, pk):
+        if request.method == 'POST':
+            new_status = request.POST.get('status')
+            application = get_object_or_404(Applications, pk=pk)
+            application.status = new_status
+            application.save()
+            return HttpResponse('Статус обновлен успешно.')
+        return HttpResponse(status=400)
 
     def render_column(self, row, column):
         # Обработка специфических столбцов (если требуется)
@@ -125,3 +135,12 @@ def AddAppl(request):
         form = forms.ApplForm(initial=initial_data)
 
     return render(request, 'applications/add_appl.html', {'form': form})
+
+def UpdateStatus(request, pk):
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        application = get_object_or_404(Applications, pk=pk)
+        application.status = new_status
+        application.save()
+        return HttpResponse('Статус обновлен успешно.')
+    return HttpResponse(status=400)

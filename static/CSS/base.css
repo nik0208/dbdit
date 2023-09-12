@@ -689,7 +689,7 @@ tbody td.name-column {
     white-space: nowrap;
   }
 
-  .dropdown-menu ul li:hover a {
+  .dropdown-menu ul li:hover {
     background-color: var(--highlight-color);
     color: #fff;
     width: 100%;

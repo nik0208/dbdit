@@ -9,6 +9,8 @@ STATUS_CHOICES = (
     ('завершена', 'Завершена'),
 )
 
+
+
 class Applications(models.Model):
     num = models.CharField(primary_key=True, max_length=50)
     requested_equipment = models.TextField(null=True, blank=True,)
@@ -25,3 +27,4 @@ class Applications(models.Model):
     class Meta:
         managed = True
         db_table = 'Applications'
+

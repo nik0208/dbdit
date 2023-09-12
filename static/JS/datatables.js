@@ -142,7 +142,26 @@ $(document).ready(function () {
         { "data": "date" },
         { "data": "deadline" },
         { "data": "department" },
-        { "data": "status" },
+        { "data": "status",
+            "render": function (data, type, row) {
+                return `
+                    <td>
+                        <div class="intable_dropdown_menu">
+                            <div class="current-status">${data}</div>
+                            <div class="dropdown-menu" style="display: none;">
+                                <ul>
+                                    <li class="status-option">Готов к выдаче</li>
+                                    <li class="status-option">Закуп</li>
+                                    <li class="status-option">Необходимо заточить</li>
+                                    <li class="status-option">На заточке</li>
+                                    <li class="status-option">Завершена</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                `;
+            }
+        }
     ]);
 
     initializeDataTable('#table_complectations', '/complectations/complectations_list/', [

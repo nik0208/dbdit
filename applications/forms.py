@@ -6,6 +6,7 @@ import re
 class ApplForm(forms.ModelForm):
 
     content = forms.CharField(widget=forms.Textarea)
+    
 
     class Meta:
         model = Applications
