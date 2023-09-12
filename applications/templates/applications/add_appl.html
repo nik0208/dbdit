@@ -1,0 +1,75 @@
+{% extends 'index/base.html' %}
+
+{% load static %}
+
+{% block title %}Добавить заявку на оборудование{% endblock %}
+
+{% block document-name %}<h2 class="form-title">Добавить заявку на оборудование</h2>{% endblock %}
+
+{% block document-buttons %}
+  <h2 class="form-title">Добавить заявку на оборудование</h2>
+{% endblock %}
+
+{% block content %}
+
+  <div class="form-container">
+
+    {{ form.media }}
+
+    <form method="post" class="form-area act">
+
+        {% csrf_token %}
+          
+        <div>
+            <label>Данные:</label>
+            {{ form.content }}
+            {% for error in form.first_part.errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+
+          <div style= "display: none">
+            <label>номер:</label>
+            {{ form.num }}
+          </div>
+    
+          <div style= "display: none">
+            <label>equip:</label>
+            {{ form.requested_equipment }}
+          </div>
+    
+          <div style= "display: none">
+            <label>Пользователь:</label>
+            {{ form.user }}
+          </div>
+    
+          <div style= "display: none">
+            <label>Подразделение:</label>
+            {{ form.department }}
+          </div>
+    
+          <div style= "display: none">
+            <label>avtor:</label>
+            {{ form.avtor }}
+          </div>
+    
+          <div style= "display: none">
+            <label>deadline:</label>
+            {{ form.deadline }}
+          </div>    
+    
+          <div style= "display: none">
+            <label>status:</label>
+            {{ form.status }}
+          </div>
+
+
+
+        <div class="form-field button">
+            <button type="submit">Добавить</button>
+        </div>
+    </form>
+
+  </div>
+{% endblock %}

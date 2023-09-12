@@ -1,23 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from . import models
 from django.apps import apps
-from openpyxl import load_workbook
-from django.http import JsonResponse
-from django.http import HttpResponse
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import os
 from django.conf import settings
 import subprocess
 from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator
-from docxtpl import DocxTemplate
-import win32api
-import tempfile
-from django.db.models.functions import Lower
-from django.db.models import CharField
-from django.contrib import messages
 import pandas as pd
+from . import forms
+from datetime import date
+import datetime
+import locale
 
 
 @login_required
@@ -37,11 +31,6 @@ class ApplicationsList(BaseDatatableView):
             else:
                 return ''
     
-        if column == 'deadline':
-            if row.deadline is not None:
-                return row.deadline.strftime('%d.%m.%Y')
-            else:
-                return ''
         return super().render_column(row, column)
 
     
@@ -103,3 +92,36 @@ def upload_data_appl(request, table_name='Applications'):
             os.remove(file_path)
 
         return redirect('/applications')
+    
+
+
+@login_required
+def AddAppl(request):
+    locale.setlocale(locale.LC_ALL, "Russian_Russia.1251")  # Установка локали
+
+    # Получение сегодняшней даты
+    today = datetime.date.today()
+    if request.method == 'POST':
+        form = forms.ApplForm(request.POST)
+        if form.is_valid():
+            act = form.save(commit=False)
+            act.save()
+            return redirect('/applications')
+        else:
+            pass
+    else:
+        initial_data = {
+            'date': today,  # Устанавливаем дату по умолчанию
+            'num': "1",
+            'requested_equipment': "1",
+            'avtor': "1",
+            'user': "1",
+            'deadline': " ",
+            'department': "1",
+            'status': None,
+            
+
+        }
+        form = forms.ApplForm(initial=initial_data)
+
+    return render(request, 'applications/add_appl.html', {'form': form})
