@@ -20,7 +20,7 @@ class OsMoveForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "move_num": forms.TextInput(attrs={'class': 'form-field string'}),
-            "equipment_os": ModelSelect2MultipleWidget(attrs={'class': 'form-field select multi'},
+            "equipment_os": ModelSelect2Widget(attrs={'class': 'form-field select multi'},
                                                        search_fields=['inv_dit__icontains'], ),
             "sklad": ModelSelect2Widget(attrs={'class': 'form-field select'},
                                         search_fields=['sklad_name_lower__icontains', 'sklad_name__icontains'],),

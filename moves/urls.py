@@ -12,6 +12,7 @@ urlpatterns = [
     path('generatemovedocument/<int:move_id>', GenerateMoveDocument,
          name='generate_move_document'),
     path('move_details/<int:move_pk>', get_move_details, name='move_details'),
+    path('upload_data_moves/', upload_data_move, name='upload_data_moves'),
 
 ]
 

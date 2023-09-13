@@ -5,8 +5,8 @@ from acts.models import *
 
 class Move(models.Model):
     move_num = models.CharField(max_length=20, null=True)
-    move_date = models.DateField(auto_now_add=True)
-    status = models.CharField(max_length=100)
+    move_date = models.DateField(null=True)
+    status = models.CharField(max_length=100, null=True)
     avtor = models.CharField(max_length=100)
     sklad = models.ForeignKey(
         SkladyOffice, on_delete=models.PROTECT, null=True)
@@ -22,7 +22,7 @@ class Move(models.Model):
 
 
 class OsMove(Move):
-    equipment_os = models.ManyToManyField(IT_OS)
+    equipment = models.ForeignKey(IT_OS, on_delete=models.PROTECT, default=None)
 
     class Meta:
         managed = True
@@ -30,8 +30,8 @@ class OsMove(Move):
 
 
 class TmcMove(Move):
-    equipment_tmc = models.ManyToManyField(Tmc)
-    qty = models.IntegerField()
+    equipment = models.ForeignKey(Tmc, on_delete=models.PROTECT, default=None)
+    qty = models.IntegerField(null=True)
 
     class Meta:
         managed = True
