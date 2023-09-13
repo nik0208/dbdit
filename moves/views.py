@@ -18,7 +18,6 @@ from datetime import datetime
 from django.db import transaction
 
 
-
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -30,7 +29,8 @@ def Moves(request):
 class MovesList(BaseDatatableView):
     model_os = apps.get_model('moves', 'OsMove')
     model_tmc = apps.get_model('moves', 'TmcMove')
-    columns = ['equipment', 'move_num', 'move_date', 'user', 'sklad', 'comment']
+    columns = ['equipment', 'move_num',
+               'move_date', 'user', 'sklad', 'comment']
 
     def get_initial_queryset(self):
         os_queryset = self.model_os.objects.select_related('sklad', 'user').values(
@@ -142,38 +142,37 @@ def GenerateMoveDocument(request, move_id):
     return redirect('moves')
 
 
-
 def upload_data_move(request, table_name='OS_move'):
 
     @transaction.atomic
     def import_OSxls_to_sqlite(move_num, names, sklad_name, date):
-        
+
         # Вставка новых данных
         OsMove.objects.create(
             move_num=move_num,
             move_date=date,
             avtor='User',
-            sklad_id=sklad_name,
+            sklad=sklad_name,
             user_id='Никита Федоров',
-            equipment_id=names
+            equipment=names
         )
 
     @transaction.atomic
     def import_TMCxls_to_sqlite(move_num, names, sklad_name, date):
-        
+
         # Вставка новых данных
-        OsMove.objects.create(
+        TmcMove.objects.create(
             move_num=move_num,
             move_date=date,
             avtor='User',
-            sklad_id=sklad_name,
+            sklad=sklad_name,
             user_id='Никита Федоров',
-            equipment_id=names
+            equipment=names
         )
 
     if request.method != "POST":
         logging.debug("Request method is not POST. Redirecting...")
-        return redirect('/acts')
+        return redirect('/moves')
 
     try:
         folder = request.FILES.getlist('folder')
@@ -193,102 +192,106 @@ def upload_data_move(request, table_name='OS_move'):
             for row in range(sheet.nrows):
                 for col in range(sheet.ncols):
                     cell_value = sheet.cell_value(row, col)
-                    if cell_value == move_value:
 
-                        desired_value = "Всего отпущено количество (прописью)"
-                        for row in range(sheet.nrows):
-                            for col in range(sheet.ncols):
-                                cell_value = sheet.cell_value(row, col)
-                                if cell_value == desired_value:
-                                    #os_path = sheet.cell_value(row, col)        
-                                    os_qty = sheet.cell_value(row - 2, col)
+            if cell_value == move_value:
 
-                        desired_value_user = "Принял:"
-                        for row in range(sheet.nrows):
-                            for col in range(sheet.ncols):
-                                cell_value = sheet.cell_value(row, col)
-                                if cell_value == desired_value_user:
-                                    user = sheet.cell_value(row, 20)
+                desired_value = "Всего отпущено количество (прописью)"
+                for row in range(sheet.nrows):
+                    for col in range(sheet.ncols):
+                        cell_value = sheet.cell_value(row, col)
+                        if cell_value == desired_value:
+                            # os_path = sheet.cell_value(row, col)
+                            os_qty = sheet.cell_value(row - 2, col)
 
-                        os_names = []
-                        for i in range(int(os_qty)):
-                            a = sheet.cell_value(25 + i, 2)
-                            last_i_index = a.rfind('I')
+                desired_value_user = "Принял:"
+                for row in range(sheet.nrows):
+                    for col in range(sheet.ncols):
+                        cell_value = sheet.cell_value(row, col)
+                        if cell_value == desired_value_user:
+                            user = sheet.cell_value(row, 20)
 
-                            if last_i_index != -1:
-                                itm_code = a[last_i_index:]  # Получаем подстроку от первой "I" с конца до конца строки
-                                
-                            while not itm_code[-1].isdigit():
-                                    itm_code = itm_code.rstrip(itm_code[-1])
-                            os_names.append(itm_code)
+                os_names = []
+                for i in range(int(os_qty)):
+                    a = sheet.cell_value(25 + i, 2)
+                    last_i_index = a.rfind('I')
 
-                        move_num = sheet.cell_value(20, 16)
-                        sklad = sheet.cell_value(11, 6)
-                        date = sheet.cell_value(20, 27)
+                    if last_i_index != -1:
+                        # Получаем подстроку от первой "I" с конца до конца строки
+                        itm_code = a[last_i_index:]
 
-                        # Создание словаря для месяцев на русском
-                        month_names = {
-                            "января": 1,
-                            "февраля": 2,
-                            "марта": 3,
-                            "апреля": 4,
-                            "мая": 5,
-                            "июня": 6,
-                            "июля": 7,
-                            "августа": 8,
-                            "сентября": 9,
-                            "октября": 10,
-                            "ноября": 11,
-                            "декабря": 12,
-                        }
+                    while not itm_code[-1].isdigit():
+                        itm_code = itm_code.rstrip(itm_code[-1])
+                    os_names.append(itm_code)
 
-                        # Разбор даты
-                        date_parts = date.split()
-                        day = int(date_parts[0])
-                        month = month_names[date_parts[1]]
-                        year = int(date_parts[2])
+                move_num = sheet.cell_value(20, 16)
+                sklad = sheet.cell_value(11, 6)
+                date = sheet.cell_value(20, 27)
 
-                        # Создание объекта datetime
-                        date_obj = datetime(year, month, day)
+                # Создание словаря для месяцев на русском
+                month_names = {
+                    "января": 1,
+                    "февраля": 2,
+                    "марта": 3,
+                    "апреля": 4,
+                    "мая": 5,
+                    "июня": 6,
+                    "июля": 7,
+                    "августа": 8,
+                    "сентября": 9,
+                    "октября": 10,
+                    "ноября": 11,
+                    "декабря": 12,
+                }
 
-                        # Форматирование в цифровой формат
-                        formatted_date = date_obj.strftime('%Y-%m-%d')
+                # Разбор даты
+                date_parts = date.split()
+                day = int(date_parts[0])
+                month = month_names[date_parts[1]]
+                year = int(date_parts[2])
 
-                
-                        for os_name in os_names:
-                            logging.debug(f"Calling import_xls_to_sqlite with os_name={os_name}")
-                            import_OSxls_to_sqlite(move_num, os_name, sklad, formatted_date)
-                    else:
-                        desired_value = "Всего отпущено количество (прописью)"
-                        for row in range(sheet.nrows):
-                            for col in range(sheet.ncols):
-                                cell_value = sheet.cell_value(row, col)
-                                if cell_value == desired_value:
-                                    #os_path = sheet.cell_value(row, col)        
-                                    os_qty = sheet.cell_value(row - 4, col)
+                # Создание объекта datetime
+                date_obj = datetime(year, month, day)
 
+                # Форматирование в цифровой формат
+                formatted_date = date_obj.strftime('%Y-%m-%d')
 
-                        os_names = []
-                        for i in range(int(os_qty)):
+                for os_name in os_names:
+                    logging.debug(
+                        f"Calling import_xls_to_sqlite with os_name={os_name}")
+                    import_OSxls_to_sqlite(
+                        move_num, os_name, sklad, formatted_date)
+                    break
+            else:
+                desired_value = "Всего отпущено количество (прописью)"
+                for row in range(sheet.nrows):
+                    for col in range(sheet.ncols):
+                        cell_value = sheet.cell_value(row, col)
+                        if cell_value == desired_value:
+                            # os_path = sheet.cell_value(row, col)
+                            os_qty = sheet.cell_value(row - 4, col)
 
-                            a = sheet.cell_value(24 + i, 3)
-                            os_names.append(a)
+                os_names = []
+                for i in range(int(os_qty)):
 
-                        move_num = sheet.cell_value(11, 35)
-                        sklad = sheet.cell_value(18, 18)
-                        date_value = sheet.cell_value(11, 41)
+                    a = sheet.cell_value(24 + i, 3)
+                    os_names.append(a)
 
-                        # Преобразование числа в формате Excel в дату
-                        date_as_datetime = xlrd.xldate_as_tuple(date_value, 0)
-                        year, month, day, _, _, _ = date_as_datetime
+                move_num = sheet.cell_value(11, 34)
+                sklad = sheet.cell_value(18, 18)
+                date_value = sheet.cell_value(11, 41)
 
-                        # Форматирование даты в новый формат "yyyy-mm-dd"
-                        formatted_date = f"{year:04d}-{month:02d}-{day:02d}"
+                # Преобразование числа в формате Excel в дату
+                date_as_datetime = xlrd.xldate_as_tuple(date_value, 0)
+                year, month, day, _, _, _ = date_as_datetime
 
+                # Форматирование даты в новый формат "yyyy-mm-dd"
+                formatted_date = f"{year:04d}-{month:02d}-{day:02d}"
+                logging.debug(
+                    f"Calling import_xls_to_sqlite with os_name={move_num}")
+                for os_name in os_names:
 
-                        for os_name in os_names:
-                            logging.debug(f"Calling import_xls_to_sqlite with os_name={os_name}")
-                            import_TMCxls_to_sqlite(move_num, os_name, sklad, formatted_date)
+                    import_TMCxls_to_sqlite(
+                        move_num, os_name, sklad, formatted_date)
     except Exception as e:
         logging.error(f"Произошла ошибка: {e}")
 
