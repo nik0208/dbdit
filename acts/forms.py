@@ -3,9 +3,6 @@ from .models import *
 from directories.models import IT_OS
 from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget
 import re
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field
-from crispy_forms.bootstrap import InlineRadios
 import logging
 
 logging.basicConfig(level=logging.DEBUG)

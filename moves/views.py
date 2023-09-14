@@ -21,7 +21,7 @@ from django.db import transaction
 
 logging.basicConfig(level=logging.DEBUG)
 
-@staff_member_required
+
 @login_required
 def Moves(request):
     return render(request, 'moves/moves.html')
