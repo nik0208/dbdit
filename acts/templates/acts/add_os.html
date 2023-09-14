@@ -18,9 +18,19 @@
 
             {% csrf_token %}
           
-          <div>
+          <div >
             <label>Дата:</label>
             {{ form.inpute_date }}
+          </div>
+
+          <div>
+            <label>Пользователь:</label>
+            {{ form.user }}
+          </div>
+    
+          <div>
+            <label>Подразделение:</label>
+            {{ form.department }}
           </div>
 
           <div>
@@ -33,34 +43,24 @@
             {{ form.os_group }}
           </div>
     
-          <div>
-            <label>Пользователь:</label>
-            {{ form.user }}
-          </div>
-    
-          <div>
-            <label>Подразделение:</label>
-            {{ form.department }}
-          </div>
-    
-          <div>
-            <label>Наименование:</label>
-            {{ form.name_os }}
-          </div>
-    
-          <div>
-            <label>Процессор:</label>
-            {{ form.first_part }}
-          </div>      
-    
-          <div>
-            <label>ОЗУ:</label>
-            {{ form.second_part }}
+          <div id="model-fields" class="os-field" style="display:none">
+            <label>Модель:</label>
+            {{ form.model }}
           </div>
           
-          <div>
-          <label>Накопитель:</label>
-            {{ form.third_part }}
+          <div id="processor-fields" class="os-field" style="display:none">
+              <label>Процессор:</label>
+              {{ form.first_part }}
+          </div>
+          
+          <div id="ram-fields" class="os-field" style="display:none">
+              <label>ОЗУ:</label>
+              {{ form.second_part }}
+          </div>
+          
+          <div id="storage-fields" class="os-field" style="display:none">
+              <label>Накопитель:</label>
+              {{ form.third_part }}
           </div>
     
           <div class="form-field button">
@@ -69,6 +69,24 @@
     
         </form>
 
-    </div>
+        <div class="prev-acts">
+    
+          <div class="alert alert-danger">
+
+            <strong>Ошибки в форме:</strong>
+
+              <ul>
+                  {% for field, error_list in form.errors.items %}
+                      {% for error in error_list %}
+                          <li>{{ field }}: {{ error }}</li>
+                      {% endfor %}
+                  {% endfor %}
+              </ul>
+
+          </div>
+
+        </div>
+
+  <div>
 
 {% endblock %}

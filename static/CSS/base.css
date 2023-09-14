@@ -732,13 +732,14 @@ tbody td.name-column {
 
 .form-field {
   display: flex;
-  width: 100%;
+  width: 98%;
   margin-bottom: 10px;
 }
 
 label {
   display: block;
   font-weight: bold;
+  margin-top: 10px;
 }
 
 .form-field.select,
@@ -753,35 +754,6 @@ text {
 }
 
 .form-field.inv_dit {
-  display: flex;
-  width: calc(45%);
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: none;
-}
-
-.form-field.input {
-  display: flex;
-  width: calc(45%);
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: none;
-}
-
-
-.form-field.textarea {
-  display: flex;
-  width: calc(45%);
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: none;
-}
-
-
-.form-field.user {
   display: flex;
   width: calc(45%);
   padding: 5px;
@@ -820,7 +792,30 @@ text {
   box-sizing: border-box;
 }
 
+.add-os-button {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin: 10px 0 10px 0;
+  padding: 10px;
+  width: 125px;
+  height: 20px;
+  border: 1px solid #161515;
+  border-radius: 3px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
 
+.add-os-button-picture {
+  display: block;
+  background-image: url(/static/icons/icon-addlink.svg);
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-left: 10px;
+}
 
 /*Стили для форм Актов ТС Start*/
 .prev-acts {
@@ -889,6 +884,12 @@ text {
   height: 20px;
 }
 
+.act-date.green,
+.act-avtor.green,
+.act-type.green {
+  background-color: #136b26; /* Здесь можно выбрать желаемый зеленый цвет */
+  color: #fff; /* Цвет текста на зеленом фоне */
+}
 
 /*Стили для форм Актов ТС End*/
 .move-data.basic {

@@ -44,6 +44,8 @@ function confirmDelete(url, actsUrl) {
     }
 }
 
+
+// Выпадающее меню
 document.addEventListener('DOMContentLoaded', function() {
     // Получаем список всех кнопок с меню
     var dropdownButtons = document.querySelectorAll('.intable_dropdown_menu .dropdown_menu_button');
@@ -88,11 +90,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Обновление списка актов с данными из ответа сервера
                 $.each(response.acts, function (index, act) {
                     var listItem = $('<li>');
+                if (act.status === 'True') {
+                    listItem.append($('<div>').addClass('act-date green').text(act.act_date));
+                    listItem.append($('<div>').addClass('act-avtor green').text(act.avtor));
+                    listItem.append($('<div>').addClass('act-result').text(act.result));
+                    listItem.append($('<div>').addClass('act-conclusion').text(act.conclusion));
+                    listItem.append($('<div>').addClass('act-type green').text(act.type));
+                } else {
                     listItem.append($('<div>').addClass('act-date').text(act.act_date));
                     listItem.append($('<div>').addClass('act-avtor').text(act.avtor));
                     listItem.append($('<div>').addClass('act-result').text(act.result));
                     listItem.append($('<div>').addClass('act-conclusion').text(act.conclusion));
                     listItem.append($('<div>').addClass('act-type').text(act.type));
+                }
+
                     $('#acts-list').append(listItem);
                 });
             }
@@ -100,48 +111,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Обработчик изменения значения в поле "Группы ОС" в acts/add_os/
+document.addEventListener("DOMContentLoaded", function () {
+    var osGroupField = document.getElementById("id_os_group"); // Получаем контейнер с выбранным значением
+    var modelFields = document.getElementById("model-fields");
+    var processorFields = document.getElementById("processor-fields");
+    var ramFields = document.getElementById("ram-fields");
+    var storageFields = document.getElementById("storage-fields");
 
-document.addEventListener('DOMContentLoaded', function() {
-    $('#table_applications').on('click', '.current-status', function() {
-        var dropdownMenu = $(this).siblings('.dropdown-menu');
-        
-        // Закрываем предыдущее активное меню, если оно существует
-        $('.dropdown-menu.show').not(dropdownMenu).hide();
-
-        // Отображаем/скрываем текущее меню
-        if (dropdownMenu.css('display') === 'none') {
-            dropdownMenu.show();
-        } else {
-            dropdownMenu.hide();
-        }
-    });
-
-    $('#table_applications').on('click', '.status-option', function() {
-        var newStatus = $(this).text();
-        var rowData = $('#table_applications').DataTable().row($(this).closest('tr')).data();
-        var pk = rowData.num; // Замените это на ваш способ получения первичного ключа записи
-        var clickedStatusOption = $(this); // Сохраняем ссылку на $(this) здесь
-        var csrfToken = $('[name=csrfmiddlewaretoken]').val();
-
+    $('#id_os_group').on('select2:select', function (e) {
+        console.log('Change event triggered.');
+        var selectedValue = e.params.data.text;
+        console.log('Selected value:', selectedValue)
+        // Отправка асинхронного запроса на сервер для получения данных актов
         $.ajax({
-            type: 'POST',
-            url: `/applications/updstatus/${pk}/`, // Замените это на URL для обновления статуса
+            url: '/acts/add_os/',  // URL-адрес, который будет обрабатывать запрос на сервере
+            type: 'GET',
             data: {
-                status: newStatus,
-                csrfmiddlewaretoken: csrfToken
+                os_group: selectedValue
             },
-            success: function(response) {
-                // Обновляем отображение статуса
-                rowData.status = newStatus;
-                $('#table_applications').DataTable().row(clickedStatusOption.closest('tr')).data(rowData).draw();
-
-                // Закрываем выпадающее меню
-                clickedStatusOption.closest('.dropdown-menu').hide();
-            },
-            error: function() {
-                alert('Ошибка при обновлении статуса.');
+            success: function (response) {
+                if (selectedValue === "Мини ПК" || selectedValue === "Ноутбук" || selectedValue === "Моноблок") {
+                  modelFields.style.display = "block";
+                  processorFields.style.display = "block";
+                  ramFields.style.display = "block";
+                  storageFields.style.display = "block";
+                } else if (selectedValue === "Системный блок") {
+                  modelFields.style.display = "none";
+                  processorFields.style.display = "block";
+                  ramFields.style.display = "block";
+                  storageFields.style.display = "block";
+                } else {
+                  modelFields.style.display = "block";
+                  processorFields.style.display = "none";
+                  ramFields.style.display = "none";
+                  storageFields.style.display = "none";
+                }
             }
         });
     });
 });
-
