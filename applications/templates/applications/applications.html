@@ -5,7 +5,7 @@
 {% block document-buttons %}
     
     <a class = "AddDocument" href="{% url 'add_appl' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
-    
+    {% if user.groups.all.0.name == "Склад" %}
     <a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
 
     <div id="uploadModal" class="modal" style="display: none;">
@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-
+    {% endif %}
     <div id="table-pagination" class="step-links"></div>
 
     <div class="table-options">

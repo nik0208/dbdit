@@ -118,12 +118,7 @@ $(document).ready(function () {
                                     <li><a href="#" onclick="confirmDelete('/acts/act_delete/${data}', '/acts/acts_list/')">Удалить</a></li>
                                     <li><a href="/acts/generate_act_document/${data}">Печать</a></li>
                                     <div id="dropdown_submenu_{{ acts.id }}" class="dropdown_submenu">
-                                        <ul>
-                                            <li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
-                                            <li><a href="#">Перемещение</a></li>
-                                            <li><a href="#">Комплектация</a></li>
-                                            <li><a href="#">Перевод товаров</a></li>
-                                        </ul>
+
                                     </div>
                                 </ul>
                             </div>
@@ -133,7 +128,12 @@ $(document).ready(function () {
             }
         }
     ]);
-
+{/* <ul>
+<li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
+<li><a href="#">Перемещение</a></li>
+<li><a href="#">Комплектация</a></li>
+<li><a href="#">Перевод товаров</a></li>
+</ul> */}
     initializeDataTable('#table_applications', '/applications/applications_list/', [
         { "data": "num" },
         { "data": "requested_equipment" },

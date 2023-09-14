@@ -81,7 +81,7 @@
 
             <!--------Список ссылок-------->
             <ul>
-
+                {% if user.groups.all.0.name == "Склад" %}
                 <li{% if request.path == "/" %} class="active"{% endif %}><a title="Главная" href="/"><span class="sidebar-icon home"></span>Главная</a></li>
 
                 <li{% if request.path == "/directories/os/" %} class="active"{% endif %}><a title="Основные средства" href="/directories/os/"><span class="sidebar-icon os"></span>Основные средства</a></li>
@@ -89,15 +89,15 @@
                 <li{% if request.path == "/directories/tmc/" %} class="active"{% endif %}><a title="Материалы" href="/directories/tmc/"><span class="sidebar-icon tmc"></span>Материалы</a></li>
 
                 <li{% if request.path == "/moves/" %} class="active"{% endif %}><a title="Перемещения" href="/moves/"><span class="sidebar-icon osmove"></span>Перемещения</a></li>
-
+                {% endif %}
                 <li{% if request.path == "/acts/" %} class="active"{% endif %}><a title="Акты" href="/acts/"><span class="sidebar-icon ActTS" title="Акты ТС"></span>Акты ТС</a></li>
 
                 <li {% if request.path == "/applications/" %} class="active"{% endif %}><a href="/applications"><span class="sidebar-icon appl" title="Заявки"></span>Заявки</a></li>
-
+                {% if user.groups.all.0.name == "Склад" %}
                 {% comment %} <li><a href="!!ССЫЛКА!!"><span class="sidebar-icon spisanie" title="Списания"></span>Списания</a></li> {% endcomment %}
 
                 <li {% if request.path == "/complectations/" %} class="active"{% endif %}><a href="/complectations/"><span class="sidebar-icon complectations" title="Комплектации"></span>Комплектации</a></li>
-
+                {% endif %}
                 {% comment %} <li><a href="!!ССЫЛКА!!"><span class="sidebar-icon users" title="Пользователи"></span>Пользователи</a></li> {% endcomment %}
 
                 {% comment %} <li><a href="!!ССЫЛКА!!"><span class="sidebar-icon locations" title="Локации"></span>Локации</a></li> {% endcomment %}

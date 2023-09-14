@@ -31,7 +31,8 @@ class OsMove(Move):
 
 
 class TmcMove(Move):
-    equipment = models.CharField(max_length=100)
+    equipment = models.ForeignKey(
+        Tmc, on_delete=models.PROTECT, default=None)
     qty = models.IntegerField(null=True)
 
     class Meta:
