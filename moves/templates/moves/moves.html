@@ -14,12 +14,12 @@
     <div class="modal-content">
         <span class="close" onclick="closeFileUploadDialog()">&times;</span>
         {% csrf_token %}
-         <div id="file-upload" data-upload-url="{% url 'upload_data' %}">
+         <div id="file-upload" data-upload-url="{% url 'upload_data_moves' %}">
  
-            <form id="uploadForm" action="{% url 'upload_data' %}" method="post" enctype="multipart/form-data">
+            <form method="post" action="{% url 'upload_data_moves' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                <input type="file" name="file" id="uploadedFile" form="uploadForm">
-                <button type="submit">Загрузить</button>
+                <input type="file" id="fileInput" name="folder" webkitdirectory directory multiple />
+                <input type="submit" value="Upload" />
             </form>
         </div> 
     </div>
@@ -54,7 +54,7 @@
     <thead>
         <tr>
             <th>Тип</th>
-            <th>PK</th>
+            <th>Наименование</th>
             <th>Номер перемещения</th>
             <th>Дата</th>
             <th>МОЛ</th>
