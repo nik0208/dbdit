@@ -20,6 +20,7 @@ from django.db.models import CharField
 from django.contrib import messages
 import pandas as pd
 from datetime import date
+import datetime
 
 
 @login_required
@@ -196,6 +197,7 @@ def upload_data_acts(request, table_name='Acts'):
 
 
 def add_os(request):
+    today = datetime.date.today()
     if request.method == 'POST':
         form = forms.AddOsForm(request.POST)
         if form.is_valid():
@@ -204,7 +206,14 @@ def add_os(request):
         else:
             pass
     else:
-        # Инициализируем форму с текущей датой
-        form = forms.AddOsForm(initial={'inpute_date': date.today()})
-
+        
+        initial_data = {
+            'inpute_date': today,  # Устанавливаем дату по умолчанию
+            'model': "None",
+            'first_part': None,
+            'second_part': None,
+            'third_part': None,
+        }
+        form = forms.AddOsForm(initial=initial_data)
+        
     return render(request, 'acts/add_os.html', {'form': form})

@@ -35,8 +35,10 @@
         {{ form.inv_dit }}
       </div>
 
-      <a href="{% url 'add_os' %}" class="add-os-button">Добавить ОС</a>
-
+      <div>
+        <a href="{% url 'add_os' %}" class="add-os-button">Добавить ОС<span class="add-os-button-picture"></span></a>
+      </div>
+      
       <div>
         <label>Результат проверки:</label>
         {{ form.result }}
