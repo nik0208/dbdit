@@ -14,17 +14,33 @@
 <body>
 
 	<div class="login-page">
+		
 		<div class="form">
-			<img src="{% static 'icons/logo_dom.svg' %}"  class="logo-dom">
-			<img src="{% static 'icons/logo_technodom.svg' %}"  class="logo-technodom">
-			<img src="{% static 'icons/logo_kz.svg' %}"  class="logo-kz">
+
+			<div class="logo">
+
+				<img src="{% static 'icons/logo_dom.svg' %}"  class="logo-dom">
+				<img src="{% static 'icons/logo_technodom.svg' %}"  class="logo-technodom">
+				<img src="{% static 'icons/logo_kz.svg' %}"  class="logo-kz">
+		
+			</div>
+
 			<form method="post">
 				{% csrf_token %}
-				<label for="username">Username:</label>
-				<input type="text" name="username" value="{{ username }}"><br>
-				<label for="password">Password:</label>
-				<input type="password" name="password" value="{{ password }}"><br>
-				<button type="submit">Login</button>
+
+				<div>
+					<label>Имя пользователя:</label>
+					<input type="text" name="username" value="{{ username }}"><br>
+				</div>
+
+				<div>
+					<label>Пароль:</label>
+					<input type="password" name="password" value="{{ password }}"><br>
+				</div>
+
+				<div class="register-button">
+					<button type="submit" id="register-button">Login</button>
+				</div>
 				<p class="message"><a href="{% url 'register'%}">Регистрация</a></p>
 			</form>
 		</div>

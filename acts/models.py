@@ -3,7 +3,7 @@ from directories.models import *
 
 
 class Acts(models.Model):
-    id = models.CharField(primary_key=True, max_length=100)
+    id = models.AutoField(primary_key=True)
     avtor = models.CharField(max_length=100)
     inv_dit = models.ForeignKey(
         IT_OS, on_delete=models.PROTECT, blank=True, null=True)

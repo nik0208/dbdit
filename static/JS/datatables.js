@@ -100,7 +100,17 @@ $(document).ready(function () {
         { "data": "user" },
         { "data": "sklad" },
         { "data": "type" },
-        { "data": "avtor" },
+        {
+            "data": "avtor",
+            "render": function (data, type, row) {
+                // Верните содержимое ячейки в виде HTML-кода, включая фамилию и имя пользователя
+                return `
+                    <td>
+                        ${row.avtor.last_name} ${row.avtor.first_name}
+                    </td>
+                `;
+            }
+        },
         {
             "data": "pk",
             "render": function (data, type, row) {
