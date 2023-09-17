@@ -81,9 +81,9 @@
 
             <!--------Список ссылок-------->
             <ul>
-                {% if user.groups.all.0.name == "Склад" %}
+                
                 <li{% if request.path == "/" %} class="active"{% endif %}><a title="Главная" href="/"><span class="sidebar-icon home"></span>Главная</a></li>
-
+                {% if user.groups.all.0.name == "Склад" %}
                 <li{% if request.path == "/directories/os/" %} class="active"{% endif %}><a title="Основные средства" href="/directories/os/"><span class="sidebar-icon os"></span>Основные средства</a></li>
 
                 <li{% if request.path == "/directories/tmc/" %} class="active"{% endif %}><a title="Материалы" href="/directories/tmc/"><span class="sidebar-icon tmc"></span>Материалы</a></li>
