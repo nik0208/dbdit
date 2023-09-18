@@ -63,8 +63,6 @@ class SkladyOffice(models.Model):
         max_length=50, choices=TYPE_CHOICES, blank=True)
     sklad_city = models.CharField(max_length=50, blank=True, null=True)
     sklad_adress = models.CharField(max_length=100)
-    responsible_person = models.ForeignKey(
-        "Users", on_delete=models.PROTECT, blank=True, null=True)
     sklad_name_lower = models.CharField(max_length=50, blank=True)
 
     def save(self, *args, **kwargs):
@@ -81,9 +79,9 @@ class SkladyOffice(models.Model):
 
 
 class Tmc(models.Model):
-    tmc_name = models.CharField(primary_key=True, max_length=50)
+    tmc_name = models.CharField(max_length=50)
     tmc_article = models.CharField(max_length=50)
-    web_code = models.CharField(max_length=50)
+    web_code = models.CharField(primary_key=True, max_length=50)
     tmc_price = models.FloatField(default=100)
 
     def __str__(self):

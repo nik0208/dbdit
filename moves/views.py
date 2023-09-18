@@ -285,10 +285,10 @@ def upload_data_move(request, table_name='OS_move'):
         os_names = []
         for i in range(int(os_qty)):
 
-            a = sheet.cell_value(24 + i, 3)
+            a = sheet.cell_value(24 + i, 21)
             def custom_encode(s):
                 replacements = {
-                    ' ': '%20',
+                    ' ': '',
                     '/': '_2F',
                     ',': '_2C'
                 }

@@ -10,7 +10,7 @@ class Complectations(models.Model):
     par_doc = models.ForeignKey(Acts, on_delete=models.PROTECT, blank=True, null=True)
     inv_dit = models.ForeignKey(IT_OS, on_delete = models.PROTECT)
     new_name_os = models.CharField(max_length=255)
-    tmc = models.ManyToManyField(Tmc, blank=True)
+    tmc = models.ForeignKey(Tmc, on_delete=models.PROTECT, blank=True, default=None)
     tmc_qty = models.IntegerField()
     prev_name_os = models.CharField(max_length=255, default="None")
     doc_num = models.IntegerField(blank=True, default=1)
