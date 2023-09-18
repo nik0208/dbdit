@@ -4,6 +4,7 @@ from directories.models import IT_OS
 from django_select2.forms import Select2Widget, Select2MultipleWidget, ModelSelect2Widget
 import re
 import logging
+from . import models
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -53,14 +54,12 @@ class ActForm(forms.ModelForm):
                 attrs={'class': 'form-field inv_dit'},
                 search_fields=['inv_dit__icontains'],
             ),
-            "sklad": ModelSelect2Widget(attrs={
-                'class': 'form-field text'},
-                search_fields=['sklad_name__icontains', 'sklad_name_lower__icontains'],
+            "sklad": ModelSelect2Widget(queryset=models.SkladyOffice.objects.all(),
+                                        attrs={'class': 'form-field select'},
+                                        search_fields=['sklad_name_lower__icontains', 'sklad_name__icontains'],
             ),
-            "user": ModelSelect2Widget(attrs={
-                'class': 'form-field text',
-                'id': 'id_user',
-                'name': 'user'},
+            "user": ModelSelect2Widget(queryset=models.Users.objects.all(),
+                                       attrs={'class': 'form-field text', 'id': 'id_user','name': 'user'},
             search_fields=['name_lower__icontains', 'name__icontains']
             ),
         }

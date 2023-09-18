@@ -18,7 +18,7 @@ class Applications(models.Model):
     user = models.CharField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True, blank = True, null=True)
     deadline = models.CharField(max_length=100, blank=True, null=True)
-    department = models.CharField(max_length=255, blank=True, null=True)
+    department = models.CharField(max_length=254, blank=True, null=True)
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, blank=True, null=True)
 
     def __str__(self):

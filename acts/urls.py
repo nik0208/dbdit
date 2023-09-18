@@ -14,7 +14,7 @@ urlpatterns = [
      path('get_acts/', get_acts, name='get_acts'),
      path('create_based_on_act/<int:act_id>',
          CreateBasedOnAct, name='create_based_on_act'),
-     path('upload-data/', upload_data_acts, name='upload_data'),
+     path('upload-data-acts/', upload_data_acts, name='upload_data_acts'),
      path('add_os/', add_os, name='add_os'),
 
 ]

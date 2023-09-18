@@ -30,7 +30,7 @@ def Acts(request):
 
 class ActsList(BaseDatatableView):
     model = apps.get_model('acts', 'Acts')
-    columns = ['pk', 'act_date', 'inv_dit', 'result',
+    columns = ['pk', 'act_date', 'inv_dit_id', 'result',
                'conclusion', 'type', 'user', 'avtor']
 
     def render_column(self, row, column):
@@ -49,8 +49,8 @@ class ActsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__name__iregex=r'(?i)^.+' + term[1:]) | Q(
-                    avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__sklad_name__icontains=term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
+                query |= Q(inv_dit_id__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__iregex=r'(?i)^.+' + term[1:]) | Q(
+                    avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__iregex=r'(?i)^.+' + term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
             qs = qs.filter(query)
         return qs
 

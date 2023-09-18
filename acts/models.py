@@ -3,16 +3,15 @@ from directories.models import *
 
 
 class Acts(models.Model):
-    id = models.AutoField(primary_key=True)
-    avtor = models.CharField(max_length=100)
+    avtor = models.CharField(max_length=101)
     inv_dit = models.ForeignKey(
         IT_OS, on_delete=models.PROTECT, blank=True, null=True)
     type = models.CharField(max_length=100)
     result = models.CharField(max_length=255)
     conclusion = models.CharField(max_length=255)
     act_date = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(Users, on_delete=models.PROTECT, blank=True)
-    sklad = models.ForeignKey(SkladyOffice, on_delete=models.PROTECT, blank=True)
+    user = models.CharField(max_length=255)
+    sklad = models.CharField(max_length=255)
     status = models.CharField(max_length=255, blank=True)
 
     def __str__(self):

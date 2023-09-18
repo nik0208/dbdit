@@ -47,8 +47,6 @@ $(document).ready(function () {
     initializeDataTable('#table_os', '/directories/os_list/', [
         { "data": "inv_dit" },
         { "data": "name_os" },
-        { "data": "user" },
-        { "data": "department" },
         { "data": "inpute_date" },
         { "data": "os_group" },
         { "data": "serial_number" },
@@ -94,7 +92,7 @@ $(document).ready(function () {
     initializeDataTable('#table_acts', '/acts/acts_list/', [
         { "data": "pk" },
         { "data": "act_date" },
-        { "data": "inv_dit" },
+        { "data": "inv_dit_id" },
         { "data": "result" },
         { "data": "conclusion" },
         { "data": "user" },
@@ -102,14 +100,14 @@ $(document).ready(function () {
         { "data": "type" },
         {
             "data": "avtor",
-            "render": function (data, type, row) {
-                // Верните содержимое ячейки в виде HTML-кода, включая фамилию и имя пользователя
-                return `
-                    <td>
-                        ${row.avtor.last_name} ${row.avtor.first_name}
-                    </td>
-                `;
-            }
+            // "render": function (data, type, row) {
+            //     // Верните содержимое ячейки в виде HTML-кода, включая фамилию и имя пользователя
+            //     return `
+            //         <td>
+            //             ${row.avtor.last_name} ${row.avtor.first_name}
+            //         </td>
+            //     `;
+            // }
         },
         {
             "data": "pk",

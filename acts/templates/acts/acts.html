@@ -12,9 +12,9 @@
         <div class="modal-content">
             <span class="close" onclick="closeFileUploadDialog()">&times;</span>
             {% csrf_token %}
-            <div id="file-upload" data-upload-url="{% url 'upload_data' %}">
+            <div id="file-upload" data-upload-url="{% url 'upload_data_acts' %}">
     
-                <form id="uploadForm" action="{% url 'upload_data' %}" method="post" enctype="multipart/form-data">
+                <form id="uploadForm" action="{% url 'upload_data_acts' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="file" name="file" id="uploadedFile" form="uploadForm">
                     <button type="submit">Загрузить</button>
