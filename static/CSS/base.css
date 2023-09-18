@@ -730,10 +730,15 @@ tbody td.name-column {
   border-radius: 4px;
 }
 
+.select2-search.select2-search--inline {
+  float: none !important;
+}
+
 .form-field {
   display: flex;
   width: 98%;
   margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 label {

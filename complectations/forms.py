@@ -35,7 +35,7 @@ class ComplForm(forms.ModelForm):
                                           search_fields=['pk__icontains'],),
             "tmc": ModelSelect2MultipleWidget(attrs={'class': 'form-field select multi'},
                                               search_fields=['tmc_name__icontains']),
-            "tmc_qty": forms.NumberInput(attrs={}),
+            "tmc_qty": forms.NumberInput(attrs={'class': 'form-field'}),
         }
 
         def save(self, commit=True):
