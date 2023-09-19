@@ -189,18 +189,18 @@ def upload_data_move(request, table_name='OS_move'):
             workbook = xlrd.open_workbook(file_path)
             sheet = workbook.sheet_by_index(0)
 
-            move_value = "Приложение 19"
+            osmove_value = "Приложение 19"
+            tmcmove_value = "Приложение 29"
 
-            logging.debug(f"")
 
             for row in range(sheet.nrows):
                 for col in range(sheet.ncols):
                     
                     cell_value = sheet.cell_value(row, col)
 
-                    if cell_value == move_value:
+                    if cell_value == osmove_value:
 
-                        logging.debug(f"move_value: {move_value}, cell_value: {cell_value}")
+                        logging.debug(f"move_value: {osmove_value}, cell_value: {cell_value}")
                         
                         desired_value = "Всего отпущено количество (прописью)"
                         for row in range(sheet.nrows):
@@ -273,57 +273,62 @@ def upload_data_move(request, table_name='OS_move'):
                         
                         continue
                             
+                    elif cell_value == tmcmove_value:
+                        desired_value = "Всего отпущено количество (прописью)"
+                        for row in range(sheet.nrows):
+                            for col in range(sheet.ncols):
+                                cell_value = sheet.cell_value(row, col)
+                                if cell_value == desired_value:
+                                    # os_path = sheet.cell_value(row, col)
+                                    os_qty = int(sheet.cell_value(row - 4, col))
+
+                        logging.debug(f"os_qty: {range(os_qty)}")
+                        os_names = []
                     
-        desired_value = "Всего отпущено количество (прописью)"
-        for row in range(sheet.nrows):
-            for col in range(sheet.ncols):
-                cell_value = sheet.cell_value(row, col)
-                if cell_value == desired_value:
-                    # os_path = sheet.cell_value(row, col)
-                    os_qty = sheet.cell_value(row - 4, col)
+                        def custom_encode(s):
+                            replacements = {
+                                ' ': '',
+                            }
+                            
+                            result = []
+                            for char in s:
+                                result.append(replacements.get(char, char))
+                            
+                            return ''.join(result)
+                    
+                        for i in range(os_qty):
 
-        os_names = []
-        for i in range(int(os_qty)):
+                            a = sheet.cell_value(24 + i, 21)
 
-            a = sheet.cell_value(24 + i, 21)
-            def custom_encode(s):
-                replacements = {
-                    ' ': '',
-                    '/': '_2F',
-                    ',': '_2C'
-                }
-                
-                result = []
-                for char in s:
-                    result.append(replacements.get(char, char))
-                
-                return ''.join(result)
 
-        
-            a = custom_encode(a)
-            os_names.append(a)
+                        
+                            a = custom_encode(a)
+                            os_names.append(a)
 
-        move_num = sheet.cell_value(11, 34)
-        sklad = sheet.cell_value(18, 18)
-        date_value = sheet.cell_value(11, 41)
+                        logging.debug(f"os_names: {os_names}")
 
-        # Преобразование числа в формате Excel в дату
-        date_as_datetime = xlrd.xldate_as_tuple(date_value, 0)
-        year, month, day, _, _, _ = date_as_datetime
+                        move_num = sheet.cell_value(11, 34)
+                        sklad = sheet.cell_value(18, 18)
+                        date_value = sheet.cell_value(11, 41)
 
-        # Форматирование даты в новый формат "yyyy-mm-dd"
-        formatted_date = f"{year:04d}-{month:02d}-{day:02d}"
-        logging.debug(
-            f"Calling import_xls_to_sqlite with os_name={move_num}")
-        for os_name in os_names:
+                        logging.debug(f"move_num: {move_num}, sklad: {sklad}, date: {date_value}")
 
-            logging.debug(
-                                f"Calling import_xls_to_sqlite with os_name={os_name}")
+                        logging.debug(f"Type of os_qty: {type(os_qty)}")
+                        logging.debug(f"Type of date_value: {type(date_value)}")
 
-            import_TMCxls_to_sqlite(
-                move_num, os_name, sklad, formatted_date)
-            
-        send2trash.send2trash(file_path)
+
+                        formatted_date = datetime.strptime(date_value, "%d.%m.%Y").strftime("%Y-%m-%d")
+
+                        
+                        for os_name in os_names:
+
+                            logging.debug(
+                                                f"Calling import_xls_to_sqlite with os_name={os_name}")
+
+                            import_TMCxls_to_sqlite(
+                                move_num, os_name, sklad, formatted_date)
+                            
+                        os.remove(file_path)
 
         
             
