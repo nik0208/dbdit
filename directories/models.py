@@ -61,7 +61,7 @@ class SkladyOffice(models.Model):
         max_length=50, choices=TYPE_CHOICES, blank=True)
     sklad_city = models.CharField(max_length=50, blank=True, null=True)
     sklad_adress = models.CharField(max_length=100)
-    sklad_name_lower = models.CharField(max_length=50, blank=True)
+    sklad_name_lower = models.CharField(max_length=50, blank=True, null = True)
 
     def save(self, *args, **kwargs):
         if self.sklad_name:

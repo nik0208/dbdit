@@ -50,7 +50,7 @@ class ActForm(forms.ModelForm):
             "conclusion": forms.Textarea(attrs={
                 'class': 'form-field text'
             }),
-            "inv_dit": ModelSelect2Widget(
+            "inv_dit": ModelSelect2Widget(queryset=models.IT_OS.objects.all(),
                 attrs={'class': 'form-field inv_dit'},
                 search_fields=['inv_dit__icontains'],
             ),

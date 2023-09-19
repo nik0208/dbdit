@@ -4,8 +4,7 @@ from directories.models import *
 
 class Acts(models.Model):
     avtor = models.CharField(max_length=101)
-    inv_dit = models.ForeignKey(
-        IT_OS, on_delete=models.PROTECT, blank=True, null=True)
+    inv_dit = models.CharField(max_length=255, default="None")
     type = models.CharField(max_length=100)
     result = models.CharField(max_length=255)
     conclusion = models.CharField(max_length=255)
