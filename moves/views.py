@@ -170,18 +170,15 @@ def upload_data_move(request, table_name='OS_move'):
             user_id='Никита Федоров',
             equipment_id=names
         )
+    
+    
+    folder = request.FILES.getlist('folder')
+    logging.debug(f"Folder: {folder}")
 
-    if request.method != "POST":
-        logging.debug("Request method is not POST. Redirecting...")
-        return redirect('/moves')
+    fs = FileSystemStorage(location='invoices/')
 
-    try:
-        folder = request.FILES.getlist('folder')
-        logging.debug(f"Folder: {folder}")
-
-        fs = FileSystemStorage(location='invoices/')
-
-        for file in folder:
+    for file in folder:
+        try:
             filename = fs.save(file.name, file)
             file_path = fs.path(filename)
             logging.debug(f"Filename: {filename}, File path: {file_path}")
@@ -269,9 +266,8 @@ def upload_data_move(request, table_name='OS_move'):
                             import_OSxls_to_sqlite(
                                 move_num, os_name, sklad, formatted_date)
                             
-                        send2trash.send2trash(file_path)
+                        os.remove(file_path)
                         
-                        continue
                             
                     elif cell_value == tmcmove_value:
                         desired_value = "Всего отпущено количество (прописью)"
@@ -330,9 +326,10 @@ def upload_data_move(request, table_name='OS_move'):
                             
                         os.remove(file_path)
 
-        
-            
-    except Exception as e:
-        logging.error(f"Произошла ошибка: {e}")
     
+        
+        except Exception as e:
+            logging.error(f"Произошла ошибка: {e}")
+            continue
+
     return redirect('/moves')
