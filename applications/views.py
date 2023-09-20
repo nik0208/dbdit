@@ -35,7 +35,7 @@ class ApplicationsList(BaseDatatableView):
     def render_column(self, row, column):
         # Обработка специфических столбцов (если требуется)
 
-        if column == 'date':
+        if column == 'date' or column == 'deadline':
             if row.date is not None:
                 return row.date.strftime('%d.%m.%Y')
             else:
