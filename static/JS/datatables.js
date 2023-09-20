@@ -1,10 +1,11 @@
 $(document).ready(function () {
-    function initializeDataTable(tableId, ajaxUrl, columns) {
+    function initializeDataTable(tableId, ajaxUrl, columns, defaultSort) {
         var table = $(tableId).DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": ajaxUrl,
             "columns": columns,
+            "order": defaultSort, // Устанавливаем сортировку по умолчанию
             "dom": '<"top"i>rt<"bottom"flp><"clear">',
             "language": {
                 "info": "Показано _START_ - _END_ из _TOTAL_ записей",
@@ -72,8 +73,8 @@ $(document).ready(function () {
             "data": "pk", render: function (data, type, row) {
                 return '<a href="/moves/generatemovedocument/' + data + '">Создать</a>';
             }
-        }
-    ]);
+        }], [[3, 'desc']]
+    );
 
     function showMoveDetailsModal(movePk) {
         $.ajax({
@@ -134,8 +135,9 @@ $(document).ready(function () {
                     </td>
                 `;
             }
-        }
-    ]);
+        },
+        ], [[0, 'desc']]
+);
 {/* <ul>
 <li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
 <li><a href="#">Перемещение</a></li>
@@ -169,8 +171,8 @@ $(document).ready(function () {
                     </td>
                 `;
             }
-        }
-    ]);
+        }], [[5, 'desc']]
+    );
 
     initializeDataTable('#table_complectations', '/complectations/complectations_list/', [
         { "data": "pk" },
@@ -180,7 +182,8 @@ $(document).ready(function () {
         { "data": "tmc" },
         { "data": "tmc_qty" },
         { "data": "par_doc" },
-    ]);
+    ], [[0, 'desc']]
+    );
 
     initializeDataTable('#table_move_detail', '/move_details/<int:move_pk>', [
         { "data": "equipment_os" },
