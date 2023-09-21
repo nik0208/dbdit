@@ -39,6 +39,5 @@ class ApplForm(forms.ModelForm):
             cleaned_data['user'] = re.search(r'Для кого закуп: \((.*?)\) (\w+ \w+)', content).group(2)
             cleaned_data['requested_equipment'] = re.search(r'Необходимое оборудование:(.*?)Обоснование:(.*)', content, re.DOTALL).group(1).strip()
             cleaned_data['department'] = re.search(r'Подразделение: (.*)', content).group(1)
-            cleaned_data['deadline'] = " "
 
         return cleaned_data

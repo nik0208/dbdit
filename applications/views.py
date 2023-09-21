@@ -35,9 +35,15 @@ class ApplicationsList(BaseDatatableView):
     def render_column(self, row, column):
         # Обработка специфических столбцов (если требуется)
 
-        if column == 'date' or column == 'deadline':
+        if column == 'date':
             if row.date is not None:
                 return row.date.strftime('%d.%m.%Y')
+            else:
+                return ''
+        
+        if column == 'deadline':
+            if row.deadline is not None:
+                return row.deadline.strftime('%d.%m.%Y')
             else:
                 return ''
     
@@ -107,10 +113,7 @@ def upload_data_appl(request, table_name='Applications'):
 
 @login_required
 def AddAppl(request):
-    locale.setlocale(locale.LC_ALL, "Russian_Russia.1251")  # Установка локали
 
-    # Получение сегодняшней даты
-    today = datetime.date.today()
     if request.method == 'POST':
         form = forms.ApplForm(request.POST)
         if form.is_valid():
@@ -121,16 +124,12 @@ def AddAppl(request):
             pass
     else:
         initial_data = {
-            'date': today,  # Устанавливаем дату по умолчанию
+
             'num': "1",
             'requested_equipment': "1",
             'avtor': "1",
             'user': "1",
-            'deadline': " ",
             'department': "1",
-            'status': None,
-            
-
         }
         form = forms.ApplForm(initial=initial_data)
 
