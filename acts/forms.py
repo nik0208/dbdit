@@ -53,10 +53,11 @@ class ActForm(forms.ModelForm):
             "inv_dit": ModelSelect2Widget(queryset=models.IT_OS.objects.all(),
                 attrs={'class': 'form-field inv_dit'},
                 search_fields=['inv_dit__icontains'],
+                search_option='icontains',  # Добавьте это поле для поиска без учета регистра
             ),
             "sklad": ModelSelect2Widget(queryset=models.SkladyOffice.objects.all(),
                                         attrs={'class': 'form-field select'},
-                                        search_fields=['sklad_name_lower__icontains', 'sklad_name__icontains'],
+                                        search_fields=['sklad_name__icontains', 'sklad_name_lower__icontains'],
             ),
             "user": ModelSelect2Widget(queryset=models.Users.objects.all(),
                                        attrs={'class': 'form-field text', 'id': 'id_user','name': 'user'},
