@@ -47,6 +47,16 @@
           </div>
 
           <div>
+            <label>Имя:</label>
+            {{ form.first_name }}
+          </div>
+
+          <div>
+            <label>Фамилия:</label>
+            {{ form.last_name }}
+          </div>
+
+          <div>
             <label>Пароль:</label>
             {{ form.password1 }}
           </div>
@@ -59,7 +69,7 @@
           <p class="message"><a href="{% url 'login'%}">Войти</a></p>
 
           <div class="register-button">
-            <button type="submit" id="register-button">Login</button>
+            <button type="submit" id="register-button">Регистрация</button>
           </div>
 
 

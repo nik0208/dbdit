@@ -117,11 +117,11 @@ def AddAppl(request):
     if request.method == 'POST':
         form = forms.ApplForm(request.POST)
         if form.is_valid():
-            act = form.save(commit=False)
+            act = form.save()
             act.save()
             return redirect('/applications')
         else:
-            pass
+            print(form.errors)
     else:
         initial_data = {
 

@@ -64,7 +64,7 @@ def AddAct(request):
         form = forms.ActForm(request.POST, user=request.user)
         if form.is_valid():
             act = form.save(commit=False)
-            act.avtor = request.user
+            act.avtor = f"{request.user.first_name} {request.user.last_name}"
             act.save()
             return redirect('acts')
     else:
@@ -117,31 +117,27 @@ def ActDelete(request, act_id):
         return JsonResponse({'success': False, 'message': 'Произошла ошибка при удалении.'})
 
 
-# Печать Акта ТС
 def GenerateActDocument(request, act_id):
     act = models.Acts.objects.get(id=act_id)
-
-    # Путь к шаблону
     template_path = os.path.join('doki', 'for_acts.docx')
-
-    # Открытие шаблона
     document = DocxTemplate(template_path)
-
-    # Словарь для замены
+    
     context = {'id_act': act.pk, 'act_date': act.act_date, 'os': act.inv_dit,
                'result': act.result, 'conclusion': act.conclusion,
                'user': act.user, 'where': act.sklad, 'avtor': act.avtor}
+    
     document.render(context)
 
-    # Создание и сохранение изменений во временном файле
-    temp_file_path = tempfile.gettempdir() + "\\generated_document.docx"
-
+    # Сохранение во временный файл
+    temp_file_path = os.path.join(tempfile.gettempdir(), "generated_document.docx")
     document.save(temp_file_path)
 
-    # Вывод на печать
-    win32api.ShellExecute(0, "print", temp_file_path, None, ".", 0)
+    # Чтение файла для ответа
+    with open(temp_file_path, 'rb') as f:
+        response = HttpResponse(f.read(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'inline; filename=generated_document.docx'
+        return response
 
-    return redirect('acts')
 
 
 def CreateBasedOnAct(request, act_id):

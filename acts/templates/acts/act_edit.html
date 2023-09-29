@@ -1,13 +1,64 @@
-{% extends 'index/base.html' %}
+﻿{% extends 'index/base.html' %}
 
 {% block content %}
 <h1>Изменить Акт</h1>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Сохранить</button>
-</form>
+<div class="form-container">
 
-<a href="{% url 'acts' %}">Назад к списку</a>
+  {{ form.media }}
+
+  <form method="post" class="form-area act">
+
+      {% csrf_token %}
+    
+    <div>
+      <label>Пользователь:</label>
+      {{ form.user }}
+    </div>
+
+    <div>
+      <label>Местонахождение:</label>
+      {{ form.sklad }}
+    </div>
+
+    <div>
+      <label>Оборудование:</label>
+      {{ form.inv_dit }}
+    </div>
+    
+    <div>
+      <label>Результат проверки:</label>
+      {{ form.result }}
+    </div>
+
+    <div>
+      <label>Заключение:</label>
+      {{ form.conclusion }}
+    </div>
+
+    <div>
+      <label>Действие:</label>
+      {{ form.type }}
+    </div>      
+
+    <div>
+      <label>Автор:</label>
+      {{ form.avtor }}
+    </div>
+
+    <div>
+      <label>Статус:</label>
+      {{ form.status }}
+    </div>
+
+    <div class="form-field button">
+      <button type="submit">Сохранить</button>
+    </div>
+    
+    <div class="form-field button">
+      <a href="{% url 'acts' %}">Назад к списку</a>
+    </div>
+  </form>
+
+
 {% endblock %}

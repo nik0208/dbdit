@@ -30,7 +30,7 @@ def Moves(request):
 class MovesList(BaseDatatableView):
     model_os = apps.get_model('moves', 'OsMove')
     model_tmc = apps.get_model('moves', 'TmcMove')
-    columns = ['equipment', 'move_num',
+    columns = ['move_num',
                'move_date', 'user', 'sklad', 'comment']
 
     def get_initial_queryset(self):
