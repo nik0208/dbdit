@@ -16,6 +16,6 @@ urlpatterns = [
          CreateBasedOnAct, name='create_based_on_act'),
     path('upload-data-acts/', upload_data_acts, name='upload_data_acts'),
     path('add_os/', add_os, name='add_os'),
-    path('select2/', include('django_select2.urls', namespace='django_select2')),
+
 
 ]
