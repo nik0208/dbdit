@@ -1,0 +1,21 @@
+{% extends "index/base.html" %}
+
+{% block title %}Загрузка Excel{% endblock %}
+
+{% block document-buttons %}
+{% endblock %}
+
+{% block content %}
+<form id="uploadForm" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div id="drop_zone">Перетащите файл сюда</div>
+  <input type="file" id="fileInput" style="display:block">
+  <input type="radio" id="option1" name="optionGroup" value="IT_OS"> ОС
+  <input type="radio" id="option2" name="optionGroup" value="Tmc"> ТМЦ
+  <input type="radio" id="option3" name="optionGroup" value="Acts"> Акты
+  <input type="radio" id="option4" name="optionGroup" value="Applications"> Заявки
+  <input type="radio" id="option5" name="optionGroup" value="SkladyOffice"> Склады
+  <input type="radio" id="option6" name="optionGroup" value="Users"> Пользователи
+  <input type="submit" value="Отправить">
+</form>
+{% endblock %}

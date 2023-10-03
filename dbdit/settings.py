@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_select2',
     'yandex_go',
     'django_extensions',
+    'loadsql',
 
 ]
 

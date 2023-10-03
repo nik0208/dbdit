@@ -32,6 +32,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('', RedirectView.as_view(url='index/', permanent=True)),
     path('select2/', include('django_select2.urls', namespace='django_select2')),
+    path('loadsql/', include('loadsql.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
