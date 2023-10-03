@@ -92,10 +92,10 @@ class Tmc(models.Model):
 
 class Users(models.Model):
     name = models.CharField(primary_key=True, max_length=255)
-    login = models.CharField(max_length=50, null=True)
-    phone_num = models.CharField(max_length=15, null=True)
     department = models.CharField(max_length=100, null=True)
     position = models.CharField(max_length=255, null=True)
+    organization = models.CharField(max_length=255, null=True)
+    subdivision = models.CharField(max_length=255, null=True)
     # Дополнительное поле для имени пользователя в нижнем регистре
     name_lower = models.CharField(max_length=100, blank=True)
 

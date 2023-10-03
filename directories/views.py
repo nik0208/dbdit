@@ -180,36 +180,4 @@ class TmcList(BaseDatatableView):
             qs = qs.filter(query)
         return qs
 
-def load_to_sdp(request):
-    model = apps.get_model('directories', 'IT_OS')
-    entries = model.objects.all()[:100]  # Получаем только первые 5 записей
-
-    headers = {"authtoken": "DE2F5A51-D3B5-417D-99AC-2B10689E0EC0"}
-
-    for entry in entries:
-        if entry.os_group in ["Мини ПК ITEKS", "Ноутбук ITNTB", "Системный блок, Тонкий клиент ITWKS", "Моноблок ITMNB"]:
-            type = "workstation"
-        else:
-            type = "asset"
-
-        url = f"https://help-test/api/v3/{type}s"
-
-        input_data = {
-            type: {
-                "org_serial_number": entry.serial_number,
-                "name": entry.inv_dit,
-                "purchase_cost": entry.original_price,
-                # "department": entry.department,
-                "product": {
-                    "name": entry.os_group,
-                },
-                # "user": entry.user,
-            }
-        }
-
-        data = {'input_data': json.dumps(input_data)}
-        response = requests.post(url, headers=headers, data=data, verify=False)
-        print(response.text)
-
-    return HttpResponse("Data upload to SDP complete.")
 

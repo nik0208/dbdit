@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'applications',
     'django_select2',
     'yandex_go',
+    'django_extensions',
 
 ]
 
