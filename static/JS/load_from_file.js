@@ -1,69 +1,26 @@
-function openFileUploadDialog() {
-    var modal = document.getElementById("uploadModal");
-    modal.style.display = "block";
-}
+document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById('fileInput');
 
-function closeFileUploadDialog() {
-    var modal = document.getElementById("uploadModal");
-    modal.style.display = "none";
-}
+    fileInput.addEventListener('change', function (event) {
+        const file = event.target.files[0]; // Получаем выбранный файл
 
-function uploadExcel() {
-    var fileInput = document.getElementById('excel-file');
-    var uploadUrl = fileInput.getAttribute('data-upload-url');
-    
-    fileInput.addEventListener('change', function() {
-        // Rest of your code
-        // Use the uploadUrl variable as the URL for your XMLHttpRequest
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', uploadUrl, true);
-        // Rest of your code
-    });
-}
-
-// Запускаем функцию uploadExcel при загрузке страницы
-document.addEventListener("DOMContentLoaded", function() {
-    uploadExcel();
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    var loadFileLink = document.querySelector(".load_file");
-    loadFileLink.addEventListener("click", openFileUploadDialog);
-});
-
-
-
-
-
-
-// Обработка перетаскивания
-var dropZone = document.getElementById('drop_zone');
-dropZone.addEventListener('dragover', function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-});
-
-dropZone.addEventListener('drop', function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    var files = e.dataTransfer.files; // Список файлов
-    handleFiles(files);
-});
-
-// Логика обработки файла
-function handleFiles(files) {
-    var file = files[0];
-    // Здесь вы можете отправить файл на сервер или обработать его на клиенте
-    console.log(file);
-}
-
-var radioButtons = document.getElementsByName('optionGroup');
-for(var i = 0; i < radioButtons.length; i++) {
-    radioButtons[i].addEventListener('change', function() {
-        if(this.checked) {
-            // Радиокнопка выбрана
-            console.log(this.value);
+        if (!file) {
+            return; // Если файл не выбран, ничего не делаем
         }
+
+        // Проверка типа файла
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'csv' && fileExtension !== 'xlsx') {
+            alert('Неверный тип файла. Пожалуйста, загрузите CSV или Excel файл.');
+            return;
+        }
+
+        // Далее вы можете использовать FileReader для чтения или другой обработки файла
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const contents = e.target.result;
+            // Теперь переменная `contents` содержит содержимое файла. Вы можете его обработать здесь.
+        };
+        reader.readAsText(file); // Читаем содержимое файла
     });
-}
+});

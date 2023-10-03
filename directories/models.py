@@ -34,12 +34,47 @@ class IT_OS(models.Model):
     inv_dit = models.CharField(primary_key=True, max_length=100)
     name_os = models.CharField(max_length=255, default="None")
     inpute_date = models.DateTimeField(null=True)
-    os_group = models.CharField(max_length=100)
+    os_group = models.CharField(max_length=100, null=True)
     serial_number = models.CharField(max_length=255, null=True, default="None")
     original_price = models.FloatField(default='100')
 
     def __str__(self):
         return self.name_os
+
+    def save(self, *args, **kwargs):
+
+        mapping = {
+            "ITEKS": "Мини ПК ITEKS",
+            "ITMNT": "Мониторы ITMNT",
+            "ITMNB": "Моноблок ITMNB",
+            "ITNTB": "Ноутбук ITNTB",
+            "ITPAD": "Планшет ITPAD",
+            "ITSRV": "Сервер ITSRV",
+            "ITSHD": "Система хранения данных ITSHD",
+            "ITWKS": "Системный блок, Тонкий клиент ITWKS",
+            "ITVDN": "Видеорегистраторы ITVDN",
+            "ITHDD": "Жесткие диски ITHDD",
+            "ITUPS": "ИБП (источники бесперебойного питания) Стабилизатор ITUPS",
+            "ITKSS": "Кассовое оборудование ITKSS",
+            "ITSAN": "Оптические коммутаторы ITSAN",
+            "ITVDC": "Охранное видеонаблюдение (Видеокамеры ITVDC)",
+            "ITPRN": "Принтеры, МФУ, копировальные аппараты ITPRN",
+            "ITPRK": "Проектор ITPRK",
+            "ITETH": "Сетевое оборудование ITETH",
+            "ITCSC": "Сетевое оборудование ITETH",
+            "ITSCN": "Сканеры штрихкода ITSCN",
+            "ITCNT": "Счетчики посетителей ITCNT",
+            "ITKND": "Счетчики посетителей ITCNT",
+            "ITTLF": "Телефон, факс ITTLF",
+            "ITTCD": "Терминал для сбора данных ITTCD,  подставки под ТСД, зарядные устройства для ТСД",
+            "ITBOX": "Шкаф коммутационный, серверный  ITBOX",
+        }
+
+        if self.name_os is not None:
+            first_five_chars = self.inv_dit[:5]
+            self.os_group = mapping.get(first_five_chars, "Не определено")
+
+        super().save(*args, **kwargs)
 
     class Meta:
         managed = True
@@ -61,7 +96,7 @@ class SkladyOffice(models.Model):
         max_length=50, choices=TYPE_CHOICES, blank=True)
     sklad_city = models.CharField(max_length=50, blank=True, null=True)
     sklad_adress = models.CharField(max_length=100)
-    sklad_name_lower = models.CharField(max_length=50, blank=True, null = True)
+    sklad_name_lower = models.CharField(max_length=50, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.sklad_name:
@@ -91,7 +126,7 @@ class Tmc(models.Model):
 
 
 class Users(models.Model):
-    name = models.CharField(primary_key=True, max_length=255)
+    name = models.CharField(max_length=255)
     department = models.CharField(max_length=100, null=True)
     position = models.CharField(max_length=255, null=True)
     organization = models.CharField(max_length=255, null=True)
