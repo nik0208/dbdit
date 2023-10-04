@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 import csv
 from directories.models import *
 from acts.models import *
+from .models import loadsqls
 from django.db import transaction
 import subprocess
 from django.db import connection
@@ -167,6 +168,7 @@ def upload_file(request):
                             subdivision=row['Подразделение']
                             
                         )
+            loadsqls.objects.create(option = selected_option)
             os.remove(file_path)
             return redirect('/')
 
@@ -184,6 +186,7 @@ def upload_file(request):
                             sklad_city=row['Город'],
                             sklad_adress=row['Адрес'],
                         )
+            loadsqls.objects.create(option = selected_option)
             os.remove(file_path)
             return redirect('/')
 
@@ -200,6 +203,7 @@ def upload_file(request):
                             web_code=row['Web code'],
                             tmc_price=row['Себестоимость'],
                         )
+            loadsqls.objects.create(option = selected_option)
             os.remove(file_path)
             return redirect('/directories/tmc')
         
@@ -224,6 +228,7 @@ def upload_file(request):
             db_name = 'db.sqlite3'
             import_csv_to_sqlite(output_file_path, db_name, selected_option)
             
+            loadsqls.objects.create(option = selected_option)
             os.remove(file_path)
             os.remove(output_file_path)
 
