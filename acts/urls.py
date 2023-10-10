@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', Acts, name='acts'),
     path('addact/', AddAct, name='add_act'),
-    path('acts_list/', ActsList.as_view(), name='acts_list'),
+    path('acts_list/', CombinedActsList.as_view(), name='acts_list'),
     path('act_edit/<int:act_id>', ActEdit, name='act_edit'),
     path('act_delete/<int:act_id>', ActDelete, name='act_delete'),
     path('generate_act_document/<int:act_id>', GenerateActDocument,

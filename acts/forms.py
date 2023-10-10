@@ -60,7 +60,7 @@ class ActForm(forms.ModelForm):
                                         search_fields=['sklad_name__icontains', 'sklad_name_lower__icontains'],
             ),
             "user": ModelSelect2Widget(queryset=models.Users.objects.all(),
-                                       attrs={'class': 'form-field text', 'id': 'id_user','name': 'user'},
+                                       attrs={'class': 'form-field text','name': 'user'},
             search_fields=['name_lower__icontains', 'name__icontains']
             ),
         }

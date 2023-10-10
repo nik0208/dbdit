@@ -28,29 +28,60 @@ def Acts(request):
     return render(request, 'acts/acts.html')
 
 
-class ActsList(BaseDatatableView):
-    model = apps.get_model('acts', 'Acts')
+# class ActsList(BaseDatatableView):
+#     model = apps.get_model('acts', 'Acts')
+#     columns = ['pk', 'act_date', 'inv_dit_id', 'result',
+#                'conclusion', 'type', 'user', 'avtor']
+
+#     def render_column(self, row, column):
+#         # Обработка специфических столбцов (если требуется)
+
+#         if column == 'act_date':
+#             if row.act_date is not None:
+#                 return row.act_date.strftime('%d.%m.%Y')
+#             else:
+#                 return ''
+#         return super().render_column(row, column)
+
+class CombinedActsList(BaseDatatableView):
+    # Получаем модели с помощью apps.get_model
+    model_acts = apps.get_model('acts', 'Acts')
+    model_old_acts = apps.get_model('acts', 'OldActs')
+
+    # Указываем поля, которые нужны в таблице
     columns = ['pk', 'act_date', 'inv_dit_id', 'result',
-               'conclusion', 'type', 'user', 'avtor']
+                'conclusion', 'type', 'user', 'avtor']
+
+    def get_initial_queryset(self):
+        # Создаем QuerySet для каждой модели
+        acts_queryset = self.model_acts.objects.values(
+            *self.columns).annotate(act_type=Value('Current', output_field=CharField()))
+        
+        old_acts_queryset = self.model_old_acts.objects.values(
+            *self.columns).annotate(act_type=Value('Old', output_field=CharField()))
+
+        # Объединяем два QuerySet в один
+        return acts_queryset.union(old_acts_queryset)
 
     def render_column(self, row, column):
-        # Обработка специфических столбцов (если требуется)
-
+        # Обработка даты (если требуется)
         if column == 'act_date':
-            if row.act_date is not None:
-                return row.act_date.strftime('%d.%m.%Y')
+            if row['act_date'] is not None:
+                return row['act_date'].strftime('%d.%m.%Y')
             else:
                 return ''
         return super().render_column(row, column)
-
+    
     def filter_queryset(self, qs):
         search_value = self.request.GET.get('search[value]', '')
         if search_value:
             search_terms = search_value.lower().split()
             query = Q()
+
             for term in search_terms:
-                query |= Q(inv_dit_id__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(user__iregex=r'(?i)^.+' + term[1:]) | Q(
-                    avtor__iregex=r'(?i)^.+' + term[1:]) | Q(sklad__iregex=r'(?i)^.+' + term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
+                for field in ['inv_dit_id__inv_dit', 'user', 'avtor', 'sklad', 'id']:
+                    query |= Q(**{f"{field}__iregex": fr"(?i)^.+{term[1:]}"})
+
             qs = qs.filter(query)
         return qs
 
