@@ -50,7 +50,7 @@ class CombinedActsList(BaseDatatableView):
 
     # Указываем поля, которые нужны в таблице
     columns = ['pk', 'act_date', 'inv_dit_id', 'result',
-                'conclusion', 'type', 'user', 'avtor']
+                'conclusion', 'type', 'user', 'avtor', 'sklad']
 
     def get_initial_queryset(self):
         # Создаем QuerySet для каждой модели
