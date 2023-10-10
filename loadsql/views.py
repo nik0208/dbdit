@@ -7,11 +7,13 @@ from django.core.files.storage import FileSystemStorage
 import csv
 from directories.models import *
 from acts.models import *
+from applications.models import *
 from .models import loadsqls
 from django.db import transaction
 import subprocess
 from django.db import connection
 import openpyxl
+
 
 @login_required
 def Loadsqls(request):
@@ -29,22 +31,22 @@ def get_table_columns(table_name):
 def reorder_csv_columns(input_file, output_file, column_order):
     with open(input_file, 'r', encoding='utf-8') as infile:
         reader = csv.DictReader(infile)
-        
+
         with open(output_file, 'w', encoding='utf-8', newline='') as outfile:
             writer = csv.DictWriter(outfile, fieldnames=column_order)
             writer.writeheader()
-            
+
             for row in reader:
                 reordered_row = {key: row[key] for key in column_order}
                 writer.writerow(reordered_row)
 
 
 def import_csv_to_sqlite(csv_file_path, db_name, table_name):
-        # Команда для выполнения импорта CSV в SQLite
-        command = f'sqlite3 "{db_name}" ".mode csv" ".import {csv_file_path} {table_name}"'
+    # Команда для выполнения импорта CSV в SQLite
+    command = f'sqlite3 "{db_name}" ".mode csv" ".import {csv_file_path} {table_name}"'
 
-        # Запуск команды в терминале
-        subprocess.run(command, shell=True)
+    # Запуск команды в терминале
+    subprocess.run(command, shell=True)
 
 
 def upload_file(request):
@@ -70,7 +72,8 @@ def upload_file(request):
                 column_number = None
                 for col in sheet.iter_cols(min_row=1, max_row=1):
                     if col[0].value == "Основное средство.Инв. номер ДИТ":
-                        column_number = col[0].col_idx  # Получаем номер столбца
+                        # Получаем номер столбца
+                        column_number = col[0].col_idx
                         break
 
                 if column_number:
@@ -78,14 +81,16 @@ def upload_file(request):
                     sheet.insert_cols(column_number + 1)
 
                     # Дать имя новому столбцу
-                    sheet.cell(row=1, column=column_number + 1).value = "Группа ОС"
+                    sheet.cell(row=1, column=column_number +
+                               1).value = "Группа ОС"
 
                     # Проходимся по строкам
                     for row_num in range(2, sheet.max_row + 1):
-                        cell_value = sheet.cell(row=row_num, column=column_number).value
+                        cell_value = sheet.cell(
+                            row=row_num, column=column_number).value
                         if cell_value is not None:
                             first_five_chars = cell_value[:5]
-                            
+
                             new_value = None
                             if first_five_chars == "ITEKS":
                                 new_value = "Мини ПК ITEKS"
@@ -133,7 +138,8 @@ def upload_file(request):
                                 new_value = "Шкаф коммутационный, серверный  ITBOX"
 
                         if new_value:
-                                sheet.cell(row=row_num, column=column_number + 1).value = new_value
+                            sheet.cell(
+                                row=row_num, column=column_number + 1).value = new_value
 
                 wb.save(file_path)
             try:
@@ -166,9 +172,9 @@ def upload_file(request):
                             position=row['Должность'],
                             organization=row['Организация'],
                             subdivision=row['Подразделение']
-                            
+
                         )
-            loadsqls.objects.create(option = selected_option)
+            loadsqls.objects.create(option=selected_option)
             os.remove(file_path)
             return redirect('/')
 
@@ -186,7 +192,7 @@ def upload_file(request):
                             sklad_city=row['Город'],
                             sklad_adress=row['Адрес'],
                         )
-            loadsqls.objects.create(option = selected_option)
+            loadsqls.objects.create(option=selected_option)
             os.remove(file_path)
             return redirect('/')
 
@@ -203,10 +209,10 @@ def upload_file(request):
                             web_code=row['Web code'],
                             tmc_price=row['Себестоимость'],
                         )
-            loadsqls.objects.create(option = selected_option)
+            loadsqls.objects.create(option=selected_option)
             os.remove(file_path)
             return redirect('/directories/tmc')
-        
+
         elif selected_option == 'IT_OS':
 
             column_name = get_table_columns(selected_option)
@@ -221,21 +227,38 @@ def upload_file(request):
             column_order = []
             for i in range(len(column_name)):
                 column_order.append(mapping.get(column_name[i], None))
-            
+
             output_file_path = 'file.csv'
             reorder_csv_columns(file_path, output_file_path, column_order)
-            
+
             db_name = 'db.sqlite3'
             import_csv_to_sqlite(output_file_path, db_name, selected_option)
-            
-            loadsqls.objects.create(option = selected_option)
+
+            loadsqls.objects.create(option=selected_option)
             os.remove(file_path)
             os.remove(output_file_path)
 
             return redirect('/directories/os')
-        
 
+        elif selected_option == 'Applications':
 
+            with transaction.atomic():
+                with open(file_path, 'r', encoding='utf-8') as csvfile:
+                    csvreader = csv.DictReader(csvfile)
 
+                    for row in csvreader:
+                        Applications.objects.update_or_create(
+                            num=row['Номер заявки'],
+                            requested_equipment=row['Что нужно'],
+                            avtor=row['Автор'],
+                            user=row['Для'],
+                            date=row['Дата поступления'],
+                            deadline=row['Дата выхода'],
+                            department=row['Подразделение'],
+                            status=row['Статус'],
+                        )
+            loadsqls.objects.create(option=selected_option)
+            os.remove(file_path)
+            return redirect('/applications')
 
         return redirect('/loadsql')

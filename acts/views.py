@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
-from directories.models import Users
 from django.apps import apps
 from openpyxl import load_workbook
 from django.http import JsonResponse
@@ -22,6 +21,7 @@ from django.contrib import messages
 import pandas as pd
 from datetime import date
 import datetime
+from directories.models import Users
 
 
 @login_required
@@ -29,53 +29,34 @@ def Acts(request):
     return render(request, 'acts/acts.html')
 
 
-# class ActsList(BaseDatatableView):
-#     model = apps.get_model('acts', 'Acts')
-#     columns = ['pk', 'act_date', 'inv_dit_id', 'result',
-#                'conclusion', 'type', 'user', 'avtor']
-
-#     def render_column(self, row, column):
-#         # Обработка специфических столбцов (если требуется)
-
-#         if column == 'act_date':
-#             if row.act_date is not None:
-#                 return row.act_date.strftime('%d.%m.%Y')
-#             else:
-#                 return ''
-#         return super().render_column(row, column)
-
-class CombinedActsList(BaseDatatableView):
-    # Получаем модели с помощью apps.get_model
-    model_acts = apps.get_model('acts', 'Acts')
-    model_old_acts = apps.get_model('acts', 'OldActs')
-
-    # Указываем поля, которые нужны в таблице
+class ActsList(BaseDatatableView):
+    model = apps.get_model('acts', 'Acts')
     columns = ['pk', 'act_date', 'inv_dit_id', 'result',
-               'conclusion', 'type', 'user', 'avtor', 'sklad']
-
-    def get_initial_queryset(self):
-        # Создаем QuerySet для каждой модели
-        acts_queryset = self.model_acts.objects.values(
-            *self.columns).annotate(act_type=Value('Current', output_field=CharField()))
-
-        old_acts_queryset = self.model_old_acts.objects.values(
-            *self.columns).annotate(act_type=Value('Old', output_field=CharField()))
-
-        # Объединяем два QuerySet в один
-        return acts_queryset.union(old_acts_queryset)
+               'conclusion', 'type', 'new_user', 'avtor', 'new_sklad']
 
     def render_column(self, row, column):
-        # Обработка даты (если требуется)
+        # Обработка специфических столбцов (если требуется)
+
         if column == 'act_date':
-            if row['act_date'] is not None:
-                return row['act_date'].strftime('%d.%m.%Y')
+            if row.act_date is not None:
+                return row.act_date.strftime('%d.%m.%Y')
             else:
                 return ''
-        elif column == 'user':
-            if isinstance(row['user'], int):
+        elif column == 'new_user':
+
+            if isinstance(row.new_user, int):
                 # Получение экземпляра пользователя
-                user_instance = Users.objects.get(id=row['user'])
+                user_instance = Users.objects.get(id=row.new_user)
                 return user_instance.name
+            elif row.new_user is None:
+                user_instance = models.Acts.objects.get(id=row.pk)
+                return user_instance.user
+
+        elif column == 'new_sklad':
+            if row.new_sklad is None:
+                sklad_instance = models.Acts.objects.get(id=row.pk)
+                return sklad_instance.sklad
+
         return super().render_column(row, column)
 
     def filter_queryset(self, qs):
@@ -83,11 +64,9 @@ class CombinedActsList(BaseDatatableView):
         if search_value:
             search_terms = search_value.lower().split()
             query = Q()
-
             for term in search_terms:
-                for field in ['inv_dit_id__inv_dit', 'user', 'avtor', 'sklad', 'id']:
-                    query |= Q(**{f"{field}__iregex": fr"(?i)^.+{term[1:]}"})
-
+                query |= Q(inv_dit_id__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(new_user_id__iregex=r'(?i)^.+' + term[1:]) | Q(
+                    avtor__iregex=r'(?i)^.+' + term[1:]) | Q(new_sklad_id__iregex=r'(?i)^.+' + term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
             qs = qs.filter(query)
         return qs
 
@@ -162,7 +141,7 @@ def GenerateActDocument(request, act_id):
 
     context = {'id_act': act.pk, 'act_date': act.act_date, 'os': act.inv_dit,
                'result': act.result, 'conclusion': act.conclusion,
-               'user': act.user, 'where': act.sklad, 'avtor': act.avtor}
+               'user': act.new_user, 'where': act.sklad, 'avtor': act.avtor}
 
     document.render(context)
 

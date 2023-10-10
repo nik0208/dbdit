@@ -135,9 +135,9 @@ $(document).ready(function () {
                 `;
             }
         },
-        ], [[0, 'desc']]
-);
-{/* <ul>
+    ], [[0, 'desc']]
+    );
+    {/* <ul>
 <li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
 <li><a href="#">Перемещение</a></li>
 <li><a href="#">Комплектация</a></li>
@@ -151,7 +151,8 @@ $(document).ready(function () {
         { "data": "date" },
         { "data": "deadline" },
         { "data": "department" },
-        { "data": "status",
+        {
+            "data": "status",
             "render": function (data, type, row) {
                 return `
                     <td>
