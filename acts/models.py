@@ -4,7 +4,8 @@ from directories.models import *
 
 class Acts(models.Model):
     avtor = models.CharField(max_length=101)
-    inv_dit = models.ForeignKey(IT_OS, on_delete=models.PROTECT, null=True, blank=True)
+    inv_dit = models.ForeignKey(
+        IT_OS, on_delete=models.PROTECT, null=True, blank=True)
     type = models.CharField(max_length=100)
     result = models.CharField(max_length=255)
     conclusion = models.CharField(max_length=255)
@@ -23,7 +24,8 @@ class Acts(models.Model):
 
 class OldActs(models.Model):
     avtor = models.CharField(max_length=101)
-    inv_dit = models.ForeignKey(IT_OS, on_delete=models.PROTECT, null=True, blank=True)
+    inv_dit = models.ForeignKey(
+        IT_OS, on_delete=models.PROTECT, null=True, blank=True)
     type = models.CharField(max_length=100)
     result = models.CharField(max_length=255)
     conclusion = models.CharField(max_length=255)

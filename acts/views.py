@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
+from directories.models import Users
 from django.apps import apps
 from openpyxl import load_workbook
 from django.http import JsonResponse
@@ -50,13 +51,13 @@ class CombinedActsList(BaseDatatableView):
 
     # Указываем поля, которые нужны в таблице
     columns = ['pk', 'act_date', 'inv_dit_id', 'result',
-                'conclusion', 'type', 'user', 'avtor', 'sklad']
+               'conclusion', 'type', 'user', 'avtor', 'sklad']
 
     def get_initial_queryset(self):
         # Создаем QuerySet для каждой модели
         acts_queryset = self.model_acts.objects.values(
             *self.columns).annotate(act_type=Value('Current', output_field=CharField()))
-        
+
         old_acts_queryset = self.model_old_acts.objects.values(
             *self.columns).annotate(act_type=Value('Old', output_field=CharField()))
 
@@ -70,8 +71,13 @@ class CombinedActsList(BaseDatatableView):
                 return row['act_date'].strftime('%d.%m.%Y')
             else:
                 return ''
+        elif column == 'user':
+            if isinstance(row['user'], int):
+                # Получение экземпляра пользователя
+                user_instance = Users.objects.get(id=row['user'])
+                return user_instance.name
         return super().render_column(row, column)
-    
+
     def filter_queryset(self, qs):
         search_value = self.request.GET.get('search[value]', '')
         if search_value:
@@ -138,10 +144,11 @@ def has_related_objects(instance):
                 return True
     return False
 
+
 def ActDelete(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
     try:
-        if request.method == 'POST':            
+        if request.method == 'POST':
             act.delete()
             return JsonResponse({'success': True})
     except:
@@ -152,23 +159,24 @@ def GenerateActDocument(request, act_id):
     act = models.Acts.objects.get(id=act_id)
     template_path = os.path.join('doki', 'for_acts.docx')
     document = DocxTemplate(template_path)
-    
+
     context = {'id_act': act.pk, 'act_date': act.act_date, 'os': act.inv_dit,
                'result': act.result, 'conclusion': act.conclusion,
                'user': act.user, 'where': act.sklad, 'avtor': act.avtor}
-    
+
     document.render(context)
 
     # Сохранение во временный файл
-    temp_file_path = os.path.join(tempfile.gettempdir(), "generated_document.docx")
+    temp_file_path = os.path.join(
+        tempfile.gettempdir(), "generated_document.docx")
     document.save(temp_file_path)
 
     # Чтение файла для ответа
     with open(temp_file_path, 'rb') as f:
-        response = HttpResponse(f.read(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response = HttpResponse(f.read(
+        ), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         response['Content-Disposition'] = f'inline; filename=generated_document.docx'
         return response
-
 
 
 def CreateBasedOnAct(request, act_id):
@@ -233,7 +241,7 @@ def add_os(request):
         else:
             pass
     else:
-        
+
         initial_data = {
             'inpute_date': today,  # Устанавливаем дату по умолчанию
             'model': "None",
@@ -242,5 +250,5 @@ def add_os(request):
             'third_part': None,
         }
         form = forms.AddOsForm(initial=initial_data)
-        
+
     return render(request, 'acts/add_os.html', {'form': form})
