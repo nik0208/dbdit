@@ -103,7 +103,7 @@ def ActEdit(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
 
         # Проверка того, является ли пользователь автором
-    if act.avtor != request.user:
+    if not request.user.groups.filter(name='Склад').exists() and act.avtor != request.user:
         return HttpResponseForbidden("Вы не являетесь автором этого акта, и поэтому не можете его редактировать.")
     
     if request.method == 'POST':
@@ -131,7 +131,7 @@ def has_related_objects(instance):
 def ActDelete(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
 
-    if not request.user.groups.filter(name='Склад').exists() and act.avtor != request.user:
+    if not request.user.groups.filter(name='Склад').exists():
         print(request.user.groups.all())
         return JsonResponse({'success': False, 'message': 'У вас нет прав на удаление этого акта'})
     else:
@@ -147,10 +147,11 @@ def GenerateActDocument(request, act_id):
     act = models.Acts.objects.get(id=act_id)
     template_path = os.path.join('doki', 'for_acts.docx')
     document = DocxTemplate(template_path)
+    act_date = act.act_date.strftime('%d.%m.%Y')
 
-    context = {'id_act': act.pk, 'act_date': act.act_date, 'os': act.inv_dit,
+    context = {'id_act': act.pk, 'act_date': act_date, 'os': act.inv_dit,
                'result': act.result, 'conclusion': act.conclusion,
-               'user': act.new_user, 'where': act.sklad, 'avtor': act.avtor}
+               'user': act.new_user, 'where': act.new_sklad, 'avtor': act.avtor}
 
     document.render(context)
 
