@@ -32,7 +32,7 @@ from django.db import models
 
 class IT_OS(models.Model):
     inv_dit = models.CharField(primary_key=True, max_length=100)
-    name_os = models.CharField(max_length=255, default="None")
+    name_os = models.CharField(max_length=255, default="None", blank=True)
     inpute_date = models.DateTimeField(null=True)
     os_group = models.CharField(max_length=100, null=True)
     serial_number = models.CharField(max_length=255, null=True, default="None")
