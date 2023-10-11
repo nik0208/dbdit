@@ -3,8 +3,7 @@ from . import forms
 from . import models
 from django.apps import apps
 from openpyxl import load_workbook
-from django.http import JsonResponse
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 from django_datatables_view.base_datatable_view import BaseDatatableView
 import os
 from django.conf import settings
@@ -102,6 +101,11 @@ def get_acts(request):
 # Изменение Акта ТС
 def ActEdit(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
+
+        # Проверка того, является ли пользователь автором
+    if act.avtor != request.user:
+        return HttpResponseForbidden("Вы не являетесь автором этого акта, и поэтому не можете его редактировать.")
+    
     if request.method == 'POST':
         form = forms.ActForm(request.POST, instance=act)
         if form.is_valid():
@@ -126,12 +130,17 @@ def has_related_objects(instance):
 
 def ActDelete(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
-    try:
-        if request.method == 'POST':
-            act.delete()
-            return JsonResponse({'success': True})
-    except:
-        return JsonResponse({'success': False, 'message': 'Произошла ошибка при удалении.'})
+
+    if not request.user.groups.filter(name='Склад').exists() and act.avtor != request.user:
+        print(request.user.groups.all())
+        return JsonResponse({'success': False, 'message': 'У вас нет прав на удаление этого акта'})
+    else:
+        try:
+            if request.method == 'POST':
+                act.delete()
+                return JsonResponse({'success': True})
+        except:
+            return JsonResponse({'success': False, 'message': 'Произошла ошибка при удалении.'})
 
 
 def GenerateActDocument(request, act_id):
