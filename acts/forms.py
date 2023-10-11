@@ -131,6 +131,7 @@ class AddOsForm(forms.ModelForm):
                 else:
                     name_os = f"{os_group_text} {model} {inv_dit}"
         except Exception as e:
+            print(name_os)
             logging.error(f"Произошла ошибка: {e}")
 
         cleaned_data['name_os'] = name_os

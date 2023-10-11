@@ -32,7 +32,7 @@ def Acts(request):
 class ActsList(BaseDatatableView):
     model = apps.get_model('acts', 'Acts')
     columns = ['pk', 'act_date', 'inv_dit_id', 'result',
-               'conclusion', 'type', 'new_user', 'avtor', 'new_sklad']
+               'conclusion', 'type', 'new_user_id', 'avtor', 'new_sklad_id']
 
     def render_column(self, row, column):
         # Обработка специфических столбцов (если требуется)
@@ -42,18 +42,18 @@ class ActsList(BaseDatatableView):
                 return row.act_date.strftime('%d.%m.%Y')
             else:
                 return ''
-        elif column == 'new_user':
+        elif column == 'new_user_id':
 
-            if isinstance(row.new_user, int):
+            if isinstance(row.new_user_id, int):
                 # Получение экземпляра пользователя
-                user_instance = Users.objects.get(id=row.new_user)
+                user_instance = Users.objects.get(id=row.new_user_id)
                 return user_instance.name
-            elif row.new_user is None:
+            elif row.new_user_id is None:
                 user_instance = models.Acts.objects.get(id=row.pk)
                 return user_instance.user
 
-        elif column == 'new_sklad':
-            if row.new_sklad is None:
+        elif column == 'new_sklad_id':
+            if row.new_sklad_id is None:
                 sklad_instance = models.Acts.objects.get(id=row.pk)
                 return sklad_instance.sklad
 

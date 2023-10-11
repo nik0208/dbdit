@@ -95,20 +95,10 @@ $(document).ready(function () {
         { "data": "inv_dit_id" },
         { "data": "result" },
         { "data": "conclusion" },
-        { "data": "user" },
-        { "data": "sklad" },
+        { "data": "new_user_id" },
+        { "data": "new_sklad_id" },
         { "data": "type" },
-        {
-            "data": "avtor",
-            // "render": function (data, type, row) {
-            //     // Верните содержимое ячейки в виде HTML-кода, включая фамилию и имя пользователя
-            //     return `
-            //         <td>
-            //             ${row.avtor.last_name} ${row.avtor.first_name}
-            //         </td>
-            //     `;
-            // }
-        },
+        { "data": "avtor" },
         {
             "data": "pk",
             "render": function (data, type, row) {
@@ -135,14 +125,15 @@ $(document).ready(function () {
                 `;
             }
         },
+
+   
     ], [[0, 'desc']]
-    );
-    {/* <ul>
-<li class="submenu_title"><a href="#" class="submenu_title">Создать на основании</a></li>
-<li><a href="#">Перемещение</a></li>
-<li><a href="#">Комплектация</a></li>
-<li><a href="#">Перевод товаров</a></li>
-</ul> */}
+    )
+    
+
+
+
+
     initializeDataTable('#table_applications', '/applications/applications_list/', [
         { "data": "num" },
         { "data": "requested_equipment" },
