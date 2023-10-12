@@ -102,8 +102,10 @@ def get_acts(request):
 def ActEdit(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
 
+    a = f'{request.user.first_name} {request.user.last_name}'
+
         # Проверка того, является ли пользователь автором
-    if not request.user.groups.filter(name='Склад').exists() and act.avtor != request.user:
+    if not request.user.groups.filter(name='Склад').exists() and act.avtor != a:
         return HttpResponseForbidden("Вы не являетесь автором этого акта, и поэтому не можете его редактировать.")
     
     if request.method == 'POST':
