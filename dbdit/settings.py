@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-72&)wkmb4q$4$ec%a3wh1vv6@u)5%a5e3h4zxbc2l)5+icrs8m
 DEBUG = True
 
 ALLOWED_HOSTS = ['172.16.12.15', 'vm-sdit.technodom.kz',
-                 'localhost:8000', '127.0.0.1']
+                 'localhost:8000', '127.0.0.1', 'localhost']
 
 Port = 80
 
