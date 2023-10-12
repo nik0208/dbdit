@@ -21,11 +21,16 @@ import pandas as pd
 from datetime import date
 import datetime
 from directories.models import Users
+from django.db import connection
 
 
 @login_required
 def Acts(request):
     return render(request, 'acts/acts.html')
+
+def reset_sequence(table_name):
+    with connection.cursor() as cursor:
+        cursor.execute(f"UPDATE sqlite_sequence SET seq = (SELECT MAX(id) FROM {table_name}) WHERE name='{table_name}';")
 
 
 class ActsList(BaseDatatableView):
@@ -140,6 +145,7 @@ def ActDelete(request, act_id):
         try:
             if request.method == 'POST':
                 act.delete()
+                reset_sequence('Acts')
                 return JsonResponse({'success': True})
         except:
             return JsonResponse({'success': False, 'message': 'Произошла ошибка при удалении.'})
