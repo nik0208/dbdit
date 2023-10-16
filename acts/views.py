@@ -69,10 +69,13 @@ class ActsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(inv_dit_id__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(new_user_id__iregex=r'(?i)^.+' + term[1:]) | Q(
-                    avtor__iregex=r'(?i)^.+' + term[1:]) | Q(new_sklad_id__iregex=r'(?i)^.+' + term[1:]) | Q(id__iregex=r'(?i)^.+' + term[1:])
+                query |= Q(inv_dit_id__inv_dit__iregex=f'(?i).*{term}.*') | Q(new_user_id__name__iregex=f'(?i).*{term}.*') | Q(conclusion__iregex=f'(?i).*{term}.*') | Q(
+                    avtor__iregex=f'(?i).*{term}.*') | Q(new_sklad_id__sklad_name__iregex=f'(?i).*{term}.*') | Q(id__iregex=f'(?i).*{term}.*') | Q(user__iregex=f'(?i).*{term}.*') | Q(sklad__iregex=f'(?i).*{term}.*')
+                    
             qs = qs.filter(query)
         return qs
+
+
 
 # Добавление Акта ТС
 
