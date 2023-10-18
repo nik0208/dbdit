@@ -24,6 +24,11 @@ $(document).ready(function () {
                 $('.dataTables_paginate').addClass('step-links');
                 $('.dataTables_paginate').find('a').addClass('page-link');
                 $('.dataTables_paginate').find('.current').addClass('current-page');
+            },
+            "createdRow": function (row, data, dataIndex) {
+                if (data.status === 'True') {
+                    $(row).addClass('green-row');
+                }
             }
         });
 
@@ -98,6 +103,7 @@ $(document).ready(function () {
         { "data": "new_user_id" },
         { "data": "new_sklad_id" },
         { "data": "type" },
+        { "data": "status", "visible": false },
         { "data": "avtor" },
         {
             "data": "pk",
