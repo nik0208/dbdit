@@ -87,7 +87,7 @@ def AddAct(request):
         form = forms.ActForm(request.POST, user=request.user)
         if form.is_valid():
             act = form.save(commit=False)
-            act.avtor = f"{request.user.first_name} {request.user.last_name}"
+            act.avtor = f"{request.user.last_name} {request.user.first_name}"
             act.save()
             return redirect('acts')
     else:

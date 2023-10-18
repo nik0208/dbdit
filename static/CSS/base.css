@@ -892,8 +892,13 @@ text {
 .act-date.green,
 .act-avtor.green,
 .act-type.green {
-  background-color: #136b26; /* Здесь можно выбрать желаемый зеленый цвет */
+  background-color: #3aaa52; /* Здесь можно выбрать желаемый зеленый цвет */
   color: #fff; /* Цвет текста на зеленом фоне */
+}
+
+.green-row {
+  background-color: #3aaa52 !important;; /* Здесь можно выбрать желаемый зеленый цвет */
+  color: #fff !important; /* Цвет текста на зеленом фоне */
 }
 
 /*Стили для форм Актов ТС End*/
