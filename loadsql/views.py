@@ -13,6 +13,7 @@ from django.db import transaction
 import subprocess
 from django.db import connection
 import openpyxl
+from datetime import datetime
 
 
 @login_required
@@ -21,6 +22,7 @@ def Loadsqls(request):
 
 
 def get_table_columns(table_name):
+    print('Получение столбцов из Excell...')
     with connection.cursor() as cursor:
         cursor.execute(f'PRAGMA table_info({table_name});')
         columns = cursor.fetchall()
@@ -29,6 +31,7 @@ def get_table_columns(table_name):
 
 
 def reorder_csv_columns(input_file, output_file, column_order):
+    print('Изменение порядка столбцов CSV...')
     with open(input_file, 'r', encoding='utf-8') as infile:
         reader = csv.DictReader(infile)
 
@@ -37,8 +40,16 @@ def reorder_csv_columns(input_file, output_file, column_order):
             writer.writeheader()
 
             for row in reader:
-                reordered_row = {key: row[key] for key in column_order}
-                writer.writerow(reordered_row)
+                # Преобразование даты
+                old_date_str = row["Дата принятия к учету1"]
+                old_date = datetime.strptime(old_date_str, "%d.%m.%Y %H:%M:%S")
+                new_date_str = old_date.strftime("%Y-%m-%d %H:%M:%S")
+                
+                # Замена значения в столбце
+                row["Дата принятия к учету1"] = new_date_str
+
+                # Запись строки в выходной файл
+                writer.writerow(row)
 
 
 def import_csv_to_sqlite(csv_file_path, db_name, table_name):
@@ -219,7 +230,7 @@ def upload_file(request):
             mapping = {
                 'inv_dit': 'Основное средство.Инв. номер ДИТ',
                 'name_os': 'Основное средство.Наименование',
-                'inpute_date': 'Дата принятия к учету 1',
+                'inpute_date': 'Дата принятия к учету1',
                 'original_price': 'Стоимость для вычисления амортизации',
                 'serial_number': 'Основное средство.Номер паспорта (регистрационный)',
                 'os_group': 'Группа ОС',
