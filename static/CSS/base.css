@@ -914,6 +914,42 @@ text {
 
 /*Стили для Перемещений END*/
 
+/*Стили для SQL загрузки Start*/
+
+ #file-upload {
+  width: 50%;
+  border-right: 1px solid #444;
+ }
+
+ #drop_zone {
+  font-weight: bold;
+  margin: 10px;
+  width: 100%;
+ }
+
+ #fileInput {
+  margin: 10px;
+  width: calc(100% - 30px);
+ }
+
+ .sqlload {
+  width: 50%;
+  height: 20px;
+  margin: 10px;
+  display: flex;
+ }
+
+ .sqlload span {
+  width: 100px;
+  border-bottom: 1px solid #444;
+ }
+
+ .sqlload-select {
+  width: 100px;
+  border-bottom: 1px solid #444;
+ }
+/*Стили для SQL загрузки END*/
+
 /*Стили для форм END*/
 
 /*Contentpanel END*/
