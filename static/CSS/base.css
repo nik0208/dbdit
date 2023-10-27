@@ -561,6 +561,10 @@
   background-image: url(/static/icons/locations.svg);
 }
 
+.sidebar ul li a .sidebar-icon.admin-icon {
+  background-image: url(/static/icons/admin.svg);
+}
+
 /*Список ссылок боковой панели END*/
 
 /*Информация о пользователе START*/
