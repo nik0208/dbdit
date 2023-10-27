@@ -14,6 +14,7 @@ import subprocess
 from django.db import connection
 import openpyxl
 from datetime import datetime
+from wand.image import Image as WandImage
 
 
 @login_required
@@ -251,25 +252,42 @@ def upload_file(request):
 
             return redirect('/directories/os')
 
-        elif selected_option == 'Applications':
-
-            with transaction.atomic():
-                with open(file_path, 'r', encoding='utf-8') as csvfile:
-                    csvreader = csv.DictReader(csvfile)
-
-                    for row in csvreader:
-                        Applications.objects.update_or_create(
-                            num=row['Номер заявки'],
-                            requested_equipment=row['Что нужно'],
-                            avtor=row['Автор'],
-                            user=row['Для'],
-                            date=row['Дата поступления'],
-                            deadline=row['Дата выхода'],
-                            department=row['Подразделение'],
-                            status=row['Статус'],
-                        )
-            loadsqls.objects.create(option=selected_option)
-            os.remove(file_path)
-            return redirect('/applications')
-
         return redirect('/loadsql')
+    
+from wand.image import Image as WandImage
+
+def add_act_skans(request):
+    if request.method == 'POST':
+        uploaded_files = request.FILES.getlist('files')
+        
+        for file in uploaded_files:
+            
+            with open('media/uploads/acts/' + file.name, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+        
+            file_name = os.path.splitext(file.name)
+       
+            if file_name[1] == '.pdf' or file_name[1] == '.PDF':
+       
+                # Открываем PDF-файл и преобразуем его в JPEG
+                pdf_path = 'media/uploads/acts/' + file.name
+       
+                with WandImage(filename=pdf_path, resolution=300) as pdf:
+       
+                    for i, page in enumerate(pdf.sequence):
+       
+                        with WandImage(page, resolution=300) as image:
+       
+                            # Задаем имя и путь для сохранения JPEG-файла
+                            jpg_name = os.path.join('media/uploads/acts/', os.path.splitext(file.name)[0] + f'.page{i+1}.jpg')
+       
+                            # Сохраняем JPEG-файл с высоким качеством
+                            image.compression_quality = 100  # максимальное качество
+                            image.save(filename=jpg_name)
+            
+            os.remove(pdf_path)
+
+
+
+        return HttpResponse("Файлы успешно загружены.")

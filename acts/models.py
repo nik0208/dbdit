@@ -24,3 +24,8 @@ class Acts(models.Model):
     class Meta:
         managed = True
         db_table = 'Acts'
+
+
+class ActsSkan(models.Model):
+    act_num = models.ForeignKey(Acts, on_delete=models.PROTECT)
+    act_file = models.FileField(upload_to='uploads/acts/')
