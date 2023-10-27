@@ -10,16 +10,20 @@
 <div id="file-upload" data-upload-url="{% url 'upload_file' %}">
 
   <form id="uploadForm" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+
   {% csrf_token %}
-  <div id="drop_zone">Перетащите файл сюда</div>
-  <input type="file" id="fileInput" name="file" style="display:block">
-  <input type="radio" id="option1" name="optionGroup" value="IT_OS"> ОС
-  <input type="radio" id="option2" name="optionGroup" value="Tmc"> ТМЦ
-  {% comment %} <input type="radio" id="option3" name="optionGroup" value="Acts"> Акты {% endcomment %}
-  <input type="radio" id="option4" name="optionGroup" value="Applications"> Заявки
-  <input type="radio" id="option5" name="optionGroup" value="SkladyOffice"> Склады
-  <input type="radio" id="option6" name="optionGroup" value="Users"> Пользователи
-  <input type="submit" value="Отправить">
+<<<<<<< HEAD
+<div id="drop_zone">Перетащите файл сюда</div>
+<input type="file" id="fileInput" name="file" style="display:block">
+
+<div class="sqlload"> <span>ОС</span> <input class="sqlload-select" type="radio" id="option1" name="optionGroup" value="IT_OS"></div>
+<div class="sqlload"> <span>ТМЦ</span> <input class="sqlload-select" type="radio" id="option2" name="optionGroup" value="Tmc"> </div>
+{% comment %} <input type="radio" id="option3" name="optionGroup" value="Acts"> Акты {% endcomment %}
+<div class="sqlload"> <span>Заявки</span> <input class="sqlload-select" type="radio" id="option4" name="optionGroup" value="Applications"> </div>
+<div class="sqlload"> <span>Склады</span> <input class="sqlload-select" type="radio" id="option5" name="optionGroup" value="SkladyOffice"> </div>
+<div class="sqlload"> <span>Пользователи</span>  <input class="sqlload-select" type="radio" id="option6" name="optionGroup" value="Users"> </div>
+<div class="form-field button"> <button type="submit"> Загрузить </button> </div>
+
 </form>
 
 <form id="uploadForm" action="{% url 'add_act_skans' %}" method="post" enctype="multipart/form-data">
@@ -29,5 +33,22 @@
   <input type="submit" value="Отправить">
 </form>
 
+=======
+
+    <div id="drop_zone">Перетащите файл сюда</div>
+    <input type="file" id="fileInput" name="file" style="display:block">
+
+    <div class="sqlload"> <span>ОС</span> <input class="sqlload-select" type="radio" id="option1" name="optionGroup" value="IT_OS"></div>
+    <div class="sqlload"> <span>ТМЦ</span> <input class="sqlload-select" type="radio" id="option2" name="optionGroup" value="Tmc"> </div>
+    {% comment %} <input type="radio" id="option3" name="optionGroup" value="Acts"> Акты {% endcomment %}
+    <div class="sqlload"> <span>Заявки</span> <input class="sqlload-select" type="radio" id="option4" name="optionGroup" value="Applications"> </div>
+    <div class="sqlload"> <span>Склады</span> <input class="sqlload-select" type="radio" id="option5" name="optionGroup" value="SkladyOffice"> </div>
+    <div class="sqlload"> <span>Пользователи</span>  <input class="sqlload-select" type="radio" id="option6" name="optionGroup" value="Users"> </div>
+    <div class="form-field button"> <button type="submit"> Загрузить </button> </div>
+
+  </form>
+  
+>>>>>>> 742960dc827d1ea720d25c43bf5669fc762beaad
 </div>
+
 {% endblock %}
