@@ -15,6 +15,12 @@ from django.db import connection
 import openpyxl
 from datetime import datetime
 from wand.image import Image as WandImage
+import pytesseract
+from PIL import Image
+
+
+pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
+
 
 
 @login_required
@@ -254,7 +260,7 @@ def upload_file(request):
 
         return redirect('/loadsql')
     
-from wand.image import Image as WandImage
+
 
 def add_act_skans(request):
     if request.method == 'POST':
@@ -285,9 +291,49 @@ def add_act_skans(request):
                             # Сохраняем JPEG-файл с высоким качеством
                             image.compression_quality = 100  # максимальное качество
                             image.save(filename=jpg_name)
-            
-            os.remove(pdf_path)
 
+
+            
+                os.remove(pdf_path)
+
+        scans_names = []
+        for path in os.listdir('media/uploads/acts/'):
+            if 'Акт' in path:
+                continue
+            elif os.path.isfile(os.path.join('media/uploads/acts/', path)):
+                scans_names.append(path)
+
+        print(scans_names)
+
+        for i in scans_names:
+            file = os.path.join('media/uploads/acts/', i)
+            img = Image.open(file)
+
+            # Преобразуем изображение в текст
+            text = pytesseract.image_to_string(img, lang='rus + eng')
+            lines = text.split('\n')
+            print(lines)
+
+            if 'Акт' in lines[0]:
+                a = "№"
+                start_index = text.find(a + " ")
+                result = text[start_index + len(a + " "):start_index + len(a + " ") + 3]
+                result2 = result.replace('о', '0')
+                result3 = 'Акт ТС №' + result2
+
+                new_name = os.path.join('media/uploads/acts/', result3) + '.jpg'
+                if os.path.exists(new_name):
+                    index = 1
+                    while True:
+                        new_name_parts = os.path.splitext(new_name)
+                        new_name = f"{new_name_parts[0]}.{index}{new_name_parts[1]}"
+                        if not os.path.exists(new_name):
+                            break
+                        index += 1
+
+                # переименовываем файл
+                os.rename(file, new_name)
+            
 
 
         return HttpResponse("Файлы успешно загружены.")
