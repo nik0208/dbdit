@@ -26,12 +26,12 @@
 
 </form>
 
-<form id="uploadForm" action="{% url 'add_act_skans' %}" method="post" enctype="multipart/form-data">
+{% comment %} <form id="uploadForm" action="{% url 'add_act_skans' %}" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <div id="drop_zone">Перетащите файлы сюда</div>
   <input type="file" id="fileInput" name="files" multiple style="display:block">
   <input type="submit" value="Отправить">
-</form>
+</form> {% endcomment %}
 
 </div>
 
