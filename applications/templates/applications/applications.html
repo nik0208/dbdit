@@ -4,13 +4,12 @@
 
 {% block document-buttons %}
     
-    <a class = "AddDocument" href="{% url 'add_appl' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
     {% if user.groups.all.0.name == "Склад" %}
-    <div class = "AddDocument" >
+    <div class = "appl_reload" >
     
         <form  action="{% url 'add_appl' %}" method="post">
             {% csrf_token %}
-            <button type="submit">Загрузить</button>
+            <button type="submit"></button>
         </form>
     </div>
     <a class="load_file" href="#" title="Загрузить данные из Excel" onclick="openFileUploadDialog()"><span class="load_file_excel"></span></a>
@@ -58,7 +57,7 @@
                 <thead>
                     <tr>
                         <th>Номер заявки</th>
-                        <th>Необходимое оборудование</th>
+                        <th >Необходимое оборудование</th>
                         <th>Автор заявки</th>
                         <th>Для кого оборудование</th>
                         <th>Дата поступления</th>

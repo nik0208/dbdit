@@ -29,6 +29,10 @@ $(document).ready(function () {
                 if (data.status === 'True') {
                     $(row).addClass('green-row');
                 }
+
+                if (data.status === 'Завершена') {
+                    $(row).addClass('green-row');
+                }
             }
         });
 
@@ -135,14 +139,11 @@ $(document).ready(function () {
    
     ], [[0, 'desc']]
     )
-    
-
-
 
 
     initializeDataTable('#table_applications', '/applications/applications_list/', [
         { "data": "num" },
-        { "data": "requested_equipment" },
+        { "data": "requested_equipment"},
         { "data": "avtor" },
         { "data": "user" },
         { "data": "date" },
