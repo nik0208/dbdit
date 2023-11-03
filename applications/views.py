@@ -189,42 +189,6 @@ def AddAppl(request):
         
         main()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #     form = forms.ApplForm(request.POST)
-    #     if form.is_valid():
-    #         act = form.save()
-    #         act.save()
-    #         return redirect('/applications')
-    #     else:
-    #         print(form.errors)
-    # else:
-    #     initial_data = {
-
-    #         'num': "1",
-    #         'requested_equipment': "1",
-    #         'avtor': "1",
-    #         'user': "1",
-    #         'department': "1",
-    #     }
-    #     form = forms.ApplForm(initial=initial_data)
-
     return redirect('/applications')
 
 def UpdateStatus(request, pk):
