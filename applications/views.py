@@ -13,6 +13,10 @@ from datetime import date
 import datetime
 import locale
 from django.http import HttpResponse
+import requests
+from lxml import html
+import sys
+from bs4 import BeautifulSoup as bs
 
 
 @login_required
@@ -115,25 +119,113 @@ def upload_data_appl(request, table_name='Applications'):
 def AddAppl(request):
 
     if request.method == 'POST':
-        form = forms.ApplForm(request.POST)
-        if form.is_valid():
-            act = form.save()
-            act.save()
-            return redirect('/applications')
-        else:
-            print(form.errors)
-    else:
-        initial_data = {
+        
+        username = 'jkaq'
+        password = 'Ытщц201820_'
 
-            'num': "1",
-            'requested_equipment': "1",
-            'avtor': "1",
-            'user': "1",
-            'department': "1",
-        }
-        form = forms.ApplForm(initial=initial_data)
 
-    return render(request, 'applications/add_appl.html', {'form': form})
+        auth = requests.auth.HTTPBasicAuth(username, password.encode('utf-8'))
+
+        def parse(url):
+
+            response = requests.get(url, auth=auth)
+
+            if response.status_code == 200:
+                soup = bs(response.text, "html.parser")
+                text = soup.find_all('td', class_='bx-bizproc-sorted')
+                text = text[::3]
+                symbols_to_remove = ['<b>', '</b>', '</br>', '<br/>', '</td>', '<br>']
+                
+                for i in text:
+
+                    i = str(i)
+                    for symbol in symbols_to_remove:
+                        i = i.replace(symbol, " ")
+
+                    i = i.split(sep=' ')
+
+                    
+
+                    i = [k for k in i if len(k) > 1]
+
+                    print(i)
+                    if 'Заявка на организацию рабочего места' in i[1]:
+                        req_eqipment = i[i.index('Необходимое оборудование:') + 1:(i.index('Необходимое оборудование:') + 1) + 6]
+                        usr = i[i.index('Фамилия:'):i.index('Фамилия:') + 6]
+                        a = i[i.index('Дата выхода:') + 1].strip()
+                        a = a.split(sep='.')
+                        b = [a[2], a[1], a[0]]
+                        b = '-'.join(b)
+                        #new_date_str = datetime.strptime(a, "%Y-%m-%d")
+                        Applications.objects.update_or_create(
+                            num = i[1].split('№')[1],
+                            
+                            requested_equipment = str(f'{req_eqipment[0]} {req_eqipment[1]} \n {req_eqipment[2]} {req_eqipment[3]} \n {req_eqipment[4]} {req_eqipment[5]}'),
+                            avtor = i[i.index('Автор:') + 1].split(') ')[1].strip(),
+                            user = str(f'{usr[0]} {usr[1]} \n {usr[2]} {usr[3]} \n {usr[4]} {usr[5]}'),
+                            deadline = b,
+                            department = i[i.index('Подразделение:') + 1].strip(),
+                        )
+                    elif 'Заявка на ИТ оборудование' in i[1]:
+                        req_eqipment = i[i.index('Необходимое оборудование'):i.index('Обоснование')]
+                        newreq_eqipment = ''
+                        for q in req_eqipment:
+                            newreq_eqipment += q + '\n'
+                        Applications.objects.update_or_create(
+                            num = i[1].split('№')[1],
+                            requested_equipment = newreq_eqipment,
+                            avtor = i[i.index('Автор:') + 1].split(') ')[1],
+                            user = i[i.index('Для кого закуп') + 1].split(') ')[1],
+                            department = i[i.index('Подразделение') + 1].split(': ')[1],
+                        )
+
+                    
+            else:
+                print(f"Ошибка при запросе: {response.status_code}")
+
+        def main():
+            parse('https://technet.technodom.kz/company/personal/bizproc/')
+
+        
+        main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #     form = forms.ApplForm(request.POST)
+    #     if form.is_valid():
+    #         act = form.save()
+    #         act.save()
+    #         return redirect('/applications')
+    #     else:
+    #         print(form.errors)
+    # else:
+    #     initial_data = {
+
+    #         'num': "1",
+    #         'requested_equipment': "1",
+    #         'avtor': "1",
+    #         'user': "1",
+    #         'department': "1",
+    #     }
+    #     form = forms.ApplForm(initial=initial_data)
+
+    return redirect('/applications')
 
 def UpdateStatus(request, pk):
     if request.method == 'POST':
