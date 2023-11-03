@@ -715,9 +715,23 @@ tbody td.name-column {
   } 
 
   /*Кнопка с выпадающим списком функций End*/
+  .appl_reload {
+    display: flex;
+    margin-left: 20px;
+  }
 
+  .appl_reload button {
+    width: 32px;
+    height: 32px;
+    background-image: url(/static/icons/reload.svg);
+    background-color: var(--primary-color);
+  }
 /*Стили для таблиц END*/
 
+
+.fixed-width-column {
+  width: 100px; /* Желаемая фиксированная ширина в пикселях */
+}
 
 
 /*Стили для форм START*/
