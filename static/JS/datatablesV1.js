@@ -169,7 +169,7 @@ $(document).ready(function () {
                     </td>
                 `;
             }
-        }], [[5, 'desc']]
+        }], [[4, 'desc']]
     );
 
     initializeDataTable('#table_complectations', '/complectations/complectations_list/', [

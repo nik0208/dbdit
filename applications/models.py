@@ -15,8 +15,8 @@ class Applications(models.Model):
     requested_equipment = models.TextField(null=True, blank=True,)
     avtor = models.CharField(max_length=100, blank=True, null=True)
     user = models.CharField(max_length=100, blank=True, null=True)
-    date = models.DateField(auto_now_add=True, blank=True, null=True)
-    deadline = models.DateField(blank=True, null=True, default=None)
+    date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    deadline = models.DateTimeField(blank=True, null=True, default=None)
     department = models.CharField(max_length=254, blank=True, null=True)
     status = models.CharField(
         max_length=100, choices=STATUS_CHOICES, default=STATUS_CHOICES[2][1])
