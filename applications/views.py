@@ -17,7 +17,7 @@ import requests
 from lxml import html
 import sys
 from bs4 import BeautifulSoup as bs
-
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 
 @login_required
 def Application(request):
@@ -191,6 +191,11 @@ def AddAppl(request):
 
 def UpdateStatus(request, pk):
     if request.method == 'POST':
+        
+        # Проверка того, является ли пользователь сосклада
+        if not request.user.groups.filter(name='Склад').exists():
+            return HttpResponseForbidden("Оппа, стапэ!!!")
+        
         new_status = request.POST.get('status')
         application = get_object_or_404(Applications, pk=pk)
         application.status = new_status
