@@ -302,6 +302,10 @@
   font-weight: bold;
 }
 
+.dataTables_paginate {
+  margin-left: 10px;
+}
+
 .document-btns a:hover,
 .dataTables_paginate a:hover {
   background-color: var(--highlight-color);
@@ -955,12 +959,10 @@ text {
 
  .sqlload span {
   width: 100px;
-  border-bottom: 1px solid #444;
  }
 
  .sqlload-select {
   width: 100px;
-  border-bottom: 1px solid #444;
  }
 /*Стили для SQL загрузки END*/
 

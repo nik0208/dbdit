@@ -17,7 +17,7 @@ import requests
 from lxml import html
 import sys
 from bs4 import BeautifulSoup as bs
-
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 
 @login_required
 def Application(request):
@@ -61,11 +61,9 @@ class ApplicationsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(num__iregex=r'(?i)^.+' + term[1:]) | Q(avtor__iregex=r'(?i)^.+' + term[1:]) | Q(user__iregex=r'(?i)^.+' + term[1:]) | Q(department__icontains=term[1:])
+                query |= Q(num__iregex=f'(?i).*{term}.*') | Q(avtor__iregex=f'(?i).*{term}.*') | Q(user__iregex=f'(?i).*{term}.*') | Q(department__iregex=f'(?i).*{term}.*') | Q(status__iregex=f'(?i).*{term}.*')
             qs = qs.filter(query)
         return qs
-    
-    
     
     
 def upload_data_appl(request, table_name='Applications'):
@@ -193,6 +191,11 @@ def AddAppl(request):
 
 def UpdateStatus(request, pk):
     if request.method == 'POST':
+        
+        # Проверка того, является ли пользователь сосклада
+        if not request.user.groups.filter(name='Склад').exists():
+            return HttpResponseForbidden("Оппа, стапэ!!!")
+        
         new_status = request.POST.get('status')
         application = get_object_or_404(Applications, pk=pk)
         application.status = new_status

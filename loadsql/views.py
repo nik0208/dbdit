@@ -14,12 +14,12 @@ import subprocess
 from django.db import connection
 import openpyxl
 from datetime import datetime
-from wand.image import Image as WandImage
-import pytesseract
-from PIL import Image
+# from wand.image import Image as WandImage
+# import pytesseract
+# from PIL import Image
 
 
-pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
 
 
@@ -263,77 +263,78 @@ def upload_file(request):
 
 
 def add_act_skans(request):
-    if request.method == 'POST':
-        uploaded_files = request.FILES.getlist('files')
+    pass
+#     if request.method == 'POST':
+#         uploaded_files = request.FILES.getlist('files')
         
-        for file in uploaded_files:
+#         for file in uploaded_files:
             
-            with open('media/uploads/acts/' + file.name, 'wb+') as destination:
-                for chunk in file.chunks():
-                    destination.write(chunk)
+#             with open('media/uploads/acts/' + file.name, 'wb+') as destination:
+#                 for chunk in file.chunks():
+#                     destination.write(chunk)
         
-            file_name = os.path.splitext(file.name)
+#             file_name = os.path.splitext(file.name)
        
-            if file_name[1] == '.pdf' or file_name[1] == '.PDF':
+#             if file_name[1] == '.pdf' or file_name[1] == '.PDF':
        
-                # Открываем PDF-файл и преобразуем его в JPEG
-                pdf_path = 'media/uploads/acts/' + file.name
+#                 # Открываем PDF-файл и преобразуем его в JPEG
+#                 pdf_path = 'media/uploads/acts/' + file.name
        
-                with WandImage(filename=pdf_path, resolution=300) as pdf:
+#                 with WandImage(filename=pdf_path, resolution=300) as pdf:
        
-                    for i, page in enumerate(pdf.sequence):
+#                     for i, page in enumerate(pdf.sequence):
        
-                        with WandImage(page, resolution=300) as image:
+#                         with WandImage(page, resolution=300) as image:
        
-                            # Задаем имя и путь для сохранения JPEG-файла
-                            jpg_name = os.path.join('media/uploads/acts/', os.path.splitext(file.name)[0] + f'.page{i+1}.jpg')
+#                             # Задаем имя и путь для сохранения JPEG-файла
+#                             jpg_name = os.path.join('media/uploads/acts/', os.path.splitext(file.name)[0] + f'.page{i+1}.jpg')
        
-                            # Сохраняем JPEG-файл с высоким качеством
-                            image.compression_quality = 100  # максимальное качество
-                            image.save(filename=jpg_name)
+#                             # Сохраняем JPEG-файл с высоким качеством
+#                             image.compression_quality = 100  # максимальное качество
+#                             image.save(filename=jpg_name)
 
 
             
-                os.remove(pdf_path)
+#                 os.remove(pdf_path)
 
-        scans_names = []
-        for path in os.listdir('media/uploads/acts/'):
-            if 'Акт' in path:
-                continue
-            elif os.path.isfile(os.path.join('media/uploads/acts/', path)):
-                scans_names.append(path)
+#         scans_names = []
+#         for path in os.listdir('media/uploads/acts/'):
+#             if 'Акт' in path:
+#                 continue
+#             elif os.path.isfile(os.path.join('media/uploads/acts/', path)):
+#                 scans_names.append(path)
 
-        print(scans_names)
+#         print(scans_names)
 
-        for i in scans_names:
-            file = os.path.join('media/uploads/acts/', i)
-            img = Image.open(file)
+#         for i in scans_names:
+#             file = os.path.join('media/uploads/acts/', i)
+#             img = Image.open(file)
 
-            # Преобразуем изображение в текст
-            text = pytesseract.image_to_string(img, lang='rus + eng')
-            lines = text.split('\n')
-            print(lines)
+#             # Преобразуем изображение в текст
+#             text = pytesseract.image_to_string(img, lang='rus + eng')
+#             lines = text.split('\n')
+#             print(lines)
 
-            if 'Акт' in lines[0]:
-                a = "№"
-                start_index = text.find(a + " ")
-                result = text[start_index + len(a + " "):start_index + len(a + " ") + 3]
-                result2 = result.replace('о', '0')
-                result3 = 'Акт ТС №' + result2
+#             if 'Акт' in lines[0]:
+#                 a = "№"
+#                 start_index = text.find(a + " ")
+#                 result = text[start_index + len(a + " "):start_index + len(a + " ") + 3]
+#                 result2 = result.replace('о', '0')
+#                 result3 = 'Акт ТС №' + result2
 
-                new_name = os.path.join('media/uploads/acts/', result3) + '.jpg'
-                if os.path.exists(new_name):
-                    index = 1
-                    while True:
-                        new_name_parts = os.path.splitext(new_name)
-                        new_name = f"{new_name_parts[0]}.{index}{new_name_parts[1]}"
-                        if not os.path.exists(new_name):
-                            break
-                        index += 1
+#                 new_name = os.path.join('media/uploads/acts/', result3) + '.jpg'
+#                 if os.path.exists(new_name):
+#                     index = 1
+#                     while True:
+#                         new_name_parts = os.path.splitext(new_name)
+#                         new_name = f"{new_name_parts[0]}.{index}{new_name_parts[1]}"
+#                         if not os.path.exists(new_name):
+#                             break
+#                         index += 1
 
-                # переименовываем файл
-                os.rename(file, new_name)
+#                 # переименовываем файл
+#                 os.rename(file, new_name)
             
 
 
-        return HttpResponse("Файлы успешно загружены.")
+#         return HttpResponse("Файлы успешно загружены.")
