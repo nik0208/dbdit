@@ -22,5 +22,5 @@ def Base(request):
 
     return render(
         request,
-        'index/base.html',
+        'index/home.html',
     )
