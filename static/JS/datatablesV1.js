@@ -25,15 +25,35 @@ $(document).ready(function () {
                 $('.dataTables_paginate').find('a').addClass('page-link');
                 $('.dataTables_paginate').find('.current').addClass('current-page');
             },
+
+            //Цветовая индикация таблиц START
+
             "createdRow": function (row, data, dataIndex) {
-                if (data.status === 'True') {
+                if (data.status === 'True' || data.status === 'Завершена') {
+                    // Если статус True или Завершена, добавьте класс green-row
                     $(row).addClass('green-row');
+                }
+            
+                var currentDate = new Date();
+                var oneDay = 24 * 60 * 60 * 1000;
+                var dateDeadlineParts = data.deadline.split('.');
+                var dateDeadline = new Date(dateDeadlineParts.reverse().join('-'));
+                
+
+                if (currentDate >= dateDeadline) {
+                    // Если currentDate больше или равна dateDeadline, добавьте класс red-row
+                    $(row).addClass('red-row');
                 }
 
-                if (data.status === 'Завершена') {
-                    $(row).addClass('green-row');
+                if (dateDeadline - currentDate > 0 && dateDeadline - currentDate <= oneDay * 3) {
+                    $(row).addClass('yellow-row');
                 }
+
             }
+
+            //Цветовая индикация таблиц END
+
+
         });
 
         $('#customSearchBox').on('keyup', function () {

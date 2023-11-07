@@ -918,8 +918,22 @@ text {
   color: #fff; /* Цвет текста на зеленом фоне */
 }
 
-.green-row {
-  background-color: #3aaa52 !important;; /* Здесь можно выбрать желаемый зеленый цвет */
+.green-row, .green-row.red-row {
+  background-color: #3aaa52 !important; /* Здесь можно выбрать желаемый зеленый цвет */
+  color: #fff !important; /* Цвет текста на зеленом фоне */
+}
+
+.green-row li, .yellow-row li, .red-row li {
+  color: var(--text-color) !important; /* Цвет текста*/
+}
+
+.red-row, .red-row.yellow-row {
+  background-color: #b83006 !important; /* Здесь можно выбрать желаемый зеленый цвет */
+  color: #fff !important; /* Цвет текста на зеленом фоне */
+}
+
+.yellow-row {
+  background-color: rgb(215, 224, 91) !important; /* Здесь можно выбрать желаемый зеленый цвет */
   color: #fff !important; /* Цвет текста на зеленом фоне */
 }
 
