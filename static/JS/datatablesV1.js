@@ -29,25 +29,25 @@ $(document).ready(function () {
             //Цветовая индикация таблиц START
 
             "createdRow": function (row, data, dataIndex) {
-                if (data.status === 'True' || data.status === 'Завершена') {
+                if (data.status === 'True' || data.status === 'Завершена' || data.status === 'Отклонена') {
                     // Если статус True или Завершена, добавьте класс green-row
                     $(row).addClass('green-row');
                 }
             
-                var currentDate = new Date();
-                var oneDay = 24 * 60 * 60 * 1000;
-                var dateDeadlineParts = data.deadline.split('.');
-                var dateDeadline = new Date(dateDeadlineParts.reverse().join('-'));
+                // var currentDate = new Date();
+                // var oneDay = 24 * 60 * 60 * 1000;
+                // var dateDeadlineParts = data.deadline.split('.');
+                // var dateDeadline = new Date(dateDeadlineParts.reverse().join('-'));
                 
 
-                if (currentDate >= dateDeadline) {
-                    // Если currentDate больше или равна dateDeadline, добавьте класс red-row
-                    $(row).addClass('red-row');
-                }
+                // if (currentDate >= dateDeadline) {
+                //     // Если currentDate больше или равна dateDeadline, добавьте класс red-row
+                //     $(row).addClass('red-row');
+                // }
 
-                if (dateDeadline - currentDate > 0 && dateDeadline - currentDate <= oneDay * 3) {
-                    $(row).addClass('yellow-row');
-                }
+                // if (dateDeadline - currentDate > 0 && dateDeadline - currentDate <= oneDay * 3) {
+                //     $(row).addClass('yellow-row');
+                // }
 
             }
 
@@ -183,6 +183,7 @@ $(document).ready(function () {
                                     <li class="status-option">Необходимо заточить</li>
                                     <li class="status-option">На заточке</li>
                                     <li class="status-option">Завершена</li>
+                                    <li class="status-option">Отклонена</li>
                                 </ul>
                             </div>
                         </div>

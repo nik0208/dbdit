@@ -933,8 +933,7 @@ text {
 }
 
 .yellow-row {
-  background-color: rgb(215, 224, 91) !important; /* Здесь можно выбрать желаемый зеленый цвет */
-  color: #fff !important; /* Цвет текста на зеленом фоне */
+  background-color: #fdf900 !important; /* Здесь можно выбрать желаемый зеленый цвет */
 }
 
 /*Стили для форм Актов ТС End*/
