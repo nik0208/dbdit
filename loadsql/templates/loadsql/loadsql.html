@@ -18,20 +18,11 @@
 
 <div class="sqlload"> <span>ОС</span> <input class="sqlload-select" type="radio" id="option1" name="optionGroup" value="IT_OS"></div>
 <div class="sqlload"> <span>ТМЦ</span> <input class="sqlload-select" type="radio" id="option2" name="optionGroup" value="Tmc"> </div>
-{% comment %} <input type="radio" id="option3" name="optionGroup" value="Acts"> Акты {% endcomment %}
-<div class="sqlload"> <span>Заявки</span> <input class="sqlload-select" type="radio" id="option4" name="optionGroup" value="Applications"> </div>
 <div class="sqlload"> <span>Склады</span> <input class="sqlload-select" type="radio" id="option5" name="optionGroup" value="SkladyOffice"> </div>
 <div class="sqlload"> <span>Пользователи</span>  <input class="sqlload-select" type="radio" id="option6" name="optionGroup" value="Users"> </div>
 <div class="form-field button"> <button type="submit"> Загрузить </button> </div>
 
 </form>
-
-{% comment %} <form id="uploadForm" action="{% url 'add_act_skans' %}" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div id="drop_zone">Перетащите файлы сюда</div>
-  <input type="file" id="fileInput" name="files" multiple style="display:block">
-  <input type="submit" value="Отправить">
-</form> {% endcomment %}
 
 </div>
 
