@@ -936,6 +936,10 @@ text {
   background-color: #fdf900 !important; /* Здесь можно выбрать желаемый зеленый цвет */
 }
 
+.green-row.denied {
+  text-decoration: line-through;
+}
+
 /*Стили для форм Актов ТС End*/
 .move-data.basic {
   display: flex;

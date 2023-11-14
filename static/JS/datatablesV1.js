@@ -33,7 +33,12 @@ $(document).ready(function () {
                     // Если статус True или Завершена, добавьте класс green-row
                     $(row).addClass('green-row');
                 }
-            
+                
+                if (data.status === 'Отклонена') {
+
+                    $(row).addClass('denied');
+                }
+
                 // var currentDate = new Date();
                 // var oneDay = 24 * 60 * 60 * 1000;
                 // var dateDeadlineParts = data.deadline.split('.');
