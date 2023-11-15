@@ -110,7 +110,7 @@ def get_acts(request):
 def ActEdit(request, act_id):
     act = get_object_or_404(models.Acts, id=act_id)
 
-    a = f'{request.user.first_name} {request.user.last_name}'
+    a = f'{request.user.last_name} {request.user.first_name}'
 
         # Проверка того, является ли пользователь автором
     if not request.user.groups.filter(name='Склад').exists() and act.avtor != a:
