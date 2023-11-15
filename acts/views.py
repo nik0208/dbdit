@@ -252,3 +252,17 @@ def add_os(request):
         form = forms.AddOsForm(initial=initial_data)
 
     return render(request, 'acts/add_os.html', {'form': form})
+
+def UpdateStatus(request, pk):
+    if request.method == 'POST':
+        
+        # Проверка того, является ли пользователь сосклада
+        if not request.user.groups.filter(name='Склад').exists():
+            return HttpResponseForbidden("Оппа, стапэ!!!")
+        
+        new_status = request.POST.get('status')
+        act = get_object_or_404(models.Acts, pk=pk)  # This line is causing the issue
+        act.status = new_status
+        act.save()
+        return HttpResponse('Статус обновлен успешно.')
+    return HttpResponse(status=400)

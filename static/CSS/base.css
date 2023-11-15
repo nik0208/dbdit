@@ -608,6 +608,21 @@
   transition: width 0,15s ease;
 }
 
+.hard-reload {
+  display: flex;
+  position: absolute;
+  top: 40%;
+  left: 30%;
+  z-index: 3;
+}
+
+.hard-reload-button button {
+  display: flex;
+  height: 200px;
+  width: 200px;
+  
+}
+
 /*Стили для таблиц START*/
 
 table {

@@ -30,7 +30,7 @@
     <div class="contentpanel">
 
         <div class="table-container">
-
+            {% csrf_token %}
             <table id="table_acts" class="display" style="width:100%">
 
                 <thead>
@@ -61,4 +61,6 @@
 
     </div>
 
+
+    
 {% endblock %}

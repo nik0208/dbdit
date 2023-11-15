@@ -151,3 +151,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+function updateStatusOnActs(pk, newStatus) {
+    var csrfToken = $('[name=csrfmiddlewaretoken]').val();
+
+    $.ajax({
+        type: 'POST',
+        url: `/acts/updstatus/${pk}/`,
+        data: {
+            status: newStatus,
+            csrfmiddlewaretoken: csrfToken
+        },
+        success: function(response) {
+            // Обновляем отображение статуса
+            var table = $('#table_acts').DataTable();
+            var rowData = table.row($(`#dropdown_btn_${pk}`).closest('tr')).data();
+            rowData.status = newStatus;
+            table.row($(`#dropdown_btn_${pk}`).closest('tr')).data(rowData).draw();
+
+            // Закрываем выпадающее меню
+            $(`#dropdown_menu_${pk}`).hide();
+
+            // Перерисовываем таблицу
+            table.ajax.reload();
+        },
+        error: function() {
+            alert('Ошибка при обновлении статуса.');
+        }
+    });
+}
