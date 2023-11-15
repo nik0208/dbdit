@@ -149,6 +149,7 @@ $(document).ready(function () {
                                 <ul>
                                     <li><a href="/acts/act_edit/${data}">Изменить</a></li>
                                     <li><a href="#" onclick="confirmDelete('/acts/act_delete/${data}', '/acts/acts_list/')">Удалить</a></li>
+                                    <li class="status-option" onclick="updateStatusOnActs('${row.pk}', 'True')">Выполнен</li>
                                     <li><a href="/acts/generate_act_document/${data}">Печать</a></li>
                                     <div id="dropdown_submenu_{{ acts.id }}" class="dropdown_submenu">
 
