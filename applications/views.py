@@ -118,8 +118,8 @@ def AddAppl(request):
 
     if request.method == 'POST':
         
-        username = 'jkaq'
-        password = 'Ытщц201820_'
+        username = 'td_41399'
+        password = 'Wrest211!'
 
 
         auth = requests.auth.HTTPBasicAuth(username, password.encode('utf-8'))

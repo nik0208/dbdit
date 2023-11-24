@@ -917,6 +917,10 @@ text {
   border-right: 1px solid #444;
 }
 
+.status-option {
+  cursor: pointer;
+}
+
 .act-type {
   width: 100%;
   font-weight: bold;
