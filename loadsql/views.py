@@ -14,12 +14,6 @@ import subprocess
 from django.db import connection
 import openpyxl
 from datetime import datetime
-# from wand.image import Image as WandImage
-# import pytesseract
-# from PIL import Image
-
-
-# pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
 
 
 @login_required
