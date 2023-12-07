@@ -171,7 +171,7 @@
   align-items: center;
 }
 
-.create-new-document {
+.create-new-document, .dismantling_act {
   width: 30px;
   height: 30px;
   display: flex;
@@ -191,6 +191,10 @@
 
 .create-new-document.os {
   background-image: url(/static/icons/create_document_os.svg);
+}
+
+.dismantling_act {
+  background-image: url(/static/icons/dismantlingon.svg);
 }
 
 .create-new-document.tmc {

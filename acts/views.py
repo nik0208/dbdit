@@ -22,7 +22,8 @@ from datetime import date
 import datetime
 from directories.models import Users
 from django.db import connection
-
+from datetime import datetime
+from directories.models import Users
 
 @login_required
 def Acts(request):
@@ -266,3 +267,27 @@ def UpdateStatus(request, pk):
         act.save()
         return HttpResponse('Статус обновлен успешно.')
     return HttpResponse(status=400)
+
+def GenerateDismantlingDocument(request):
+    template_path = os.path.join('doki', 'dismantling_act.docx')
+    document = DocxTemplate(template_path)
+    act_date = datetime.now().strftime('%d.%m.%Y')
+    subdivision_filter = "Отдел технической поддержки"
+    name_filter = f"{request.user.last_name} {request.user.first_name}"
+    avtor_dolshnost = Users.objects.filter(subdivision=subdivision_filter, name__contains=name_filter).last()
+    
+    context = {'act_date': act_date, 'avtor': f"{request.user.last_name} {request.user.first_name}", 'avtor_dolshnost' : avtor_dolshnost.position}
+    
+    document.render(context)
+
+    # Сохранение во временный файл
+    temp_file_path = os.path.join(
+        tempfile.gettempdir(), "generated_document.docx")
+    document.save(temp_file_path)
+
+    # Чтение файла для ответа
+    with open(temp_file_path, 'rb') as f:
+        response = HttpResponse(f.read(
+        ), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'inline; filename=generated_document.docx'
+        return response
