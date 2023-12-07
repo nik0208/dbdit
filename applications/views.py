@@ -146,10 +146,12 @@ def AddAppl(request):
 
                     i = [k for k in i if len(k) > 1]
 
-                    print(i)
                     if 'Заявка на организацию рабочего места' in i[1]:
                         req_eqipment = i[i.index('Необходимое оборудование:') + 1:(i.index('Необходимое оборудование:') + 1) + 6]
-                        usr = i[i.index('Фамилия:'):i.index('Фамилия:') + 6]
+                        usr = []
+                        usr[:] = i[i.index('Фамилия:'):i.index('Компания:') + 2]
+                        usr = '\n'.join(usr)
+                        print(usr)
                         a = i[i.index('Дата выхода:') + 1].strip()
                         a = a.split(sep='.')
                         b = [a[2], a[1], a[0]]
@@ -160,7 +162,7 @@ def AddAppl(request):
                             
                             requested_equipment = str(f'{req_eqipment[0]} {req_eqipment[1]} \n {req_eqipment[2]} {req_eqipment[3]} \n {req_eqipment[4]} {req_eqipment[5]}'),
                             avtor = i[i.index('Автор:') + 1].split(') ')[1].strip(),
-                            user = str(f'{usr[0]} {usr[1]} \n {usr[2]} {usr[3]} \n {usr[4]} {usr[5]}'),
+                            user = str(f'{usr}'),
                             deadline = b,
                             department = i[i.index('Подразделение:') + 1].strip(),
                         )
