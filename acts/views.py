@@ -18,11 +18,9 @@ from django.db.models.functions import Lower
 from django.db.models import CharField
 from django.contrib import messages
 import pandas as pd
-from datetime import date
-import datetime
 from directories.models import Users
 from django.db import connection
-from datetime import datetime
+import datetime
 from directories.models import Users
 
 @login_required
@@ -271,10 +269,11 @@ def UpdateStatus(request, pk):
 def GenerateDismantlingDocument(request):
     template_path = os.path.join('doki', 'dismantling_act.docx')
     document = DocxTemplate(template_path)
-    act_date = datetime.now().strftime('%d.%m.%Y')
-    subdivision_filter = "Отдел технической поддержки"
+    act_date = datetime.date.today().strftime('%d.%m.%Y')
+    subdivision_filter = ["Отдел технической поддержки", "Сектор поддержки пользователей и ИТ систем"]
     name_filter = f"{request.user.last_name} {request.user.first_name}"
-    avtor_dolshnost = Users.objects.filter(subdivision=subdivision_filter, name__contains=name_filter).last()
+    avtor_dolshnost = Users.objects.filter(subdivision__in=subdivision_filter, name__contains=name_filter).first()
+
     
     context = {'act_date': act_date, 'avtor': f"{request.user.last_name} {request.user.first_name}", 'avtor_dolshnost' : avtor_dolshnost.position}
     
