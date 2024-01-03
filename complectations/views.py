@@ -13,6 +13,7 @@ from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from docxtpl import DocxTemplate
+
 import tempfile
 from django.db.models.functions import Lower
 from django.db.models import CharField
@@ -24,13 +25,14 @@ import pandas as pd
 def Complectations(request):
     return render(request, 'complectations/complectations.html')
 
+
 class ComplectationsList(BaseDatatableView):
     model = apps.get_model('complectations', 'Complectations')
     columns = ['pk', 'date', 'avtor', 'inv_dit', 'tmc', 'tmc_qty', 'par_doc']
 
     def render_column(self, row, column):
         if column == 'tmc':
-                return ', '.join([str(tmc) for tmc in row.tmc.all()])
+            return ', '.join([str(tmc) for tmc in row.tmc.all()])
 
         if column == 'date':
             if row.date is not None:
@@ -45,7 +47,8 @@ class ComplectationsList(BaseDatatableView):
             search_terms = search_value.lower().split()
             query = Q()
             for term in search_terms:
-                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' + term[1:]) | Q(tmc__tmc_name__iregex=r'(?i)^.+' + term[1:])
+                query |= Q(inv_dit__inv_dit__iregex=r'(?i)^.+' +
+                           term[1:]) | Q(tmc__tmc_name__iregex=r'(?i)^.+' + term[1:])
             qs = qs.filter(query).distinct()  # Применяем distinct() здесь
         return qs
 

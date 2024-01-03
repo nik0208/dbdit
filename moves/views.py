@@ -7,6 +7,7 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
 from docxtpl import DocxTemplate
+
 import tempfile
 from django.db.models import CharField
 import os
@@ -167,8 +168,7 @@ def upload_data_move(request, table_name='OS_move'):
             user_id='Никита Федоров',
             equipment_id=names
         )
-    
-    
+
     folder = request.FILES.getlist('folder')
     logging.debug(f"Folder: {folder}")
 
@@ -186,16 +186,16 @@ def upload_data_move(request, table_name='OS_move'):
             osmove_value = "Приложение 19"
             tmcmove_value = "Приложение 29"
 
-
             for row in range(sheet.nrows):
                 for col in range(sheet.ncols):
-                    
+
                     cell_value = sheet.cell_value(row, col)
 
                     if cell_value == osmove_value:
 
-                        logging.debug(f"move_value: {osmove_value}, cell_value: {cell_value}")
-                        
+                        logging.debug(
+                            f"move_value: {osmove_value}, cell_value: {cell_value}")
+
                         desired_value = "Всего отпущено количество (прописью)"
                         for row in range(sheet.nrows):
                             for col in range(sheet.ncols):
@@ -218,14 +218,15 @@ def upload_data_move(request, table_name='OS_move'):
                             while not itm_code[-1].isdigit():
                                 itm_code = itm_code.rstrip(itm_code[-1])
                             os_names.append(itm_code)
-                        
+
                         logging.debug(f"os_names: {os_names}")
-                    
+
                         move_num = sheet.cell_value(20, 16)
                         sklad = sheet.cell_value(11, 6)
                         date = sheet.cell_value(20, 27)
 
-                        logging.debug(f"move_num: {move_num}, sklad: {sklad}, date: {date}")
+                        logging.debug(
+                            f"move_num: {move_num}, sklad: {sklad}, date: {date}")
 
                         # Создание словаря для месяцев на русском
                         month_names = {
@@ -262,10 +263,9 @@ def upload_data_move(request, table_name='OS_move'):
                                 f"Calling import_xls_to_sqlite with os_name={os_name}")
                             import_OSxls_to_sqlite(
                                 move_num, os_name, sklad, formatted_date)
-                            
+
                         os.remove(file_path)
-                        
-                            
+
                     elif cell_value == tmcmove_value:
                         desired_value = "Всего отпущено количество (прописью)"
                         for row in range(sheet.nrows):
@@ -273,28 +273,27 @@ def upload_data_move(request, table_name='OS_move'):
                                 cell_value = sheet.cell_value(row, col)
                                 if cell_value == desired_value:
                                     # os_path = sheet.cell_value(row, col)
-                                    os_qty = int(sheet.cell_value(row - 4, col))
+                                    os_qty = int(
+                                        sheet.cell_value(row - 4, col))
 
                         logging.debug(f"os_qty: {range(os_qty)}")
                         os_names = []
-                    
+
                         def custom_encode(s):
                             replacements = {
                                 ' ': '',
                             }
-                            
+
                             result = []
                             for char in s:
                                 result.append(replacements.get(char, char))
-                            
+
                             return ''.join(result)
-                    
+
                         for i in range(os_qty):
 
                             a = sheet.cell_value(24 + i, 21)
 
-
-                        
                             a = custom_encode(a)
                             os_names.append(a)
 
@@ -304,27 +303,26 @@ def upload_data_move(request, table_name='OS_move'):
                         sklad = sheet.cell_value(18, 18)
                         date_value = sheet.cell_value(11, 41)
 
-                        logging.debug(f"move_num: {move_num}, sklad: {sklad}, date: {date_value}")
+                        logging.debug(
+                            f"move_num: {move_num}, sklad: {sklad}, date: {date_value}")
 
                         logging.debug(f"Type of os_qty: {type(os_qty)}")
-                        logging.debug(f"Type of date_value: {type(date_value)}")
+                        logging.debug(
+                            f"Type of date_value: {type(date_value)}")
 
+                        formatted_date = datetime.strptime(
+                            date_value, "%d.%m.%Y").strftime("%Y-%m-%d")
 
-                        formatted_date = datetime.strptime(date_value, "%d.%m.%Y").strftime("%Y-%m-%d")
-
-                        
                         for os_name in os_names:
 
                             logging.debug(
-                                                f"Calling import_xls_to_sqlite with os_name={os_name}")
+                                f"Calling import_xls_to_sqlite with os_name={os_name}")
 
                             import_TMCxls_to_sqlite(
                                 move_num, os_name, sklad, formatted_date)
-                            
+
                         os.remove(file_path)
 
-    
-        
         except Exception as e:
             logging.error(f"Произошла ошибка: {e}")
             continue

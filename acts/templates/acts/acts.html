@@ -3,6 +3,8 @@
 {% block title %}Акты ТС{% endblock %}
 
 {% block document-buttons %}
+
+    <a class = "AddDocument" href="{% url 'dem_act' %}" title="Акт демонтажа"><span class="dismantling_act"></span></a>
     
     <a class = "AddDocument" href="{% url 'add_act' %}" title="Создать новый документ"><span class="create-new-document"></span></a>
 

@@ -12,24 +12,27 @@ from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from docxtpl import DocxTemplate
+
 import tempfile
 from django.db.models.functions import Lower
 from django.db.models import CharField
 from django.contrib import messages
 import pandas as pd
-from datetime import date
-import datetime
 from directories.models import Users
 from django.db import connection
+import datetime
+from directories.models import Users
 
 
 @login_required
 def Acts(request):
     return render(request, 'acts/acts.html')
 
+
 def reset_sequence(table_name):
     with connection.cursor() as cursor:
-        cursor.execute(f"UPDATE sqlite_sequence SET seq = (SELECT MAX(id) FROM {table_name}) WHERE name='{table_name}';")
+        cursor.execute(
+            f"UPDATE sqlite_sequence SET seq = (SELECT MAX(id) FROM {table_name}) WHERE name='{table_name}';")
 
 
 class ActsList(BaseDatatableView):
@@ -70,10 +73,9 @@ class ActsList(BaseDatatableView):
             for term in search_terms:
                 query |= Q(inv_dit_id__inv_dit__iregex=f'(?i).*{term}.*') | Q(new_user_id__name__iregex=f'(?i).*{term}.*') | Q(conclusion__iregex=f'(?i).*{term}.*') | Q(
                     avtor__iregex=f'(?i).*{term}.*') | Q(new_sklad_id__sklad_name__iregex=f'(?i).*{term}.*') | Q(id__iregex=f'(?i).*{term}.*') | Q(user__iregex=f'(?i).*{term}.*') | Q(sklad__iregex=f'(?i).*{term}.*')
-                    
+
             qs = qs.filter(query)
         return qs
-
 
 
 # Добавление Акта ТС
@@ -111,10 +113,10 @@ def ActEdit(request, act_id):
 
     a = f'{request.user.last_name} {request.user.first_name}'
 
-        # Проверка того, является ли пользователь автором
+    # Проверка того, является ли пользователь автором
     if not request.user.groups.filter(name='Склад').exists() and act.avtor != a:
         return HttpResponseForbidden("Вы не являетесь автором этого акта, и поэтому не можете его редактировать.")
-    
+
     if request.method == 'POST':
         form = forms.ActForm(request.POST, instance=act)
         if form.is_valid():
@@ -252,16 +254,46 @@ def add_os(request):
 
     return render(request, 'acts/add_os.html', {'form': form})
 
+
 def UpdateStatus(request, pk):
     if request.method == 'POST':
-        
+
         # Проверка того, является ли пользователь сосклада
         if not request.user.groups.filter(name='Склад').exists():
             return HttpResponseForbidden("Оппа, стапэ!!!")
-        
+
         new_status = request.POST.get('status')
-        act = get_object_or_404(models.Acts, pk=pk)  # This line is causing the issue
+        # This line is causing the issue
+        act = get_object_or_404(models.Acts, pk=pk)
         act.status = new_status
         act.save()
         return HttpResponse('Статус обновлен успешно.')
     return HttpResponse(status=400)
+
+
+def GenerateDismantlingDocument(request):
+    template_path = os.path.join('doki', 'dismantling_act.docx')
+    document = DocxTemplate(template_path)
+    act_date = datetime.date.today().strftime('%d.%m.%Y')
+    subdivision_filter = ["Отдел технической поддержки",
+                          "Сектор поддержки пользователей и ИТ систем"]
+    name_filter = f"{request.user.last_name} {request.user.first_name}"
+    avtor_dolshnost = Users.objects.filter(
+        subdivision__in=subdivision_filter, name__contains=name_filter).first()
+
+    context = {'act_date': act_date, 'avtor': f"{request.user.last_name} {request.user.first_name}",
+               'avtor_dolshnost': avtor_dolshnost.position}
+
+    document.render(context)
+
+    # Сохранение во временный файл
+    temp_file_path = os.path.join(
+        tempfile.gettempdir(), "generated_document.docx")
+    document.save(temp_file_path)
+
+    # Чтение файла для ответа
+    with open(temp_file_path, 'rb') as f:
+        response = HttpResponse(f.read(
+        ), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = f'inline; filename=generated_document.docx'
+        return response
