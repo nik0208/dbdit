@@ -7,7 +7,6 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
 from docxtpl import DocxTemplate
-import win32api
 import tempfile
 from django.db.models import CharField
 import os
@@ -137,8 +136,6 @@ def GenerateMoveDocument(request, move_id):
 
     document.save(temp_file_path)
 
-    # Вывод на печать
-    win32api.ShellExecute(0, "print", temp_file_path, None, ".", 0)
 
     return redirect('moves')
 

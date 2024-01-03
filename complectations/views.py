@@ -13,7 +13,6 @@ from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from docxtpl import DocxTemplate
-import win32api
 import tempfile
 from django.db.models.functions import Lower
 from django.db.models import CharField
