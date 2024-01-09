@@ -8,7 +8,6 @@ import subprocess
 from django.db.models import Q, F, Value, CharField
 from django.shortcuts import render, get_object_or_404, redirect
 import pandas as pd
-from . import forms
 from datetime import date
 import datetime
 import locale

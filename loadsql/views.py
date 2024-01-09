@@ -42,8 +42,11 @@ def reorder_csv_columns(input_file, output_file, column_order):
             for row in reader:
                 # Преобразование даты
                 old_date_str = row["Дата принятия к учету1"]
-                old_date = datetime.strptime(old_date_str, "%d.%m.%Y %H:%M:%S")
-                new_date_str = old_date.strftime("%Y-%m-%d %H:%M:%S")
+                if old_date_str:
+                    old_date = datetime.strptime(old_date_str, "%Y-%m-%d %H:%M:%S")
+                    new_date_str = old_date.strftime("%Y-%m-%d %H:%M:%S")
+                else:
+                    pass
 
                 # Замена значения в столбце
                 row["Дата принятия к учету1"] = new_date_str
